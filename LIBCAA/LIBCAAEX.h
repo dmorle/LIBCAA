@@ -6,31 +6,22 @@
 namespace LIBCAA {
 
 	// data variable of a MDA or derived class has not been created
-	class initExecption : public std::exception
+	class initEx : public std::exception
 	{
-		virtual const char* what() const throw()
-		{
-			return "array data does not exist";
-		}
-	} initEx;
+		virtual const char * what() const throw();
+	};
 
 	// forced re-initialization of existing variable
-	class reinitExecption : public std::exception
+	class reinitEx : public std::exception
 	{
-		virtual const char* what() const throw()
-		{
-			return "variable already exists";
-		}
-	} reinitEx;
+		virtual const char * what() const throw();
+	};
 
 	// operation is called on a Tensor or derived class which have different shapes
-	class shapeExecption : public std::exception
+	class shapeEx : public std::exception
 	{
-		virtual const char* what() const throw()
-		{
-			return "unmatching shapes";
-		}
-	} shapeEx;
+		virtual const char * what() const throw();
+	};
 
 }
 
