@@ -9,9 +9,17 @@ namespace LIBCAA {
 	{
 		virtual const char* what() const throw()
 		{
-			return "Using Uninitialized Array Values";
+			return "array data does not exist";
 		}
 	} initEx;
+
+	class shapeExecption : public std::exception
+	{
+		virtual const char* what() const throw()
+		{
+			return "unmatching shapes";
+		}
+	} shapeEx;
 
 }
 
