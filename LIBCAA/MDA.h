@@ -45,7 +45,7 @@ namespace LIBCAA {
 		}
 
 		// recursively duplicates "orgAxis"
-		template <typename dataType> void *copyAxis(int rank, int *dimensions, void *orgAxis) {
+		template <typename dataType> void *copyAxis(void *orgAxis, int rank, int *dimensions) {
 			// bottom layer axis
 			if (rank == 1) {
 				dataType *axis = (dataType *)malloc(sizeof(dataType) * dimensions[0]);
@@ -77,6 +77,13 @@ namespace LIBCAA {
 
 		}
 
+		template <typename dataType> dataType getIndex(void *axis, int rank, int *indicies) {
+			if (rank == 1)
+				return ((dataType *)axis)[indicies[0]];
+
+			return getAxis<dataType>(((void **)axis)[indicies[0]], rank - 1, indicies + 1);
+		}
+
 		// recursively prints the axis
 		template <typename dataType> void printAxis(void *axis, int rank, int *dimensions) {
 			if (rank == 1) {
@@ -100,41 +107,55 @@ namespace LIBCAA {
 	template <typename dataType> class MDA:Object
 	{
 	public:
-		MDA(pSHAPE pShape)
-		{
+		MDA(pSHAPE pShape) {
 			this->pShape = pShape;
-			this->init = false;
 			this->data = IAXIS::generateAxis<dataType>(this->pShape->rank, this->pShape->dimensions);
+			this->init = false;
 		}
 
-		MDA(pSHAPE pShape, dataType val)
-		{
+		MDA(pSHAPE pShape, dataType val) {
 			this->pShape = pShape;
-			this->init = true;
 			this->data = IAXIS::generateAxis<dataType>(this->pShape->rank, this->pShape->dimensions, val);
+			this->init = true;
 		}
 
-		~MDA()
-		{
+		MDA(int rank, int *dimensions) {
+			this->pShape = getShape(rank, dimensions);
+			this->data = IAXIS::generateAxis<dataType>(this->pShape->rank, this->pShape->dimensions);
+			this->init = false;
+		}
+
+		MDA(int rank, int *dimensions, dataType val) {
+			this->pShape = getShape(rank, dimensions);
+			this->data = IAXIS::generateAxis<dataType>(this->pShape->rank, this->pShape->dimensions, val);
+			this->init = true;
+		}
+
+		~MDA() {
 			// deleting the array data
 			IAXIS::delAxis(this->data, this->pShape->rank, this->pShape->dimensions);
 
 			// deleting the shape data
-			free(this->pShape->dimensions);
-			free(this->pShape);
+			delShape(this->pShape);
 		}
 
-		MDA<dataType> *clone()
-		{
-			return NULL;
+		void clone(MDA<dataType> * nMDA) {
+			nMDA->pShape = copyShape(this->pShape);
+			nMDA->data = IAXIS::copyAxis(this->data, this->pShape->rank, this->pShape->dimensions);
+			nMDA->init = this->init;
 		}
 
-		void print()
-		{
+		void print() {
 			if (!this->init)
 				throw initEx;		// the array has uninitialized values
 
 			IAXIS::printAxis<dataType>(this->data, this->pShape->rank, this->pShape->dimensions);
+		}
+
+		MDA<dataType> *getTranspose(int *axisOrder) {
+			pSHAPE npShape = getShape(this->pShape->rank, axisOrder);
+
+			return NULL;
 		}
 
 	protected:

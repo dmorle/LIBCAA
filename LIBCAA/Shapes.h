@@ -16,6 +16,11 @@ namespace LIBCAA {
 	typedef SHAPE *pSHAPE;
 
 	pSHAPE getShape(int rank, ...);
+	pSHAPE getShape(int rank, int *dimensions);
+
+	pSHAPE copyShape(SHAPE shape);
+	pSHAPE copyShape(pSHAPE pShape);
+
 	void delShape(pSHAPE pShape);
 	
 	int getLen(SHAPE);
