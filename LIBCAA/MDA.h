@@ -9,6 +9,34 @@
 
 namespace LIBCAA {
 
+	// checks the the two shapes are the same
+	bool sameShape(int rank1, int *dimensions1, int rank2, int *dimensions2) {
+		if (rank1 != rank2)
+			return false;
+		
+		for (int i = 0; i < rank1; i++)
+			if (dimensions1[i] != dimensions2[i])
+				return false;
+		
+		return true;
+	}
+
+	// checks if all shapes are the same
+	bool sameShape(int shapeNum, int *ranks, int **dimensions) {
+		for (int i = 0; i < shapeNum; i++)
+			for (int j = i + 1; j < shapeNum; j++)
+				if (ranks[i] != ranks[j])
+					return false;
+		
+		for (int i = 0; i < shapeNum; i++)
+			for (int j = i + 1; j < shapeNum; j++)
+				for (int k = 0; k < *ranks; k++)
+					if (dimensions[i][k] != dimensions[j][k])
+						return false;
+		
+		return true;
+	}
+
 	/*
 	 *	Multi-dimensional array class
 	 *	extremely limited functionality
@@ -18,7 +46,7 @@ namespace LIBCAA {
 	 *		Vector
 	 *		MDPolynomial
 	 */
-	template <typename dataType> class MDA:Object
+	template <typename dataType> class MDA : protected Object
 	{
 	public:
 
@@ -26,8 +54,7 @@ namespace LIBCAA {
 		MDA(int rank, int *dimensions) {
 			this->type = "MDA";
 			this->stdInit(rank, dimensions);
-
-			this->data = (dataType *)malloc(sizeof(dataType) * this->len);
+			
 			this->init = false;
 		}
 
@@ -44,7 +71,7 @@ namespace LIBCAA {
 			this->init = true;
 		}
 
-		// 
+		// creates MDA obj with each element initialized by initFunc
 		MDA(int rank, int *dimensions, dataType(*initFunc)()) {
 			this->type = "MDA";
 			this->stdInit(rank, dimensions);
@@ -120,6 +147,22 @@ namespace LIBCAA {
 		// TODO: impliment a slicing function
 
 		// TODO: impliment a reshaping function
+
+		friend bool sameShape(MDA<dataType> *MDA1, MDA<dataType> *MDA2) {
+			return sameShape(MDA1->rank MDA1->dimensions, MDA2->rank, MDA2->dimensions)
+		}
+
+		friend bool sameShape(int MDANum, MDA<dataType> **MDAs) {
+			int *ranks = (int *)malloc(sizeof(int) * MDANum);
+			int **allDimensions = (int **)malloc(sizeof(int *) * MDANum);
+
+			for (int i = 0; i < MDANum; i++) {
+				ranks[i] = MDAs[i]->rank;
+				allDimensions[i] = MDAs[i]->dimensions;
+			}
+
+			return sameShape(tensNum, ranks, allDimensions);
+		}
 
 	protected:
 		int rank;
