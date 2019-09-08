@@ -2,12 +2,11 @@
 #define TENSOR_H
 
 #include "MDA.h"
-#include "LIBCAAEX.h"
 
 namespace LIBCAA {
 
 
-	class Tensor : protected MDA<double>
+	class Tensor : public MDA<double>
 	{
 	public:
 
@@ -18,7 +17,7 @@ namespace LIBCAA {
 		Tensor(int rank, int *dimensions, double *data);
 
 		// MDA deconstructor is transferable to Tensor
-		~Tensor() { MDA<double>::~MDA(); }
+		~Tensor();
 
 		Tensor operator + (Tensor tens);
 		Tensor operator + (double val);
@@ -30,8 +29,7 @@ namespace LIBCAA {
 		Tensor operator / (double val);
 		Tensor operator ^ (Tensor tens);
 		Tensor operator ^ (double val);
-		Tensor operator % (Tensor tens);
-		Tensor operator % (double val);
+		Tensor operator ^ (int val);
 
 		void operator += (Tensor tens);
 		void operator += (double val);

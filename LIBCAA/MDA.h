@@ -2,7 +2,6 @@
 #define MDA_H
 
 #include "Object.h"
-#include "LIBCAAEX.h"
 #include <stdarg.h>
 #include <stdlib.h>
 #include <iostream>
@@ -10,32 +9,10 @@
 namespace LIBCAA {
 
 	// checks the the two shapes are the same
-	bool sameShape(int rank1, int *dimensions1, int rank2, int *dimensions2) {
-		if (rank1 != rank2)
-			return false;
-		
-		for (int i = 0; i < rank1; i++)
-			if (dimensions1[i] != dimensions2[i])
-				return false;
-		
-		return true;
-	}
+	bool sameShape(int rank1, int *dimensions1, int rank2, int *dimensions2);
 
 	// checks if all shapes are the same
-	bool sameShape(int shapeNum, int *ranks, int **dimensions) {
-		for (int i = 0; i < shapeNum; i++)
-			for (int j = i + 1; j < shapeNum; j++)
-				if (ranks[i] != ranks[j])
-					return false;
-		
-		for (int i = 0; i < shapeNum; i++)
-			for (int j = i + 1; j < shapeNum; j++)
-				for (int k = 0; k < *ranks; k++)
-					if (dimensions[i][k] != dimensions[j][k])
-						return false;
-		
-		return true;
-	}
+	bool sameShape(int shapeNum, int *ranks, int **dimensions);
 
 	/*
 	 *	Multi-dimensional array class
@@ -46,7 +23,7 @@ namespace LIBCAA {
 	 *		Vector
 	 *		MDPolynomial
 	 */
-	template <typename dataType> class MDA : protected Object
+	template <typename dataType> class MDA : public Object
 	{
 	public:
 
@@ -98,11 +75,15 @@ namespace LIBCAA {
 
 		// deallocates memory used by MDA obj
 		~MDA() {
-			// freeing the array memory
-			free(this->data);
-			
-			// freeing the dimension memory
+			// freeing the dimensions memory
 			free(this->dimensions);
+
+			// freeing the strides memory
+			free(this->strides);
+
+			// freeing the data memory
+			if (this->init)
+				free(this->data);
 		}
 
 		// copies all data into a new MDA
@@ -119,14 +100,27 @@ namespace LIBCAA {
 		void print() {
 			if (!this->init)
 				// the array has uninitialized values
-				throw initEx;
+				throw initEx();
 
 			// print the MDA
 			this->printAxis("", 0, this->rank, this->dimensions, this->strides);
 		}
 
+		// initializes this->data with data
+		// copies data
+		void dataInit(int *data) {
+			if (!this->init) {
+				this->data = (dataType *)malloc(sizeof(dataType) * this->len);
+				this->init = true;
+			}
+
+			for (int i = 0; i < this->len; i++) {
+				this->data[i] = data[i];
+			}
+		}
+
 		// gets the value at the index
-		dataType getRawIndex(int *indicies) {
+		dataType getAbsIndex(int *indicies) {
 			int index = 0;
 			for (int i = 0; i < this->rank; i++) {
 				index += indicies[i] * this->strides[i];
@@ -139,7 +133,7 @@ namespace LIBCAA {
 				indicies[i] %= this->dimensions[i];
 			}
 
-			return this->getRawIndex(indicies);
+			return this->getAbsIndex(indicies);
 		}
 
 		// TODO: overload () operator for indexing
@@ -148,8 +142,23 @@ namespace LIBCAA {
 
 		// TODO: impliment a reshaping function
 
+		// unsafe function which sets this->data
+		// only use if object is empty
+		void forceDataSet(dataType *data) {
+			if (this->init)
+				throw reinitEx();
+
+			this->init = true;
+			this->data = data;
+		}
+
+		// gets the array at a location in RAM
+		dataType getDataIndex(int index) {
+			return this->data[index];
+		}
+
 		friend bool sameShape(MDA<dataType> *MDA1, MDA<dataType> *MDA2) {
-			return sameShape(MDA1->rank MDA1->dimensions, MDA2->rank, MDA2->dimensions)
+			return sameShape(MDA1->rank, MDA1->dimensions, MDA2->rank, MDA2->dimensions);
 		}
 
 		friend bool sameShape(int MDANum, MDA<dataType> **MDAs) {
@@ -161,7 +170,7 @@ namespace LIBCAA {
 				allDimensions[i] = MDAs[i]->dimensions;
 			}
 
-			return sameShape(tensNum, ranks, allDimensions);
+			return sameShape(MDANum, ranks, allDimensions);
 		}
 
 	protected:
@@ -172,6 +181,7 @@ namespace LIBCAA {
 		dataType *data;
 		bool init;
 
+	private:
 		// initializes the shape defining attributes
 		void stdInit(int rank, int *dimensions) {
 			this->rank = rank;
@@ -190,6 +200,7 @@ namespace LIBCAA {
 				this->strides[i] = dimensions[i] * strides[i + 1];
 				this->len *= dimensions[i];
 			}
+			return;
 		}
 
 		// recursively prints out the array
