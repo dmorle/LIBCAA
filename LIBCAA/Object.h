@@ -1,6 +1,8 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
+#include <string>
+
 namespace LIBCAA {
 
 	// abstract class which all other classes will inherit from
@@ -12,7 +14,7 @@ namespace LIBCAA {
 		virtual void clone(void *) = 0;	// virtual clone function to be overridden
 		virtual void print() = 0;		// virtual print function to be overridden
 
-		std::string type() { return this->type; }
+		std::string getType() { return this->type; }
 
 	protected:
 		std::string type;

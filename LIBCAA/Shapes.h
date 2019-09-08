@@ -9,7 +9,7 @@ namespace LIBCAA {
 		int *dimensions;
 
 		int &operator [] (int idx) {
-			return this->dimensions[idx % this->rank];
+			return this->dimensions[idx];
 		}
 	};
 

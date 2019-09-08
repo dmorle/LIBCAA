@@ -1,5 +1,5 @@
-#ifndef INITEX_H
-#define INITEX_H
+#ifndef LIBCAAEX_H
+#define LIBCAAEX_H
 
 #include <exception>
 

@@ -32,7 +32,10 @@
     <ClInclude Include="Shapes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="initEx.h">
+    <ClInclude Include="LIBCAAEX.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IAXIS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
