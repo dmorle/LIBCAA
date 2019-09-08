@@ -116,14 +116,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Shapes.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="IAXIS.h" />
+    <ClInclude Include="InitFunc.h" />
     <ClInclude Include="LIBCAAEX.h" />
     <ClInclude Include="MDA.h" />
     <ClInclude Include="Object.h" />
-    <ClInclude Include="Shapes.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

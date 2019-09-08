@@ -22,7 +22,7 @@ namespace LIBCAA {
 	{
 	public:
 
-		// creates MDA obj without initialization from a rank and dimension array
+		// creates an empty MDA obj
 		MDA(int rank, int *dimensions) {
 			this->type = "MDA";
 			this->stdInit(rank, dimensions);
@@ -44,6 +44,7 @@ namespace LIBCAA {
 			this->init = true;
 		}
 
+		// 
 		MDA(int rank, int *dimensions, dataType(*initFunc)()) {
 			this->type = "MDA";
 			this->stdInit(rank, dimensions);
@@ -77,9 +78,13 @@ namespace LIBCAA {
 			free(this->dimensions);
 		}
 
-		// copies all data into nMDA
+		// copies all data into a new MDA
 		void *clone() {
-			MDA<datatype> *npMDA = new MDA<dataType>(this->rank, this->dimensions, this->data);
+			if (this->init) {
+				MDA<dataType> *npMDA = new MDA<dataType>(this->rank, this->dimensions, this->data);
+				return npMDA;
+			}
+			MDA<dataType> *npMDA = new MDA<dataType>(this->rank, this->dimensions);
 			return npMDA;
 		}
 
@@ -90,26 +95,31 @@ namespace LIBCAA {
 				throw initEx;
 
 			// print the MDA
+			this->printAxis("", 0, this->rank, this->dimensions, this->strides);
 		}
 
 		// gets the value at the index
 		dataType getRawIndex(int *indicies) {
 			int index = 0;
-			for (int i = 0; i < )
-			return 
+			for (int i = 0; i < this->rank; i++) {
+				index += indicies[i] * this->strides[i];
+			}
+			return this->data[index];
 		}
 
-		dataType getIndex(int *index) {
-			for (int i = 0; i < this->pShape->rank; i++) {
-				index[i] %= (*this->pShape)[i];
+		dataType getIndex(int *indicies) {
+			for (int i = 0; i < this->rank; i++) {
+				indicies[i] %= this->dimensions[i];
 			}
 
-			return this->getRawIndex(index);
+			return this->getRawIndex(indicies);
 		}
 
 		// TODO: overload () operator for indexing
 
 		// TODO: impliment a slicing function
+
+		// TODO: impliment a reshaping function
 
 	protected:
 		int rank;
@@ -119,6 +129,7 @@ namespace LIBCAA {
 		dataType *data;
 		bool init;
 
+		// initializes the shape defining attributes
 		void stdInit(int rank, int *dimensions) {
 			this->rank = rank;
 
@@ -126,14 +137,39 @@ namespace LIBCAA {
 			this->strides = (int *)malloc(sizeof(int) * rank);
 
 			int maxIndex = rank - 1;
-			this->strides[maxIndex] = 1;
+
 			this->dimensions[maxIndex] = dimensions[maxIndex];
-			this->len = dimenions[maxIndex];
-			for (int i = maxIndex; i >= 0; i--) {
+			this->strides[maxIndex] = 1;
+			this->len = dimensions[maxIndex];
+
+			for (int i = maxIndex - 1; i >= 0; i--) {
 				this->dimensions[i] = dimensions[i];
 				this->strides[i] = dimensions[i] * strides[i + 1];
 				this->len *= dimensions[i];
 			}
+		}
+
+		// recursively prints out the array
+		void printAxis(std::string base, int startIndex, int cRank, int *cDimensions, int *cStride) {
+			if (cRank == 1) {
+				std::cout << base << "[";
+				if (cDimensions[0] != 0) {
+					std::cout << this->data[startIndex];
+					for (int i = 1; i < cDimensions[0]; i++) {
+						std::cout << ", " << this->data[startIndex + i];
+					}
+				}
+				std::cout << "]" << std::endl;
+				return;
+			}
+
+			std::cout << base << "[" << std::endl;
+			if (cDimensions[0] != 0) {
+				for (int i = 0; i < cDimensions[0]; i++) {
+					this->printAxis(base + " ", startIndex + cStride[0] * i, cRank - 1, cDimensions + 1, cStride + 1);
+				}
+			}
+			std::cout << base << "]" << std::endl;
 		}
 	};
 

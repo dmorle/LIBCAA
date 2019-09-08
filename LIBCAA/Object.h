@@ -11,7 +11,7 @@ namespace LIBCAA {
 	class Object
 	{
 	public:
-		virtual void clone(void *) = 0;	// virtual clone function to be overridden
+		virtual void *clone() = 0;		// virtual clone function to be overridden
 		virtual void print() = 0;		// virtual print function to be overridden
 
 		std::string getType() { return this->type; }
