@@ -128,17 +128,55 @@ namespace LIBCAA {
 			}
 		}
 
+		// recursively adds a constant to all elements of an axis
+		template <typename dataType> void *addAxis(void *axis, dataType shift, int rank, int *dimensions) {
+			if (rank == 1) {
+				// base axis
+				dataType *nAxis = (dataType *)malloc(sizeof(dataType) * dimensions[0]);
+				for (int i = 0; i < dimensions; i++) {
+					nAxis[i] = axis[i] + shift;
+				}
+
+				return nAxis;
+			}
+
+			// non-trivial multiplication
+			void **nAxis = (void **)malloc(sizeof(void *) * dimensions[0]);
+			for (int i = 0; i < dimensions[0]; i++) {
+				nAxis[i] = addAxis(axis[i], shift, rank - 1, dimensions + 1);
+			}
+
+			return (void *)nAxis;
+		}
+
 		// recursively adds two axes
-		template <typename dataType> void *addAxes(void *axis1, void *axis2, int rank, int *dimensions) {
-			// TODO: entire implimentation
+		template <typename dataType> void *addAxis(void *axis1, void *axis2, int rank, int *dimensions) {
+			if (rank == 1) {
+				// base axis
+				dataType * nAxis = (dataType *)malloc(sizeof(dataType) * dimensions[0]);
+				for (int i = 0; i < dimensions[0]; i++) {
+					nAxis[i] = axis1[i] + axis2[i];
+				}
+
+				return nAxis;
+			}
+
+			// axis contains more axes
+			// call addAxes() on the contained axes
+			void **nAxis = (void **)malloc(sizeof(void *) * dimensions[0]);
+			for (int i = 0; i < dimensions[0]; i++) {
+				nAxis[i] = addAxes(axis1[i], axis2[i], rank - 1, dimensions + 1);
+			}
+
+			return (void *)nAxis;
 		}
 
 		// recursively adds a set of axes
-		template <typename dataType> void *addAxes(void **axes, int axisNum, int rank, int *dimensions) {
+		template <typename dataType> void *addAxis(void **axes, int axisNum, int rank, int *dimensions) {
 			if (rank == 1) {
 				// base axis
 				// add the axes over the single dimension
-				(dataType *)nAxis = (dataType *)malloc(sizeof(dataType) * dimensions[0]);
+				dataType *nAxis = (dataType *)malloc(sizeof(dataType) * dimensions[0]);
 				for (int i = 0; i < dimensions[0]; i++) {
 					nAxis[i] = 0;
 					for (int n = 0; n < axisNum; n++) {
@@ -153,17 +191,137 @@ namespace LIBCAA {
 			// reconstruct axes into nAxes
 			// call addAxes recursively with the contructed axes
 			void **nAxis = (void **)malloc(sizeof(void *) * dimensions[0]);
-			void **nAxes = (void **)malloc(sizeof(void *) * axisNum);
+			void **nInAxes = (void **)malloc(sizeof(void *) * axisNum);
 			for (int i = 0; i < dimensions[0]; i++) {
 				for (int n = 0; n < axisNum; n++) {
-					nAxes[n] = axes[n][i];
+					nInAxes[n] = axes[n][i];
 				}
-				nAxis[i] = addAxes(nAxes, axisNum, rank - 1, dimensions + 1);
+				nAxis[i] = addAxes(nInAxes, axisNum, rank - 1, dimensions + 1);
 
 			}
-			free(nAxes);
+			free(nInAxes);
 			return (void *)nAxis;
 
+		}
+
+		// recursively subtracts two axes
+		template <typename dataType> void *subAxis(void *axis1, void *axis2, int rank, int *dimensions) {
+			if (rank == 1) {
+				// base axis
+				dataType * nAxis = (dataType *)malloc(sizeof(dataType) * dimensions[0]);
+				for (int i = 0; i < dimensions[0]; i++) {
+					nAxis[i] = axis1[i] - axis2[i];
+				}
+
+				return nAxis;
+			}
+
+			// axis contains more axes
+			// call addAxes() on the contained axes
+			void **nAxis = (void **)malloc(sizeof(void *) * dimensions[0]);
+			for (int i = 0; i < dimensions[0]; i++) {
+				nAxis[i] = subAxes(axis1[i], axis2[i], rank - 1, dimensions + 1);
+			}
+
+			return (void *)nAxis;
+		}
+
+		// recursively multiplies all elements of an axis by a constant
+		template <typename dataType> void *mulAxis(void *axis, dataType mult, int rank, int *dimensions) {
+			if (rank == 1) {
+				// base axis
+				dataType *nAxis = (dataType *)malloc(sizeof(dataType) * dimensions[0]);
+				for (int i = 0; i < dimensions; i++) {
+					nAxis[i] = axis[i] * mult;
+				}
+
+				return nAxis;
+			}
+
+			// non-trivial multiplication
+			void **nAxis = (void **)malloc(sizeof(void *) * dimensions[0]);
+			for (int i = 0; i < dimensions[0]; i++) {
+				nAxis[i] = mulAxis(axis[i], mult, rank - 1, dimensions + 1);
+			}
+
+			return (void *)nAxis;
+		}
+
+		// recursively multiplies two axes pointwise
+		template <typename dataType> void *mulAxis(void *axis1, void *axis2, int rank, int *dimensions) {
+			if (rank == 1) {
+				// base axis
+				dataType *nAxis = (dataType *)malloc(sizeof(dataType) * dimensions[0]);
+				for (int i = 0; i < dimensions[0]; i++) {
+					nAxis[i] = axis1[i] * axis2[i];
+				}
+
+				return nAxis;
+			}
+
+			// axis contains more axes
+			// call addAxes() on the contained axes
+			void **nAxis = (void **)malloc(sizeof(void *) * dimensions[0]);
+			for (int i = 0; i < dimensions[0]; i++) {
+				nAxis[i] = mulAxes(axis1[i], axis2[i], rank - 1, dimensions + 1);
+			}
+
+			return (void *)nAxis;
+		}
+
+		// recursively multiplies a set of axes pointwise
+		template <typename dataType> void *mulAxes(void **axes, int axisNum, int rank, int *dimensions) {
+			if (rank == 1) {
+				// base axis
+				// add the axes over the single dimension
+				dataType *nAxis = (dataType *)malloc(sizeof(dataType) * dimensions[0]);
+				for (int i = 0; i < dimensions[0]; i++) {
+					nAxis[i] = 1;
+					for (int n = 0; n < axisNum; n++) {
+						nAxis[i] *= axes[n][i];
+					}
+				}
+
+				return nAxis;
+			}
+
+			// axis contains more axes
+			// reconstruct axes into nAxes
+			// call addAxes recursively with the contructed axes
+			void **nAxis = (void **)malloc(sizeof(void *) * dimensions[0]);
+			void **nInAxes = (void **)malloc(sizeof(void *) * axisNum);
+			for (int i = 0; i < dimensions[0]; i++) {
+				for (int n = 0; n < axisNum; n++) {
+					nInAxes[n] = axes[n][i];
+				}
+				nAxis[i] = mulAxes(nInAxes, axisNum, rank - 1, dimensions + 1);
+
+			}
+			free(nInAxes);
+			return (void *)nAxis;
+
+		}
+
+		// recursively divides two axes pointwise
+		template <typename dataType> void *divAxes(void *axis1, void *axis2, int rank, int *dimensions) {
+			if (rank == 1) {
+				// base axis
+				dataType * nAxis = (dataType *)malloc(sizeof(dataType) * dimensions[0]);
+				for (int i = 0; i < dimensions[0]; i++) {
+					nAxis[i] = axis1[i] / axis2[i];
+				}
+
+				return nAxis;
+			}
+
+			// axis contains more axes
+			// call addAxes() on the contained axes
+			void **nAxis = (void **)malloc(sizeof(void *) * dimensions[0]);
+			for (int i = 0; i < dimensions[0]; i++) {
+				nAxis[i] = divAxes(axis1[i], axis2[i], rank - 1, dimensions + 1);
+			}
+
+			return (void *)nAxis;
 		}
 
 	}

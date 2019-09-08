@@ -97,10 +97,6 @@ namespace LIBCAA {
 
 		// TODO: impliment a slicing function
 
-		friend void **packAxes(int axisNum, MDA<dataType> *pMDA) {
-			// TODO: pack MDA->data into an array for each element in pMDA
-		}
-
 	protected:
 		pSHAPE pShape;
 		void *data;

@@ -10,8 +10,8 @@ int main() {
 
 	arr.print();
 
-	int indicies[] = { 0, 0, 0 };
-	std::cout << arr(0, 0, 0);
+	int index[] = { 0, 0, 0 };
+	std::cout << arr.getIndex(index);
 
 	std::cin.get();
 	return 0;
