@@ -2,8 +2,6 @@
 #define MDA_H
 
 #include "Object.h"
-#include "Shapes.h"
-#include "IAXIS.h"
 #include "LIBCAAEX.h"
 #include <stdarg.h>
 #include <stdlib.h>
@@ -23,52 +21,66 @@ namespace LIBCAA {
 	template <typename dataType> class MDA:Object
 	{
 	public:
-		// creates MDA obj without initialization.  NOTE: use getShape() for pShape parameter
-		MDA(pSHAPE pShape) {
-			this->type = "MDA";
-			this->pShape = pShape;
-			this->data = IAXIS::generateAxis<dataType>(this->pShape->rank, this->pShape->dimensions);
-			this->init = false;
-		}
-
-		// creates MDA obj with initialization. NOTE: use getShape() for pShape parameter
-		MDA(pSHAPE pShape, dataType val) {
-			this->type = "MDA";
-			this->pShape = pShape;
-			this->data = IAXIS::generateAxis<dataType>(this->pShape->rank, this->pShape->dimensions, val);
-			this->init = true;
-		}
 
 		// creates MDA obj without initialization from a rank and dimension array
 		MDA(int rank, int *dimensions) {
 			this->type = "MDA";
-			this->pShape = getShape(rank, dimensions);
-			this->data = IAXIS::generateAxis<dataType>(this->pShape->rank, this->pShape->dimensions);
+			this->stdInit(rank, dimensions);
+
+			this->data = (dataType *)malloc(sizeof(dataType) * this->len);
 			this->init = false;
 		}
 
 		// creates MDA obj with initialization from a rank and dimension array
 		MDA(int rank, int *dimensions, dataType val) {
 			this->type = "MDA";
-			this->pShape = getShape(rank, dimensions);
-			this->data = IAXIS::generateAxis<dataType>(this->pShape->rank, this->pShape->dimensions, val);
+			this->stdInit(rank, dimensions);
+
+			this->data = (dataType *)malloc(sizeof(dataType) * this->len);
+			for (int i = 0; i < this->len; i++) {
+				this->data[i] = val;
+			}
+
+			this->init = true;
+		}
+
+		MDA(int rank, int *dimensions, dataType(*initFunc)()) {
+			this->type = "MDA";
+			this->stdInit(rank, dimensions);
+			
+			this->data = (dataType *)malloc(sizeof(dataType) * this->len);
+			for (int i = 0; i < this->len; i++) {
+				this->data[i] = initFunc();
+			}
+
+			this->init = true;
+		}
+
+		MDA(int rank, int *dimensions, dataType *data) {
+			this->type = "MDA";
+			this->stdInit(rank, dimensions);
+
+			this->data = (dataType *)malloc(sizeof(dataType) * this->len);
+			for (int i = 0; i < this->len; i++) {
+				this->data[i] = data[i];
+			}
+
 			this->init = true;
 		}
 
 		// deallocates memory used by MDA obj
 		~MDA() {
-			// deleting the array data
-			IAXIS::delAxis(this->data, this->pShape->rank, this->pShape->dimensions);
-
-			// deleting the shape data
-			delShape(this->pShape);
+			// freeing the array memory
+			free(this->data);
+			
+			// freeing the dimension memory
+			free(this->dimensions);
 		}
 
 		// copies all data into nMDA
-		void clone(void *npMDA) {
-			((MDA<dataType> *)npMDA)->pShape = copyShape(this->pShape);
-			((MDA<dataType> *)npMDA)->data = IAXIS::copyAxis<dataType>(this->data, this->pShape->rank, this->pShape->dimensions);
-			((MDA<dataType> *)npMDA)->init = this->init;
+		void *clone() {
+			MDA<datatype> *npMDA = new MDA<dataType>(this->rank, this->dimensions, this->data);
+			return npMDA;
 		}
 
 		// displays the array
@@ -77,12 +89,14 @@ namespace LIBCAA {
 				// the array has uninitialized values
 				throw initEx;
 
-			IAXIS::printAxis<dataType>(this->data, this->pShape->rank, this->pShape->dimensions);
+			// print the MDA
 		}
 
 		// gets the value at the index
-		dataType getRawIndex(int *index) {
-			return IAXIS::getIndex<dataType>(this->data, this->pShape->rank, index);
+		dataType getRawIndex(int *indicies) {
+			int index = 0;
+			for (int i = 0; i < )
+			return 
 		}
 
 		dataType getIndex(int *index) {
@@ -98,9 +112,29 @@ namespace LIBCAA {
 		// TODO: impliment a slicing function
 
 	protected:
-		pSHAPE pShape;
-		void *data;
+		int rank;
+		int *dimensions;
+		int *strides;
+		int len;
+		dataType *data;
 		bool init;
+
+		void stdInit(int rank, int *dimensions) {
+			this->rank = rank;
+
+			this->dimensions = (int *)malloc(sizeof(int) * rank);
+			this->strides = (int *)malloc(sizeof(int) * rank);
+
+			int maxIndex = rank - 1;
+			this->strides[maxIndex] = 1;
+			this->dimensions[maxIndex] = dimensions[maxIndex];
+			this->len = dimenions[maxIndex];
+			for (int i = maxIndex; i >= 0; i--) {
+				this->dimensions[i] = dimensions[i];
+				this->strides[i] = dimensions[i] * strides[i + 1];
+				this->len *= dimensions[i];
+			}
+		}
 	};
 
 }
