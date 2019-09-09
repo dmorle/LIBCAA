@@ -5,6 +5,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <iostream>
+#include <iomanip>
 
 namespace LIBCAA {
 
@@ -217,7 +218,7 @@ namespace LIBCAA {
 
 			for (int i = maxIndex - 1; i >= 0; i--) {
 				this->dimensions[i] = dimensions[i];
-				this->strides[i] = dimensions[i] * strides[i + 1];
+				this->strides[i] = dimensions[i + 1] * strides[i + 1];
 				this->len *= dimensions[i];
 			}
 		}
@@ -242,9 +243,10 @@ namespace LIBCAA {
 			if (cRank == 1) {
 				std::cout << base << "[";
 				if (cDimensions[0] != 0) {
-					std::cout << this->data[startIndex];
+					std::cout << std::setw(6) << this->data[startIndex];
 					for (int i = 1; i < cDimensions[0]; i++) {
-						std::cout << ", " << this->data[startIndex + i];
+						std::cout << ", ";
+						std::cout << std::setw(4) << this->data[startIndex + i];
 					}
 				}
 				std::cout << "]" << std::endl;

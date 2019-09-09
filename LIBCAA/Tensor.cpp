@@ -6,15 +6,15 @@ namespace LIBCAA {
 
 	// helper functions
 
-	template <typename dataType> void transposeAxis(dataType *oldData, int *oldSrd, dataType *newData, int *dim, int *newSrd, int rk) {
+	template <typename dataType> void transposeAxis(dataType *oldData, int *oldSrd, int *axisOrder, dataType *newData, int *dim, int *newSrd, int rk) {
 		if (rk == 1) {
 			for (int i = 0; i < dim[0]; i++) {
-				newData[i] = oldData[i * oldSrd[0]];
+				newData[i] = oldData[i * oldSrd[axisOrder[0]]];
 			}
 		}
 		else {
 			for (int i = 0; i < dim[0]; i++) {
-				transposeAxis(oldData + i * oldSrd[0], oldSrd + 1, newData + i * newSrd[0], dim + 1, newSrd + 1, rk - 1);
+				transposeAxis(oldData + i * oldSrd[axisOrder[0]], oldSrd, axisOrder + 1, newData + i * newSrd[0], dim + 1, newSrd + 1, rk - 1);
 			}
 		}
 	}
@@ -346,10 +346,10 @@ namespace LIBCAA {
 		nStrides[this->rank - 1] = 1;
 
 		for (int i = rank - 2; i >= 0; i--)
-			nStrides[i] = nDimensions[i] * nStrides[i + 1];
+			nStrides[i] = nDimensions[i + 1] * nStrides[i + 1];
 
 		double *newData = (double *)malloc(sizeof(double) * this->len);
-		transposeAxis<double>(this->data, this->strides, newData, nDimensions, nStrides, this->rank);
+		transposeAxis<double>(this->data, this->strides, axisOrder, newData, nDimensions, nStrides, this->rank);
 
 		Tensor *nTens = new Tensor(this->rank, nDimensions, nStrides);
 		nTens->forceSetData(newData);
