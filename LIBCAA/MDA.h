@@ -161,6 +161,7 @@ namespace LIBCAA {
 
 		// unsafe function which sets this->data
 		// only use if object is empty
+		// DO NOT DELETE DATA
 		void forceSetData(dataType *data) {
 			if (this->init)
 				throw reinitEx();
@@ -228,6 +229,11 @@ namespace LIBCAA {
 			
 			this->dimensions = (int *)malloc(sizeof(int) * rank);
 			this->strides = (int *)malloc(sizeof(int) * rank);
+
+			for (int i = 0; i < rank; i++) {
+				this->dimensions[i] = dimensions[i];
+				this->strides[i] = strides[i];
+			}
 
 			this->len = strides[0] * dimensions[0];
 		}
