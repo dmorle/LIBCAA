@@ -50,6 +50,9 @@ namespace LIBCAA {
 		Tensor operator <= (Tensor tens);
 
 		void operator = (Tensor tens);
+
+		void collapseAxis(int axis);
+		Tensor collapseAxis(int axisNum, int *axes)
 	};
 
 }

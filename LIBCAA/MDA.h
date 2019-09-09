@@ -119,6 +119,14 @@ namespace LIBCAA {
 			}
 		}
 
+		void setIndex(int *indicies, dataType val) {
+			int index = 0;
+			for (int i = 0; i < this->rank; i++) {
+				index += indicies[i] * this->strides[i];
+			}
+			this->data[index] = val;
+		}
+
 		// gets the value at the index
 		dataType getAbsIndex(int *indicies) {
 			int index = 0;
@@ -155,6 +163,10 @@ namespace LIBCAA {
 		// gets the array at a location in RAM
 		dataType getDataIndex(int index) {
 			return this->data[index];
+		}
+
+		int getLen() {
+			return this->len;
 		}
 
 		friend bool sameShape(MDA<dataType> *MDA1, MDA<dataType> *MDA2) {

@@ -1,19 +1,22 @@
-#include "MDA.h"
+#include "Tensor.h"
 #include "InitFunc.h"
 #include <iostream>
 
 using namespace LIBCAA;
 
+void checkMemLeak(int rank, int *dimensions) {
+	Tensor tens = Tensor(rank, dimensions, INIT::arange<double>);
+}
+
 int main() {
 	int rank = 3;
-	int dimensions[] = { 3, 3, 3 };
+	int dimensions[] = { 100, 100, 100 };
 
-	MDA<double> arr(rank, dimensions, INIT::arange<double>);
+	for (int i = 0; i < 1000; i++) {
+		checkMemLeak(rank, dimensions);
+	}
 
-	arr.print();
-
-	int index[] = { 0, 0, 0 };
-	std::cout << arr.getIndex(index);
+	std::cout << "done";
 
 	std::cin.get();
 	return 0;
