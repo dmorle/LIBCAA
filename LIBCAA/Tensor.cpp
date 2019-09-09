@@ -104,14 +104,14 @@ namespace LIBCAA {
 
 	Tensor::~Tensor() {}
 
-	Tensor *Tensor::operator+(Tensor tens)
+	Tensor *Tensor::operator+(Tensor *tens)
 	{
-		if (!sameShape(this, &tens))
+		if (!sameShape(this, tens))
 			throw shapeEx();
 		
 		double *nData = (double *)malloc(sizeof(double) * this->len);
 		for (int i = 0; i < this->len; i++) {
-			nData[i] = this->data[i] + tens.getDataIndex(i);
+			nData[i] = this->data[i] + tens->getDataIndex(i);
 		}
 
 		Tensor *npTens = new Tensor(this->rank, this->dimensions);
@@ -133,14 +133,14 @@ namespace LIBCAA {
 		return npTens;
 	}
 
-	Tensor *Tensor::operator-(Tensor tens)
+	Tensor *Tensor::operator-(Tensor *tens)
 	{
-		if (!sameShape(this, &tens))
+		if (!sameShape(this, tens))
 			throw shapeEx();
 
 		double *nData = (double *)malloc(sizeof(double) * this->len);
 		for (int i = 0; i < this->len; i++) {
-			nData[i] = this->data[i] - tens.getDataIndex(i);
+			nData[i] = this->data[i] - tens->getDataIndex(i);
 		}
 
 		Tensor *npTens = new Tensor(this->rank, this->dimensions);
@@ -162,14 +162,14 @@ namespace LIBCAA {
 		return npTens;
 	}
 
-	Tensor *Tensor::operator*(Tensor tens)
+	Tensor *Tensor::operator*(Tensor *tens)
 	{
-		if (!sameShape(this, &tens))
+		if (!sameShape(this, tens))
 			throw shapeEx();
 
 		double *nData = (double *)malloc(sizeof(double) * this->len);
 		for (int i = 0; i < this->len; i++) {
-			nData[i] = this->data[i] * tens.getDataIndex(i);
+			nData[i] = this->data[i] * tens->getDataIndex(i);
 		}
 
 		Tensor *npTens = new Tensor(this->rank, this->dimensions);
@@ -191,14 +191,14 @@ namespace LIBCAA {
 		return npTens;
 	}
 
-	Tensor *Tensor::operator/(Tensor tens)
+	Tensor *Tensor::operator/(Tensor *tens)
 	{
-		if (!sameShape(this, &tens))
+		if (!sameShape(this, tens))
 			throw shapeEx();
 
 		double *nData = (double *)malloc(sizeof(double) * this->len);
 		for (int i = 0; i < this->len; i++) {
-			nData[i] = this->data[i] / tens.getDataIndex(i);
+			nData[i] = this->data[i] / tens->getDataIndex(i);
 		}
 
 		Tensor *npTens = new Tensor(this->rank, this->dimensions);
@@ -220,14 +220,14 @@ namespace LIBCAA {
 		return npTens;
 	}
 
-	Tensor *Tensor::operator^(Tensor tens)
+	Tensor *Tensor::operator^(Tensor *tens)
 	{
-		if (!sameShape(this, &tens))
+		if (!sameShape(this, tens))
 			throw shapeEx();
 
 		double *nData = (double *)malloc(sizeof(double) * this->len);
 		for (int i = 0; i < this->len; i++) {
-			nData[i] = std::pow(this->data[i], tens.getDataIndex(i));
+			nData[i] = std::pow(this->data[i], tens->getDataIndex(i));
 		}
 
 		Tensor *npTens = new Tensor(this->rank, this->dimensions);
@@ -262,7 +262,7 @@ namespace LIBCAA {
 		return npTens;
 	}
 
-	void Tensor::operator+=(Tensor tens)
+	void Tensor::operator+=(Tensor *tens)
 	{
 	}
 
@@ -270,7 +270,7 @@ namespace LIBCAA {
 	{
 	}
 
-	void Tensor::operator-=(Tensor tens)
+	void Tensor::operator-=(Tensor *tens)
 	{
 	}
 
@@ -278,7 +278,7 @@ namespace LIBCAA {
 	{
 	}
 
-	void Tensor::operator*=(Tensor tens)
+	void Tensor::operator*=(Tensor *tens)
 	{
 	}
 
@@ -286,7 +286,7 @@ namespace LIBCAA {
 	{
 	}
 
-	void Tensor::operator/=(Tensor tens)
+	void Tensor::operator/=(Tensor *tens)
 	{
 	}
 
@@ -294,7 +294,7 @@ namespace LIBCAA {
 	{
 	}
 
-	void Tensor::operator^=(Tensor tens)
+	void Tensor::operator^=(Tensor *tens)
 	{
 	}
 
@@ -302,7 +302,7 @@ namespace LIBCAA {
 	{
 	}
 
-	void Tensor::operator%=(Tensor tens)
+	void Tensor::operator%=(Tensor *tens)
 	{
 	}
 
@@ -310,19 +310,19 @@ namespace LIBCAA {
 	{
 	}
 	/*
-	Tensor Tensor::operator==(Tensor tens)
+	Tensor Tensor::operator==(Tensor *tens)
 	{
 	}
 
-	Tensor Tensor::operator!=(Tensor tens)
+	Tensor Tensor::operator!=(Tensor *tens)
 	{
 	}
 
-	Tensor Tensor::operator>=(Tensor tens)
+	Tensor Tensor::operator>=(Tensor *tens)
 	{
 	}
 
-	Tensor Tensor::operator<=(Tensor tens)
+	Tensor Tensor::operator<=(Tensor *tens)
 	{
 	}
 	*/
