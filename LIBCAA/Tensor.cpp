@@ -264,6 +264,8 @@ namespace LIBCAA {
 
 	void Tensor::operator+=(Tensor *tens)
 	{
+		if (!sameShape(this, tens))
+			throw shapeEx();
 	}
 
 	void Tensor::operator+=(double val)
@@ -272,6 +274,8 @@ namespace LIBCAA {
 
 	void Tensor::operator-=(Tensor *tens)
 	{
+		if (!sameShape(this, tens))
+			throw shapeEx();
 	}
 
 	void Tensor::operator-=(double val)
@@ -280,6 +284,8 @@ namespace LIBCAA {
 
 	void Tensor::operator*=(Tensor *tens)
 	{
+		if (!sameShape(this, tens))
+			throw shapeEx();
 	}
 
 	void Tensor::operator*=(double val)
@@ -288,6 +294,8 @@ namespace LIBCAA {
 
 	void Tensor::operator/=(Tensor *tens)
 	{
+		if (!sameShape(this, tens))
+			throw shapeEx();
 	}
 
 	void Tensor::operator/=(double val)
@@ -296,6 +304,8 @@ namespace LIBCAA {
 
 	void Tensor::operator^=(Tensor *tens)
 	{
+		if (!sameShape(this, tens))
+			throw shapeEx();
 	}
 
 	void Tensor::operator^=(double val)
@@ -304,6 +314,8 @@ namespace LIBCAA {
 
 	void Tensor::operator%=(Tensor *tens)
 	{
+		if (!sameShape(this, tens))
+			throw shapeEx();
 	}
 
 	void Tensor::operator%=(double val)
