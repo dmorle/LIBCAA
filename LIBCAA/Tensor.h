@@ -42,8 +42,7 @@ namespace LIBCAA {
 		void operator /= (double val);
 		void operator ^= (Tensor *tens);
 		void operator ^= (double val);
-		void operator %= (Tensor *tens);
-		void operator %= (double val);
+		void operator ^= (int val);
 
 		Tensor *operator == (Tensor tens);
 		Tensor *operator != (Tensor tens);
@@ -57,6 +56,11 @@ namespace LIBCAA {
 		Tensor *collapseAxis(int axisNum, int *axes);
 
 		friend Tensor *outerProd(Tensor *tens1, Tensor *tens2);
+
+	private:
+		// checks if a pointwise operation can be performed
+		// throws shapeEx() or initEx()
+		void opExcept(Tensor *pTens);
 	};
 
 }

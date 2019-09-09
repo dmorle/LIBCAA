@@ -179,6 +179,10 @@ namespace LIBCAA {
 			return this->len;
 		}
 
+		bool getInit() {
+			return this->init;
+		}
+
 		friend bool sameShape(MDA<dataType> *MDA1, MDA<dataType> *MDA2) {
 			return sameShape(MDA1->rank, MDA1->dimensions, MDA2->rank, MDA2->dimensions);
 		}

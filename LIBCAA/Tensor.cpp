@@ -106,8 +106,7 @@ namespace LIBCAA {
 
 	Tensor *Tensor::operator+(Tensor *tens)
 	{
-		if (!sameShape(this, tens))
-			throw shapeEx();
+		this->opExcept(tens);
 		
 		double *nData = (double *)malloc(sizeof(double) * this->len);
 		for (int i = 0; i < this->len; i++) {
@@ -122,6 +121,9 @@ namespace LIBCAA {
 
 	Tensor *Tensor::operator+(double val)
 	{
+		if (!this->init)
+			throw initEx();
+
 		double *nData = (double *)malloc(sizeof(double) * this->len);
 		for (int i = 0; i < this->len; i++) {
 			nData[i] = this->data[i] - val;
@@ -135,8 +137,7 @@ namespace LIBCAA {
 
 	Tensor *Tensor::operator-(Tensor *tens)
 	{
-		if (!sameShape(this, tens))
-			throw shapeEx();
+		this->opExcept(tens);
 
 		double *nData = (double *)malloc(sizeof(double) * this->len);
 		for (int i = 0; i < this->len; i++) {
@@ -151,6 +152,9 @@ namespace LIBCAA {
 
 	Tensor *Tensor::operator-(double val)
 	{
+		if (!this->init)
+			throw initEx();
+
 		double *nData = (double *)malloc(sizeof(double) * this->len);
 		for (int i = 0; i < this->len; i++) {
 			nData[i] = this->data[i] - val;
@@ -164,8 +168,7 @@ namespace LIBCAA {
 
 	Tensor *Tensor::operator*(Tensor *tens)
 	{
-		if (!sameShape(this, tens))
-			throw shapeEx();
+		this->opExcept(tens);
 
 		double *nData = (double *)malloc(sizeof(double) * this->len);
 		for (int i = 0; i < this->len; i++) {
@@ -180,6 +183,9 @@ namespace LIBCAA {
 
 	Tensor *Tensor::operator*(double val)
 	{
+		if (!this->init)
+			throw initEx();
+
 		double *nData = (double *)malloc(sizeof(double) * this->len);
 		for (int i = 0; i < this->len; i++) {
 			nData[i] = this->data[i] * val;
@@ -193,8 +199,7 @@ namespace LIBCAA {
 
 	Tensor *Tensor::operator/(Tensor *tens)
 	{
-		if (!sameShape(this, tens))
-			throw shapeEx();
+		this->opExcept(tens);
 
 		double *nData = (double *)malloc(sizeof(double) * this->len);
 		for (int i = 0; i < this->len; i++) {
@@ -209,6 +214,9 @@ namespace LIBCAA {
 
 	Tensor *Tensor::operator/(double val)
 	{
+		if (!this->init)
+			throw initEx();
+
 		double *nData = (double *)malloc(sizeof(double) * this->len);
 		for (int i = 0; i < this->len; i++) {
 			nData[i] = this->data[i] / val;
@@ -222,8 +230,7 @@ namespace LIBCAA {
 
 	Tensor *Tensor::operator^(Tensor *tens)
 	{
-		if (!sameShape(this, tens))
-			throw shapeEx();
+		this->opExcept(tens);
 
 		double *nData = (double *)malloc(sizeof(double) * this->len);
 		for (int i = 0; i < this->len; i++) {
@@ -238,6 +245,9 @@ namespace LIBCAA {
 
 	Tensor *Tensor::operator^(double val)
 	{
+		if (!this->init)
+			throw initEx();
+
 		double *nData = (double *)malloc(sizeof(double) * this->len);
 		for (int i = 0; i < this->len; i++) {
 			nData[i] = std::pow(this->data[i], val);
@@ -251,6 +261,9 @@ namespace LIBCAA {
 
 	Tensor *Tensor::operator^(int val)
 	{
+		if (!this->init)
+			throw initEx();
+
 		double *nData = (double *)malloc(sizeof(double) * this->len);
 		for (int i = 0; i < this->len; i++) {
 			nData[i] = std::pow(this->data[i], val);
@@ -264,63 +277,108 @@ namespace LIBCAA {
 
 	void Tensor::operator+=(Tensor *tens)
 	{
-		if (!sameShape(this, tens))
-			throw shapeEx();
+		this->opExcept(tens);
+
+		// operation
+		for (int i = 0; i < this->len; i++)
+			this->data[i] += tens->getDataIndex(i);
 	}
 
 	void Tensor::operator+=(double val)
 	{
+		if (!this->init)
+			throw initEx();
+
+		// operation
+		for (int i = 0; i < this->len; i++)
+			this->data[i] += val;
 	}
 
 	void Tensor::operator-=(Tensor *tens)
 	{
-		if (!sameShape(this, tens))
-			throw shapeEx();
+		this->opExcept(tens);
+
+		// operation
+		for (int i = 0; i < this->len; i++)
+			this->data[i] -= tens->getDataIndex(i);
 	}
 
 	void Tensor::operator-=(double val)
 	{
+		if (!this->init)
+			throw initEx();
+
+		for (int i = 0; i < this->len; i++)
+			this->data[i] -= val;
 	}
 
 	void Tensor::operator*=(Tensor *tens)
 	{
-		if (!sameShape(this, tens))
-			throw shapeEx();
+		this->opExcept(tens);
+
+		// operation
+		for (int i = 0; i < this->len; i++)
+			this->data[i] *= tens->getDataIndex(i);
 	}
 
 	void Tensor::operator*=(double val)
 	{
+		if (!this->init)
+			throw initEx();
+
+		// operation
+		for (int i = 0; i < this->len; i++)
+			this->data[i] *= val;
 	}
 
 	void Tensor::operator/=(Tensor *tens)
 	{
-		if (!sameShape(this, tens))
-			throw shapeEx();
+		this->opExcept(tens);
+
+		// operation
+		for (int i = 0; i < this->len; i++)
+			this->data[i] /= tens->getDataIndex(i);
 	}
 
 	void Tensor::operator/=(double val)
 	{
+		if (!this->init)
+			throw initEx();
+
+		// operation
+		for (int i = 0; i < this->len; i++)
+			this->data[i] /= val;
 	}
 
 	void Tensor::operator^=(Tensor *tens)
 	{
-		if (!sameShape(this, tens))
-			throw shapeEx();
+		this->opExcept(tens);
+
+		// operation
+		for (int i = 0; i < this->len; i++)
+			this->data[i] = pow(this->data[i], tens->getDataIndex(i));
 	}
 
 	void Tensor::operator^=(double val)
 	{
+		if (!this->init)
+			throw initEx();
+
+		// operation
+		for (int i = 0; i < this->len; i++)
+			this->data[i] = pow(this->data[i], val);
 	}
 
-	void Tensor::operator%=(Tensor *tens)
+	void Tensor::operator^=(int val)
 	{
-		if (!sameShape(this, tens))
-			throw shapeEx();
+		if (!this->init)
+			throw initEx();
+
+		// operation
+		for (int i = 0; i < this->len; i++)
+			this->data[i] = pow(this->data[i], val);
 	}
 
-	void Tensor::operator%=(double val)
-	{
-	}
 	/*
 	Tensor Tensor::operator==(Tensor *tens)
 	{
@@ -464,6 +522,15 @@ namespace LIBCAA {
 		free(newStrides);
 
 		return npTens;
+	}
+
+	void Tensor::opExcept(Tensor *pTens) {
+		// checking if operation can be performed
+		if (!sameShape(this, pTens))
+			throw shapeEx();
+
+		if (!this->init || !pTens->getInit())
+			throw initEx();
 	}
 
 }
