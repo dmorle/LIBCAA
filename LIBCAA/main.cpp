@@ -4,19 +4,18 @@
 
 using namespace LIBCAA;
 
-void checkMemLeak(int rank, int *dimensions) {
-	Tensor tens = Tensor(rank, dimensions, INIT::arange<double>);
-}
-
 int main() {
-	int rank = 3;
-	int dimensions[] = { 100, 100, 100 };
+	int rank = 2;
+	int dimensions[] = { 2, 2 };
 
-	for (int i = 0; i < 1000; i++) {
-		checkMemLeak(rank, dimensions);
-	}
+	Tensor tens = Tensor(rank, dimensions, INIT::arange<double>);
 
-	std::cout << "done";
+	tens.print();
+
+	int axisOrder[] = { 1, 0 };
+	Tensor nTens = tens.transpose(axisOrder);
+
+	nTens.print();
 
 	std::cin.get();
 	return 0;

@@ -35,6 +35,14 @@ namespace LIBCAA {
 			this->init = false;
 		}
 
+		// creates an empty MDA obj
+		MDA(int rank, int *dimensions, int *strides) {
+			this->type = "MDA";
+			this->stdInit(rank, dimensions, strides);
+
+			this->init = false;
+		}
+
 		// creates MDA obj with initialization from a rank and dimension array
 		MDA(int rank, int *dimensions, dataType val) {
 			this->type = "MDA";
@@ -152,7 +160,7 @@ namespace LIBCAA {
 
 		// unsafe function which sets this->data
 		// only use if object is empty
-		void forceDataSet(dataType *data) {
+		void forceSetData(dataType *data) {
 			if (this->init)
 				throw reinitEx();
 
@@ -212,7 +220,21 @@ namespace LIBCAA {
 				this->strides[i] = dimensions[i] * strides[i + 1];
 				this->len *= dimensions[i];
 			}
-			return;
+		}
+
+		void stdInit(int rank, int *dimensions, int *strides) {
+			this->rank = rank;
+			
+			this->dimensions = (int *)malloc(sizeof(int) * rank);
+			this->strides = (int *)malloc(sizeof(int) * rank);
+
+			this->len = 1;
+
+			for (int i = 0; i < rank; i++) {
+				this->dimensions[i] = dimensions[i];
+				this->strides[i] = strides[i];
+				this->len *= dimensions[i];
+			}
 		}
 
 		// recursively prints out the array

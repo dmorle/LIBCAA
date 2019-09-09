@@ -12,6 +12,7 @@ namespace LIBCAA {
 
 		// all MDA constuctors are transferable to Tensor
 		Tensor(int rank, int *dimensions);
+		Tensor(int rank, int *dimensions, int *strides);
 		Tensor(int rank, int *dimensions, double val);
 		Tensor(int rank, int *dimensions, double(*initFunc)());
 		Tensor(int rank, int *dimensions, double *data);
@@ -51,8 +52,9 @@ namespace LIBCAA {
 
 		void operator = (Tensor tens);
 
-		void collapseAxis(int axis);
-		Tensor collapseAxis(int axisNum, int *axes)
+		Tensor transpose(int *axisOrder);
+
+		Tensor collapseAxis(int axisNum, int *axes);
 	};
 
 }
