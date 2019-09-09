@@ -214,13 +214,13 @@ namespace LIBCAA {
 
 			this->dimensions[maxIndex] = dimensions[maxIndex];
 			this->strides[maxIndex] = 1;
-			this->len = dimensions[maxIndex];
 
 			for (int i = maxIndex - 1; i >= 0; i--) {
 				this->dimensions[i] = dimensions[i];
 				this->strides[i] = dimensions[i + 1] * strides[i + 1];
-				this->len *= dimensions[i];
 			}
+
+			this->len = this->strides[0] * this->dimensions[0];
 		}
 
 		void stdInit(int rank, int *dimensions, int *strides) {
@@ -229,13 +229,7 @@ namespace LIBCAA {
 			this->dimensions = (int *)malloc(sizeof(int) * rank);
 			this->strides = (int *)malloc(sizeof(int) * rank);
 
-			this->len = 1;
-
-			for (int i = 0; i < rank; i++) {
-				this->dimensions[i] = dimensions[i];
-				this->strides[i] = strides[i];
-				this->len *= dimensions[i];
-			}
+			this->len = strides[0] * dimensions[0];
 		}
 
 		// recursively prints out the array
