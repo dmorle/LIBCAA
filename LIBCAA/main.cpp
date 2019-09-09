@@ -4,18 +4,35 @@
 
 using namespace LIBCAA;
 
+void testMemLeak(Tensor *tens, int axisNum, int *axes) {
+	Tensor *npTens = tens->collapseAxis(axisNum, axes);
+	delete npTens;
+}
+
 int main() {
 	int rank = 3;
 	int dimensions[] = { 2, 3, 4 };
 
-	Tensor tens = Tensor(rank, dimensions, INIT::arange<double>);
+	Tensor *tens = new Tensor(rank, dimensions, INIT::arange<double>);
 
-	tens.print();
+	tens->print();
 
-	int axisOrder[] = { 2, 1, 0 };
-	Tensor nTens = tens.transpose(axisOrder);
+	int axisNum = 2;
+	int axes[] = { 0, 2, -1 };
 
-	nTens.print();
+	/*
+	for (int i = 0; i < 100000; i++) {
+		testMemLeak(tens, axisNum, axes);
+		if (!(i % 10))
+			std::cout << i << std::endl;
+	}
+	*/
+	
+	Tensor *npTens = tens->collapseAxis(axisNum, axes);
+	npTens->print();
+
+	delete tens;
+	delete npTens;
 
 	std::cin.get();
 	return 0;

@@ -38,17 +38,12 @@ namespace LIBCAA {
 		return result;
 	}
 
-	template<typename dataType> void partArray(int size, dataType *baseArr, int *locs, dataType *part1, dataType *part2) {
-		int count1 = 0;
-		int count2 = 0;
+	template<typename dataType> void partArray(int size, dataType *baseArr, int *locs, dataType *result) {
+		int count = 0;
 		for (int i = 0; i < size; i++) {
-			if (i == locs[count1]) {
-				part1[count1] = baseArr[i];
-				count1++;
-			}
-			else {
-				part2[count2] = baseArr[i];
-				count2++;
+			if (i == locs[count]) {
+				result[count] = baseArr[i];
+				count++;
 			}
 		}
 	}
@@ -109,7 +104,7 @@ namespace LIBCAA {
 
 	Tensor::~Tensor() {}
 
-	Tensor Tensor::operator+(Tensor tens)
+	Tensor *Tensor::operator+(Tensor tens)
 	{
 		if (!sameShape(this, &tens))
 			throw shapeEx();
@@ -122,10 +117,10 @@ namespace LIBCAA {
 		Tensor *npTens = new Tensor(this->rank, this->dimensions);
 		npTens->forceSetData(nData);
 
-		return *npTens;
+		return npTens;
 	}
 
-	Tensor Tensor::operator+(double val)
+	Tensor *Tensor::operator+(double val)
 	{
 		double *nData = (double *)malloc(sizeof(double) * this->len);
 		for (int i = 0; i < this->len; i++) {
@@ -135,10 +130,10 @@ namespace LIBCAA {
 		Tensor *npTens = new Tensor(this->rank, this->dimensions);
 		npTens->forceSetData(nData);
 
-		return *npTens;
+		return npTens;
 	}
 
-	Tensor Tensor::operator-(Tensor tens)
+	Tensor *Tensor::operator-(Tensor tens)
 	{
 		if (!sameShape(this, &tens))
 			throw shapeEx();
@@ -151,10 +146,10 @@ namespace LIBCAA {
 		Tensor *npTens = new Tensor(this->rank, this->dimensions);
 		npTens->forceSetData(nData);
 
-		return *npTens;
+		return npTens;
 	}
 
-	Tensor Tensor::operator-(double val)
+	Tensor *Tensor::operator-(double val)
 	{
 		double *nData = (double *)malloc(sizeof(double) * this->len);
 		for (int i = 0; i < this->len; i++) {
@@ -164,10 +159,10 @@ namespace LIBCAA {
 		Tensor *npTens = new Tensor(this->rank, this->dimensions);
 		npTens->forceSetData(nData);
 
-		return *npTens;
+		return npTens;
 	}
 
-	Tensor Tensor::operator*(Tensor tens)
+	Tensor *Tensor::operator*(Tensor tens)
 	{
 		if (!sameShape(this, &tens))
 			throw shapeEx();
@@ -180,10 +175,10 @@ namespace LIBCAA {
 		Tensor *npTens = new Tensor(this->rank, this->dimensions);
 		npTens->forceSetData(nData);
 
-		return *npTens;
+		return npTens;
 	}
 
-	Tensor Tensor::operator*(double val)
+	Tensor *Tensor::operator*(double val)
 	{
 		double *nData = (double *)malloc(sizeof(double) * this->len);
 		for (int i = 0; i < this->len; i++) {
@@ -193,10 +188,10 @@ namespace LIBCAA {
 		Tensor *npTens = new Tensor(this->rank, this->dimensions);
 		npTens->forceSetData(nData);
 
-		return *npTens;
+		return npTens;
 	}
 
-	Tensor Tensor::operator/(Tensor tens)
+	Tensor *Tensor::operator/(Tensor tens)
 	{
 		if (!sameShape(this, &tens))
 			throw shapeEx();
@@ -209,10 +204,10 @@ namespace LIBCAA {
 		Tensor *npTens = new Tensor(this->rank, this->dimensions);
 		npTens->forceSetData(nData);
 
-		return *npTens;
+		return npTens;
 	}
 
-	Tensor Tensor::operator/(double val)
+	Tensor *Tensor::operator/(double val)
 	{
 		double *nData = (double *)malloc(sizeof(double) * this->len);
 		for (int i = 0; i < this->len; i++) {
@@ -222,10 +217,10 @@ namespace LIBCAA {
 		Tensor *npTens = new Tensor(this->rank, this->dimensions);
 		npTens->forceSetData(nData);
 
-		return *npTens;
+		return npTens;
 	}
 
-	Tensor Tensor::operator^(Tensor tens)
+	Tensor *Tensor::operator^(Tensor tens)
 	{
 		if (!sameShape(this, &tens))
 			throw shapeEx();
@@ -238,10 +233,10 @@ namespace LIBCAA {
 		Tensor *npTens = new Tensor(this->rank, this->dimensions);
 		npTens->forceSetData(nData);
 
-		return *npTens;
+		return npTens;
 	}
 
-	Tensor Tensor::operator^(double val)
+	Tensor *Tensor::operator^(double val)
 	{
 		double *nData = (double *)malloc(sizeof(double) * this->len);
 		for (int i = 0; i < this->len; i++) {
@@ -251,10 +246,10 @@ namespace LIBCAA {
 		Tensor *npTens = new Tensor(this->rank, this->dimensions);
 		npTens->forceSetData(nData);
 
-		return *npTens;
+		return npTens;
 	}
 
-	Tensor Tensor::operator^(int val)
+	Tensor *Tensor::operator^(int val)
 	{
 		double *nData = (double *)malloc(sizeof(double) * this->len);
 		for (int i = 0; i < this->len; i++) {
@@ -264,7 +259,7 @@ namespace LIBCAA {
 		Tensor *npTens = new Tensor(this->rank, this->dimensions);
 		npTens->forceSetData(nData);
 
-		return *npTens;
+		return npTens;
 	}
 
 	void Tensor::operator+=(Tensor tens)
@@ -332,32 +327,41 @@ namespace LIBCAA {
 	}
 	*/
 
-	Tensor Tensor::transpose(int *axisOrder) {
+	Tensor *Tensor::transpose(int *axisOrder) {
+		// checking possiblity
 		for (int i = 0; i < this->rank; i++)
 			if (axisOrder[i] >= this->rank)
 				throw shapeEx();
 
+		// generating the dimensions of the transpose
 		int *nDimensions = (int *)malloc(sizeof(int) * this->rank);
 		for (int i = 0; i < this->rank; i++) {
 			nDimensions[i] = this->dimensions[axisOrder[i]];
 		}
 
+		// generating the strides of the transpose
 		int *nStrides = (int *)malloc(sizeof(int) * this->rank);
 		nStrides[this->rank - 1] = 1;
 
-		for (int i = rank - 2; i >= 0; i--)
+		for (int i = this->rank - 2; i >= 0; i--)
 			nStrides[i] = nDimensions[i + 1] * nStrides[i + 1];
 
+		// allocating memory for the new data
 		double *newData = (double *)malloc(sizeof(double) * this->len);
+
+		// getting the transposed axes
 		transposeAxis<double>(this->data, this->strides, axisOrder, newData, nDimensions, nStrides, this->rank);
 
-		Tensor *nTens = new Tensor(this->rank, nDimensions, nStrides);
-		nTens->forceSetData(newData);
+		// creating the tensor
+		Tensor *npTens = new Tensor(this->rank, nDimensions, nStrides);
+		npTens->forceSetData(newData);
 
-		return *nTens;
+		return npTens;
 	}
 
-	/*Tensor Tensor::collapseAxis(int axisNum, int *axes) {
+	// collapses axes of the tensor via summation
+	// after the last entry in axes, the following integer MUST be -1
+	Tensor *Tensor::collapseAxis(int axisNum, int *axes) {
 		// check if the collapse is valid
 		if (axisNum > this->rank)
 			throw shapeEx();
@@ -370,29 +374,84 @@ namespace LIBCAA {
 			if (axes[i] >= axes[i + 1])
 				throw shapeEx();
 		
-		if (axes[axisNum - 1] >= axes[axisNum])
+		if (axes[axisNum - 1] <= axes[axisNum])
 			throw shapeEx();
 
 		// the axes can be collapsed
 
-		int oldRk = axisNum;
-		int newRk = this->rank - oldRk;
+			// generating the transpose of the original for axis collapse
 
-		int *newDim = (int *)malloc(sizeof(int) * newRk);
-		int *newSrd = (int *)malloc(sizeof(int) * newRk);
-		int *oldDim = (int *)malloc(sizeof(int) * oldRk);
-		int *oldSrd = (int *)malloc(sizeof(int) * oldRk);
+		// getting the axis order for the transpose
+		double *transData = (double *)malloc(sizeof(double) * this->len);
 
-		partArray<int>(this->rank, this->dimensions, axes, oldDim, newDim);
-		partArray<int>(this->rank, this->strides, axes, oldSrd, newSrd);
+		int count = 0;
+		int *transOrder = (int *)malloc(sizeof(int) * this->rank);
+		for (int i = 0; i < this->rank; i++) {
+			if (i == axes[count]) {
+				count++;
+				continue;
+			}
+
+			transOrder[i - count] = i;
+		}
+
+		for (int i = 0; i < axisNum; i++) {
+			transOrder[this->rank - i - 1] = axes[i];
+		}
+
+		// generating the dimensions of the transpose
+		int *transDimensions = (int *)malloc(sizeof(int) * this->rank);
+		for (int i = 0; i < this->rank; i++) {
+			transDimensions[i] = this->dimensions[transOrder[i]];
+		}
+
+
+		// generating the strides of the transpose
+		int *transStrides = (int *)malloc(sizeof(int) * this->rank);
+		transStrides[this->rank - 1] = 1;
+
+		for (int i = this->rank - 2; i >= 0; i--)
+			transStrides[i] = transDimensions[i + 1] * transStrides[i + 1];
+
+		// generating the transpose
+		transposeAxis<double>(this->data, this->strides, transOrder, transData, transDimensions, transStrides, this->rank);
+
+			// set up for axis collapse
+
+		int newRank = this->rank - axisNum;
+
+		int *newDimensions = (int *)malloc(sizeof(int) * newRank);
+		int *newStrides = (int *)malloc(sizeof(int) * newRank);
+
+		int sumLen = transStrides[newRank - 1];
+
+		for (int i = 0; i < newRank; i++) {
+			newDimensions[i] = transDimensions[i];
+			newStrides[i] = transStrides[i] / sumLen;
+		}
+
+		// len = dim[0] * srd[0]
+		double *newData = (double *)malloc(sizeof(double) * newDimensions[0] * newStrides[0]);
 		
-		// get oldData and newData
-		// newData is an empty array
-		// oldData is a transposed this->data
+		for (int i = 0; i < this->len / sumLen; i++) {
+			newData[i] = transData[i * sumLen];
+			for (int j = 1; j < sumLen; j++) {
+				newData[i] += transData[i * sumLen + j];
+			}
+		}
 
-		//Tensor *nTens = new Tensor(nRank, nDimensions, 0.0);
-		//free(nDimensions);
+		Tensor *npTens = new Tensor(newRank, newDimensions, newStrides);
+		npTens->forceSetData(newData);
 
-	}*/
+		free(transData);
+		free(transOrder);
+		free(transDimensions);
+		free(transStrides);
+
+		free(newDimensions);
+		free(newStrides);
+
+		return npTens;
+	}
 
 }

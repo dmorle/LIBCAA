@@ -20,17 +20,17 @@ namespace LIBCAA {
 		// MDA deconstructor is transferable to Tensor
 		~Tensor();
 
-		Tensor operator + (Tensor tens);
-		Tensor operator + (double val);
-		Tensor operator - (Tensor tens);
-		Tensor operator - (double val);
-		Tensor operator * (Tensor tens);
-		Tensor operator * (double val);
-		Tensor operator / (Tensor tens);
-		Tensor operator / (double val);
-		Tensor operator ^ (Tensor tens);
-		Tensor operator ^ (double val);
-		Tensor operator ^ (int val);
+		Tensor *operator + (Tensor tens);
+		Tensor *operator + (double val);
+		Tensor *operator - (Tensor tens);
+		Tensor *operator - (double val);
+		Tensor *operator * (Tensor tens);
+		Tensor *operator * (double val);
+		Tensor *operator / (Tensor tens);
+		Tensor *operator / (double val);
+		Tensor *operator ^ (Tensor tens);
+		Tensor *operator ^ (double val);
+		Tensor *operator ^ (int val);
 
 		void operator += (Tensor tens);
 		void operator += (double val);
@@ -45,16 +45,16 @@ namespace LIBCAA {
 		void operator %= (Tensor tens);
 		void operator %= (double val);
 
-		Tensor operator == (Tensor tens);
-		Tensor operator != (Tensor tens);
-		Tensor operator >= (Tensor tens);
-		Tensor operator <= (Tensor tens);
+		Tensor *operator == (Tensor tens);
+		Tensor *operator != (Tensor tens);
+		Tensor *operator >= (Tensor tens);
+		Tensor *operator <= (Tensor tens);
 
 		void operator = (Tensor tens);
 
-		Tensor transpose(int *axisOrder);
+		Tensor *transpose(int *axisOrder);
 
-		Tensor collapseAxis(int axisNum, int *axes);
+		Tensor *collapseAxis(int axisNum, int *axes);
 	};
 
 }
