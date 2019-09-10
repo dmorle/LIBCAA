@@ -27,6 +27,9 @@
     <ClCompile Include="LIBCAAEX.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MDPolynomial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Tensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MDPolynomial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
