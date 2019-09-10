@@ -6,7 +6,8 @@ namespace LIBCAA {
 
 	// helper functions
 
-	template <typename dataType> void transposeAxis(dataType *oldData, int *oldSrd, int *axisOrder, dataType *newData, int *dim, int *newSrd, int rk) {
+	template <typename dataType> void transposeAxis(dataType *oldData, int *oldSrd, int *axisOrder, dataType *newData, int *dim, int *newSrd, int rk)
+	{
 		if (rk == 1) {
 			for (int i = 0; i < dim[0]; i++) {
 				newData[i] = oldData[i * oldSrd[axisOrder[0]]];
@@ -20,7 +21,8 @@ namespace LIBCAA {
 	}
 
 	// final size, base array, insertion array, final insert locations (ascending) ending in 0
-	template<typename dataType> dataType * insertArray(int size, dataType *baseArr, dataType *insertArr, int *locs, int locNum) {
+	template<typename dataType> dataType * insertArray(int size, dataType *baseArr, dataType *insertArr, int *locs, int locNum)
+	{
 		dataType *result = (dataType *)malloc(sizeof(dataType) * size);
 
 		int bCount = 0;
@@ -38,7 +40,8 @@ namespace LIBCAA {
 		return result;
 	}
 
-	template<typename dataType> void partArray(int size, dataType *baseArr, int *locs, dataType *result) {
+	template<typename dataType> void partArray(int size, dataType *baseArr, int *locs, dataType *result)
+	{
 		int count = 0;
 		for (int i = 0; i < size; i++) {
 			if (i == locs[count]) {
@@ -48,7 +51,8 @@ namespace LIBCAA {
 		}
 	}
 
-	template <typename dataType> dataType sumAxis (dataType *oldData, int *oldDim, int *oldSrd, int oldRk) {
+	template <typename dataType> dataType sumAxis (dataType *oldData, int *oldDim, int *oldSrd, int oldRk)
+	{
 		int sum = 0;
 		if (oldRk == 1) {
 			for (int i = 0; i < oldDim[0]; i++) {
@@ -397,7 +401,8 @@ namespace LIBCAA {
 	}
 	*/
 
-	Tensor *Tensor::transpose(int *axisOrder) {
+	Tensor *Tensor::transpose(int *axisOrder)
+	{
 		// checking possiblity
 		for (int i = 0; i < this->rank; i++)
 			if (axisOrder[i] >= this->rank)
@@ -431,7 +436,8 @@ namespace LIBCAA {
 
 	// collapses axes of the tensor via summation
 	// after the last entry in axes, the following integer MUST be -1
-	Tensor *Tensor::collapseAxis(int axisNum, int *axes) {
+	Tensor *Tensor::collapseAxis(int axisNum, int *axes)
+	{
 		// check if the collapse is valid
 		if (axisNum > this->rank)
 			throw shapeEx();
@@ -524,13 +530,24 @@ namespace LIBCAA {
 		return npTens;
 	}
 
-	void Tensor::opExcept(Tensor *pTens) {
+	void Tensor::opExcept(Tensor *pTens)
+	{
 		// checking if operation can be performed
 		if (!sameShape(this, pTens))
 			throw shapeEx();
 
 		if (!this->init || !pTens->getInit())
 			throw initEx();
+	}
+
+	double innerProd(Tensor *tens1, Tensor *tens2) {
+		tens1->opExcept(tens2);
+
+		double result = 0;
+		for (int i = 0; i < tens1->len; i++) {
+			result += tens1->data[i] * tens2->data[i];
+		}
+		return result;
 	}
 
 }

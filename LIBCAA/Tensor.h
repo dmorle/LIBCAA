@@ -56,6 +56,7 @@ namespace LIBCAA {
 		Tensor *collapseAxis(int axisNum, int *axes);
 
 		friend Tensor *outerProd(Tensor *tens1, Tensor *tens2);
+		friend double innerProd(Tensor *tens1, Tensor *tens2);
 
 	private:
 		// checks if a pointwise operation can be performed
