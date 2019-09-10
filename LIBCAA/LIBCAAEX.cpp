@@ -17,4 +17,9 @@ namespace LIBCAA {
 		return "unmatching shapes";
 	}
 
+	const char * typeEx::what() const throw()
+	{
+		return "unmatching types";
+	}
+
 }
