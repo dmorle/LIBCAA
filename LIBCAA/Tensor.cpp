@@ -506,6 +506,8 @@ namespace LIBCAA {
 			newStrides[i] = transStrides[i] / sumLen;
 		}
 
+			// creating the collapsed axes
+
 		// len = dim[0] * srd[0]
 		double *newData = (double *)malloc(sizeof(double) * newDimensions[0] * newStrides[0]);
 		
@@ -526,7 +528,7 @@ namespace LIBCAA {
 
 		free(newDimensions);
 		free(newStrides);
-
+		
 		return npTens;
 	}
 
@@ -538,6 +540,43 @@ namespace LIBCAA {
 
 		if (!this->init || !pTens->getInit())
 			throw initEx();
+	}
+
+	Tensor *outerProd(Tensor *tens1, Tensor *tens2) {
+		int newRank = tens1->rank + tens2->rank;
+
+		int *newDimensions = (int *)malloc(sizeof(int) * newRank);
+		int *newStrides = (int *)malloc(sizeof(int) * newRank);
+
+		// initializing newDimensions
+		for (int i = 0; i < tens1->rank; i++) {
+			newDimensions[i] = tens1->dimensions[i];
+		}
+		for (int i = 0; i < tens2->rank; i++) {
+			newDimensions[i + tens1->rank] = tens2->dimensions[i];
+		}
+
+		// initializing newStrides
+		newStrides[newRank - 1] = 1;
+
+		for (int i = newRank - 1; i > 0; i--) {
+			newStrides[i - 1] = newDimensions[i] * newStrides[i];
+		}
+
+		double *newData = (double *)malloc(sizeof(double) * newStrides[0] * newDimensions[0]);
+
+		// initializing newData
+		for (int i = 0; i < tens1->rank; i++) {
+			for (int j = 0; j < tens2->rank; j++) {
+				newData[i * tens2->rank + j] = tens1->data[i] * tens2->data[j];
+
+		Tensor *nTens = new Tensor(newRank, newDimensions, newStrides);
+		nTens->forceSetData(newData);
+
+		free(newDimensions);
+		free(newStrides);
+		
+		return nTens;
 	}
 
 	double innerProd(Tensor *tens1, Tensor *tens2) {
