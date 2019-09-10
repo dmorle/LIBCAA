@@ -566,9 +566,9 @@ namespace LIBCAA {
 		double *newData = (double *)malloc(sizeof(double) * newStrides[0] * newDimensions[0]);
 
 		// initializing newData
-		for (int i = 0; i < tens1->rank; i++) {
-			for (int j = 0; j < tens2->rank; j++) {
-				newData[i * tens2->rank + j] = tens1->data[i] * tens2->data[j];
+		for (int i = 0; i < tens1->len; i++)
+			for (int j = 0; j < tens2->len; j++)
+				newData[i * tens2->len + j] = tens1->data[i] * tens2->data[j];
 
 		Tensor *nTens = new Tensor(newRank, newDimensions, newStrides);
 		nTens->forceSetData(newData);
