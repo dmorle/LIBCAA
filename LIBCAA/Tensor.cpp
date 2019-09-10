@@ -538,6 +538,22 @@ namespace LIBCAA {
 		if (!sameShape(this, pTens))
 			throw shapeEx();
 
+		// checking if both tensors are initialized
+		if (!this->init || !pTens->getInit())
+			throw initEx();
+	}
+
+	void Tensor::opExecpt(Tensor *pTens, bool checkType)
+	{
+		// checking if tensors have the same type
+		if (this->getType() != pTens->getType())
+			throw typeEx();
+
+		// checking if operation can be performed
+		if (!sameShape(this, pTens))
+			throw shapeEx();
+
+		// checking if both tensors are initialized
 		if (!this->init || !pTens->getInit())
 			throw initEx();
 	}

@@ -57,11 +57,13 @@ namespace LIBCAA {
 
 		friend Tensor *outerProd(Tensor *tens1, Tensor *tens2);
 		friend double innerProd(Tensor *tens1, Tensor *tens2);
+		friend Tensor *tensorDot(Tensor *tens1, Tensor *tens2, int **axisCollapse);
 
 	private:
 		// checks if a pointwise operation can be performed
 		// throws shapeEx() or initEx()
 		void opExcept(Tensor *pTens);
+		void opExcept(Tensor *pTens, bool checkType);
 	};
 
 }
