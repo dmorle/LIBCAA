@@ -96,7 +96,7 @@ namespace LIBCAA {
 		}
 
 		// copies all data into a new MDA
-		MDA<dataType> *clone() {
+		void *clone() {
 			if (this->init) {
 				MDA<dataType> *npMDA = new MDA<dataType>(this->rank, this->dimensions, this->data);
 				return npMDA;
