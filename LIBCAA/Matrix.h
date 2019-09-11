@@ -15,6 +15,10 @@ namespace LIBCAA {
 		Matrix(matrixParams params, double **data);
 		Matrix(matrixParams params, double(*initFunc)());
 		~Matrix();
+
+		void setIndex(int i, int j);
+		double getAbsIndex(int i, int j);
+		double getIndex(int i, int j);
 	};
 
 }
