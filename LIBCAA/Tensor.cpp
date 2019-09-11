@@ -763,18 +763,59 @@ namespace LIBCAA {
 		// creating t2Data
 		double *t2Data = (double *)malloc(sizeof(double) * tens2->len);
 		transposeAxis<double>(tens2->data, tens2->strides, t2AxisOrder, t2Data, t2Dim, t2Srd, tens2->rank);
-
 		// finished grouping summed axes by transpose for both
 
-		/*
-		for i in range(tens1.len / sumLen): # len(tens1 preserved axes)
-			for j in range(tens2.len / sumLen): # len(tens2 preserved axes)
-				nData[i * tens2.len / sumLen + j] = 0
-				for k in range(sumLen):
-					nData[i * tens2.len / sumLen + j] += tens1[i * sumLen + k] * tens2[j * sumLen + k]
+		// getting sumLen
+		int sumLen = 1; 
+		for (int i = 0; i < axisNum; i++)
+			sumLen *= t1Srd[tens1->rank - i];
 
-		return nData
-		*/
+		// creating nRank
+		int nRank = tens1->rank + tens2->rank - 2 * axisNum ;
+
+		// creating nDim
+		int *nDim = (int *)malloc(sizeof(int) * nRank);
+		for (int i = 0; i < tens1->rank - axisNum; i++)
+			nDim[i] = tens1->dimensions[i];
+		for (int i = 0; i < tens2->rank - axisNum; i++)
+			nDim[i + tens1->rank - axisNum] = tens2->dimensions[i];
+
+		// creating nSrd
+		int *nSrd = (int *)malloc(sizeof(int) *nRank);
+		nSrd[nRank - 1] = 1;
+		for (int i = nRank - 1; i > 0; i++) {
+			nSrd[i - 1] = nDim[i] * nSrd[i];
+		}
+
+		// creating nData
+		double *nData = (double *)malloc(sizeof(double) * nSrd[0] * nDim[0]);
+		for (int i = 0; i < tens1->rank / sumLen; i++) {
+			for (int j = 0; j < tens2->len / sumLen; j++) {
+				nData[i * tens2->len / sumLen + j] = 0;
+				for (int k = 0; k < sumLen; k++)
+					nData[i * tens2->len / sumLen + j] += tens1->data[i * sumLen + k] * tens2->data[j * sumLen + k];
+			}
+		}
+
+		// creating the Tensor
+		Tensor *npTens = new Tensor(nRank, nDim, nSrd);
+		npTens->forceSetData(nData);
+
+		// freeing the allocated memory
+		free(t1AxisOrder);
+		free(t1Dim);
+		free(t1Srd);
+		free(t1Data);
+		
+		free(t2AxisOrder);
+		free(t2Dim);
+		free(t2Srd);
+		free(t2Data);
+
+		free(nDim);
+		free(nSrd);
+
+		return npTens;
 	}
 
 }
