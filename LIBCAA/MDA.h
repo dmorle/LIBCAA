@@ -159,6 +159,10 @@ namespace LIBCAA {
 
 		// TODO: impliment a reshaping function
 
+		// TODO: impliment a concatonation function
+
+		// TODO: impliment a tile function
+
 		// unsafe function which sets this->data
 		// only use if object is empty
 		// DO NOT DELETE DATA
@@ -208,6 +212,10 @@ namespace LIBCAA {
 		bool init;
 
 	private:
+		int dspWidth;
+		int dspIndent;
+
+	private:
 		// initializes the shape defining attributes
 		void stdInit(int rank, int *dimensions) {
 			this->rank = rank;
@@ -226,6 +234,9 @@ namespace LIBCAA {
 			}
 
 			this->len = this->strides[0] * this->dimensions[0];
+
+			this->dspWidth = 6;
+			this->dspIndent = " ";
 		}
 
 		void stdInit(int rank, int *dimensions, int *strides) {
@@ -240,6 +251,9 @@ namespace LIBCAA {
 			}
 
 			this->len = strides[0] * dimensions[0];
+
+			this->dspWidth = 6;
+			this->dspIndent = " ";
 		}
 
 		// recursively prints out the array
@@ -247,10 +261,10 @@ namespace LIBCAA {
 			if (cRank == 1) {
 				std::cout << base << "[";
 				if (cDimensions[0] != 0) {
-					std::cout << std::setw(6) << this->data[startIndex];
+					std::cout << std::setw(this->dspWidth) << this->data[startIndex];
 					for (int i = 1; i < cDimensions[0]; i++) {
 						std::cout << ", ";
-						std::cout << std::setw(4) << this->data[startIndex + i];
+						std::cout << std::setw(this->dspWidth) << this->data[startIndex + i];
 					}
 				}
 				std::cout << "]" << std::endl;
@@ -260,7 +274,7 @@ namespace LIBCAA {
 			std::cout << base << "[" << std::endl;
 			if (cDimensions[0] != 0) {
 				for (int i = 0; i < cDimensions[0]; i++) {
-					this->printAxis(base + " ", startIndex + cStride[0] * i, cRank - 1, cDimensions + 1, cStride + 1);
+					this->printAxis(base + dspIndent, startIndex + cStride[0] * i, cRank - 1, cDimensions + 1, cStride + 1);
 				}
 			}
 			std::cout << base << "]" << std::endl;
