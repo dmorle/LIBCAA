@@ -615,7 +615,7 @@ namespace LIBCAA {
 			throw initEx();
 	}
 
-	void Tensor::opExecpt(Tensor *pTens, bool checkType)
+	void Tensor::opExcept(Tensor *pTens, bool checkType)
 	{
 		// checking if tensors have the same type
 		if (this->getType() != pTens->getType())
@@ -637,19 +637,16 @@ namespace LIBCAA {
 		int *newStrides = (int *)malloc(sizeof(int) * newRank);
 
 		// initializing newDimensions
-		for (int i = 0; i < tens1->rank; i++) {
+		for (int i = 0; i < tens1->rank; i++)
 			newDimensions[i] = tens1->dimensions[i];
-		}
-		for (int i = 0; i < tens2->rank; i++) {
+		for (int i = 0; i < tens2->rank; i++)
 			newDimensions[i + tens1->rank] = tens2->dimensions[i];
-		}
 
 		// initializing newStrides
 		newStrides[newRank - 1] = 1;
 
-		for (int i = newRank - 1; i > 0; i--) {
+		for (int i = newRank - 1; i > 0; i--)
 			newStrides[i - 1] = newDimensions[i] * newStrides[i];
-		}
 
 		double *newData = (double *)malloc(sizeof(double) * newStrides[0] * newDimensions[0]);
 
@@ -675,6 +672,109 @@ namespace LIBCAA {
 			result += tens1->data[i] * tens2->data[i];
 		}
 		return result;
+	}
+
+	Tensor *tensorDot(Tensor *tens1, Tensor *tens2, int axisNum, int **axisPairs) {
+			// check all conditions for tensorDot
+
+		// checks for initialization
+		if (!tens1->init || !tens2->init)
+			throw initEx();
+
+		// checks for too many axes
+		if (axisNum > tens1->rank || axisNum > tens2->rank)
+			throw shapeEx();
+
+		// checks for out of range axes
+		for (int i = 0; i < axisNum; i++) {
+			if (axisPairs[0][i] >= tens1->rank)
+				throw shapeEx();
+			if (axisPairs[1][i] >= tens2->rank)
+				throw shapeEx();
+		}
+
+		// checks for repeated or decending axes
+		for (int i = 0; i < axisNum - 1; i++) {
+			if (axisPairs[0][i] >= axisPairs[0][i + 1])
+				throw shapeEx();
+			if (axisPairs[1][i] >= axisPairs[1][i + 1])
+				throw shapeEx();
+		}
+
+		// checks if the paired axes have the same dimensions
+		for (int i = 0; i < axisNum; i++)
+			if (tens1->dimensions[axisPairs[0][i]] != tens2->dimensions[axisPairs[1][i]])
+				throw shapeEx();
+
+			// ready to perform tensorDot
+
+		int currAxis;
+
+		// creating t1AxisOrder
+		int *t1AxisOrder = (int *)malloc(sizeof(int) * tens1->rank);
+		currAxis = 0;
+		for (int i = 0; i < tens1->rank - axisNum; i++) {
+			while (currAxis == axisPairs[0][currAxis])
+				currAxis++;
+
+			t1AxisOrder[i] = currAxis++;
+		}
+		for (int i = 0; i < axisNum; i++)
+			t1AxisOrder[tens1->rank - i] = axisPairs[0][i];
+
+		// creating t2AxisOrder
+		int *t2AxisOrder = (int *)malloc(sizeof(int) * tens2->rank);
+		currAxis = 0;
+		for (int i = 0; i < tens2->rank - axisNum; i++) {
+			while (currAxis == axisPairs[1][currAxis])
+				currAxis++;
+
+			t2AxisOrder[i] = currAxis++;
+		}
+		for (int i = 0; i < axisNum; i++)
+			t2AxisOrder[tens2->rank - i] = axisPairs[1][i];
+
+		// creating t1Dim
+		int *t1Dim = (int *)malloc(sizeof(int) * tens1->rank);
+		for (int i = 0; i < tens1->rank; i++)
+			t1Dim[i] = tens1->dimensions[t1AxisOrder[i]];
+
+		// creating t2Dim
+		int *t2Dim = (int *)malloc(sizeof(int) * tens2->rank);
+		for (int i = 0; i < tens2->rank; i++)
+			t2Dim[i] = tens2->dimensions[t2AxisOrder[i]];
+
+		// creating t1Srd
+		int *t1Srd = (int *)malloc(sizeof(int) * tens1->rank);
+		t1Srd[tens1->rank - 1] = 1;
+		for (int i = tens1->rank - 2; i >= 0; i--)
+			t1Srd[i] = t1Dim[i + 1] * t1Srd[i + 1];
+
+		// creating t2Srd
+		int *t2Srd = (int *)malloc(sizeof(int) * tens2->rank);
+		t2Srd[tens2->rank - 1] = 1;
+		for (int i = tens2->rank - 2; i >= 0; i--)
+			t2Srd[i] = t2Dim[i + 1] * t2Srd[i + 1];
+
+		// creating t1Data
+		double *t1Data = (double *)malloc(sizeof(double) * tens1->len);
+		transposeAxis<double>(tens1->data, tens1->strides, t1AxisOrder, t1Data, t1Dim, t1Srd, tens1->rank);
+
+		// creating t2Data
+		double *t2Data = (double *)malloc(sizeof(double) * tens2->len);
+		transposeAxis<double>(tens2->data, tens2->strides, t2AxisOrder, t2Data, t2Dim, t2Srd, tens2->rank);
+
+		// finished grouping summed axes by transpose for both
+
+		/*
+		for i in range(tens1.len / sumLen): # len(tens1 preserved axes)
+			for j in range(tens2.len / sumLen): # len(tens2 preserved axes)
+				nData[i * tens2.len / sumLen + j] = 0
+				for k in range(sumLen):
+					nData[i * tens2.len / sumLen + j] += tens1[i * sumLen + k] * tens2[j * sumLen + k]
+
+		return nData
+		*/
 	}
 
 }
