@@ -383,23 +383,95 @@ namespace LIBCAA {
 			this->data[i] = pow(this->data[i], val);
 	}
 
-	/*
-	Tensor Tensor::operator==(Tensor *tens)
+	Tensor *Tensor::operator==(Tensor *tens)
 	{
+		this->opExcept(tens);
+
+		double *nData = (double *)malloc(sizeof(double) * this->len);
+		for (int i = 0; i < this->len; i++) {
+			nData[i] = this->data[i] == tens->getDataIndex(i);
+		}
+
+		Tensor *npTens = new Tensor(this->rank, this->dimensions);
+		npTens->forceSetData(nData);
+
+		return npTens;
 	}
 
-	Tensor Tensor::operator!=(Tensor *tens)
+	Tensor *Tensor::operator!=(Tensor *tens)
 	{
+		this->opExcept(tens);
+
+		double *nData = (double *)malloc(sizeof(double) * this->len);
+		for (int i = 0; i < this->len; i++) {
+			nData[i] = this->data[i] != tens->getDataIndex(i);
+		}
+
+		Tensor *npTens = new Tensor(this->rank, this->dimensions);
+		npTens->forceSetData(nData);
+
+		return npTens;
 	}
 
-	Tensor Tensor::operator>=(Tensor *tens)
+	Tensor *Tensor::operator>(Tensor *tens)
 	{
+		this->opExcept(tens);
+
+		double *nData = (double *)malloc(sizeof(double) * this->len);
+		for (int i = 0; i < this->len; i++) {
+			nData[i] = this->data[i] > tens->getDataIndex(i);
+		}
+
+		Tensor *npTens = new Tensor(this->rank, this->dimensions);
+		npTens->forceSetData(nData);
+
+		return npTens;
 	}
 
-	Tensor Tensor::operator<=(Tensor *tens)
+	Tensor *Tensor::operator<(Tensor *tens)
 	{
+		this->opExcept(tens);
+
+		double *nData = (double *)malloc(sizeof(double) * this->len);
+		for (int i = 0; i < this->len; i++) {
+			nData[i] = this->data[i] < tens->getDataIndex(i);
+		}
+
+		Tensor *npTens = new Tensor(this->rank, this->dimensions);
+		npTens->forceSetData(nData);
+
+		return npTens;
 	}
-	*/
+
+	Tensor *Tensor::operator>=(Tensor *tens)
+	{
+		this->opExcept(tens);
+
+		double *nData = (double *)malloc(sizeof(double) * this->len);
+		for (int i = 0; i < this->len; i++) {
+			nData[i] = this->data[i] >= tens->getDataIndex(i);
+		}
+
+		Tensor *npTens = new Tensor(this->rank, this->dimensions);
+		npTens->forceSetData(nData);
+
+		return npTens;
+	}
+
+	Tensor *Tensor::operator<=(Tensor *tens)
+	{
+		this->opExcept(tens);
+
+		double *nData = (double *)malloc(sizeof(double) * this->len);
+		for (int i = 0; i < this->len; i++) {
+			nData[i] = this->data[i] <= tens->getDataIndex(i);
+		}
+
+		Tensor *npTens = new Tensor(this->rank, this->dimensions);
+		npTens->forceSetData(nData);
+
+		return npTens;
+	}
 
 	Tensor *Tensor::transpose(int *axisOrder)
 	{

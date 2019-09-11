@@ -44,10 +44,12 @@ namespace LIBCAA {
 		void operator ^= (double val);
 		void operator ^= (int val);
 
-		Tensor *operator == (Tensor tens);
-		Tensor *operator != (Tensor tens);
-		Tensor *operator >= (Tensor tens);
-		Tensor *operator <= (Tensor tens);
+		Tensor *operator == (Tensor *tens);
+		Tensor *operator != (Tensor *tens);
+		Tensor *operator >  (Tensor *tens);
+		Tensor *operator <  (Tensor *tens);
+		Tensor *operator >= (Tensor *tens);
+		Tensor *operator <= (Tensor *tens);
 
 		void operator = (Tensor tens);
 
