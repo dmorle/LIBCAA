@@ -96,7 +96,7 @@ namespace LIBCAA {
 		}
 
 		// copies all data into a new MDA
-		void *clone() {
+		MDA<dataType> *clone() {
 			if (this->init) {
 				MDA<dataType> *npMDA = new MDA<dataType>(this->rank, this->dimensions, this->data);
 				return npMDA;
@@ -157,7 +157,32 @@ namespace LIBCAA {
 
 		// TODO: impliment a slicing function
 
-		// TODO: impliment a reshaping function
+		// enter -1 for automatic dimension length on a single axis
+		// 
+		void reshape(int nRank, int *nDim) {
+			int nLen = 1;
+			int varDim = -1;
+			for (int i = 0; i < nRank; i++) {
+				if (nDim[i] == -1) {
+					if (varDim == -1)
+						varDim = i;;
+					else
+						throw shapeEx();
+				}
+				else
+					nLen *= nDim[i];
+			}
+			if (varDim == -1) {
+				if (this->len % nLen == 0)
+					nDim[varDim] = this->len / nLen;
+				else
+					throw shapeEx();
+			}
+			else if (this->len != nLen)
+				throw shapeEx();
+
+			this->stdInit(nRank, nDim);
+		}
 
 		// TODO: impliment a concatonation function
 
