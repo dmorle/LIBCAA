@@ -51,14 +51,15 @@ namespace LIBCAA {
 		Tensor *operator >= (Tensor *tens);
 		Tensor *operator <= (Tensor *tens);
 
-		void operator = (Tensor tens);
-
 		Tensor *transpose(int *axisOrder);
 
 		Tensor *collapseAxis(int axisNum, int *axes);
 
+		Tensor *applyFunc(double(*func)(double));
+
 		friend Tensor *outerProd(Tensor *tens1, Tensor *tens2);
 		friend double innerProd(Tensor *tens1, Tensor *tens2);
+
 		friend Tensor *tensorDot(Tensor *tens1, Tensor *tens2, int axisNum, int **axisPairs);
 
 	private:

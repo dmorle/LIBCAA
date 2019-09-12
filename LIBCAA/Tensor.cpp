@@ -630,7 +630,21 @@ namespace LIBCAA {
 			throw initEx();
 	}
 
-	Tensor *outerProd(Tensor *tens1, Tensor *tens2) {
+	Tensor *Tensor::applyFunc(double(*func)(double))
+	{
+		double *nData = (double *)malloc(sizeof(double) * this->len);
+		for (int i = 0; i < this->len; i++) {
+			nData[i] = func(this->data[i]);
+		}
+
+		Tensor *npTens = new Tensor(this->rank, this->dimensions, this->rank);
+		npTens->forceSetData(nData);
+
+		return npTens;
+	}
+
+	Tensor *outerProd(Tensor *tens1, Tensor *tens2)
+	{
 		int newRank = tens1->rank + tens2->rank;
 
 		int *newDimensions = (int *)malloc(sizeof(int) * newRank);
@@ -674,7 +688,8 @@ namespace LIBCAA {
 		return result;
 	}
 
-	Tensor *tensorDot(Tensor *tens1, Tensor *tens2, int axisNum, int **axisPairs) {
+	Tensor *tensorDot(Tensor *tens1, Tensor *tens2, int axisNum, int **axisPairs)
+	{
 			// check all conditions for tensorDot
 
 		// checks for initialization
