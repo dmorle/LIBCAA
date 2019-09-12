@@ -16,9 +16,13 @@ namespace LIBCAA {
 		Matrix(matrixParams params, double(*initFunc)());
 		~Matrix();
 
-		void setIndex(int i, int j);
+		// overriding Tensor functions for efficiency
+		void setIndex(int i, int j, double val);
 		double getAbsIndex(int i, int j);
 		double getIndex(int i, int j);
+
+		void scaleRow(int rowNum, double scale);
+		void switchRows(int row1, int row2);
 	};
 
 }
