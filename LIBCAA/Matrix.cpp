@@ -149,9 +149,23 @@ namespace LIBCAA {
 
 	Matrix *matmul(Matrix *mat1, Matrix *mat2)
 	{
-		int axis1[] = { 0 };
-		int axis2[] = { 1 };
-		return (Matrix *)tensorDot(mat1, mat2, 1, createAxisPairs(1, axis1, axis2));
+		// checking if multiplcation is possible
+		if (mat1->dimensions[1] != mat2->dimensions[0])
+			throw shapeEx();
+
+		double *nData = (double *)malloc(sizeof(double) * mat1->dimensions[0] * mat2->dimensions[1]);
+		for (int i = 0; i < mat1->dimensions[0]; i++) {
+			for (int j = 0; j < mat2->dimensions[1]; j++) {
+				nData[i * mat1->dimensions[1] + j] = 0;
+				for (int k = 0; k < mat1->dimensions[1]; k++)
+					nData[i * mat1->dimensions[1] + j] += mat1->getAbsIndex(i, k) * mat2->getAbsIndex(k, j);
+			}
+		}
+
+		Matrix *nMrx = new Matrix(createMatrixParams(mat1->dimensions[0], mat2->dimensions[1]));
+		nMrx->forceSetData(nData);
+
+		return nMrx;
 	}
 
 }
