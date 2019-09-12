@@ -165,7 +165,7 @@ namespace LIBCAA {
 			for (int i = 0; i < nRank; i++) {
 				if (nDim[i] == -1) {
 					if (varDim == -1)
-						varDim = i;;
+						varDim = i;
 					else
 						throw shapeEx();
 				}
@@ -238,7 +238,7 @@ namespace LIBCAA {
 
 	private:
 		int dspWidth;
-		int dspIndent;
+		std::string dspIndent;
 
 	private:
 		// initializes the shape defining attributes
@@ -299,7 +299,7 @@ namespace LIBCAA {
 			std::cout << base << "[" << std::endl;
 			if (cDimensions[0] != 0) {
 				for (int i = 0; i < cDimensions[0]; i++) {
-					this->printAxis(base + dspIndent, startIndex + cStride[0] * i, cRank - 1, cDimensions + 1, cStride + 1);
+					this->printAxis(base + this->dspIndent, startIndex + cStride[0] * i, cRank - 1, cDimensions + 1, cStride + 1);
 				}
 			}
 			std::cout << base << "]" << std::endl;
