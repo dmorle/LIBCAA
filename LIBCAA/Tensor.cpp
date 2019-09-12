@@ -6,6 +6,22 @@ namespace LIBCAA {
 
 	// helper functions
 
+	int **createAxisPairs(int axisNum, int *axis1, int *axis2) {
+		int **axisPairs = (int **)malloc(sizeof(int *) * 2);
+		axisPairs[0] = (int *)malloc(sizeof(int) * (axisNum + 1));
+		axisPairs[1] = (int *)malloc(sizeof(int) * (axisNum + 1));
+
+		for (int i = 0; i < axisNum; i++) {
+			axisPairs[0][i] = axis1[i];
+			axisPairs[1][i] = axis2[i];
+		}
+
+		axisPairs[0][axisNum] = -1;
+		axisPairs[1][axisNum] = -1;
+
+		return axisPairs;
+	}
+
 	template <typename dataType> void transposeAxis(dataType *oldData, int *oldSrd, int *axisOrder, dataType *newData, int *dim, int *newSrd, int rk)
 	{
 		if (rk == 1) {
@@ -735,7 +751,7 @@ namespace LIBCAA {
 			t1AxisOrder[i] = currAxis++;
 		}
 		for (int i = 0; i < axisNum; i++)
-			t1AxisOrder[tens1->rank - i] = axisPairs[0][i];
+			t1AxisOrder[tens1->rank - i - 1] = axisPairs[0][i];
 
 		// creating t2AxisOrder
 		int *t2AxisOrder = (int *)malloc(sizeof(int) * tens2->rank);
@@ -747,7 +763,7 @@ namespace LIBCAA {
 			t2AxisOrder[i] = currAxis++;
 		}
 		for (int i = 0; i < axisNum; i++)
-			t2AxisOrder[tens2->rank - i] = axisPairs[1][i];
+			t2AxisOrder[tens2->rank - i - 1] = axisPairs[1][i];
 
 		// creating t1Dim
 		int *t1Dim = (int *)malloc(sizeof(int) * tens1->rank);
@@ -786,7 +802,7 @@ namespace LIBCAA {
 			sumLen *= t1Srd[tens1->rank - i];
 
 		// creating nRank
-		int nRank = tens1->rank + tens2->rank - 2 * axisNum ;
+		int nRank = tens1->rank + tens2->rank - 2 * axisNum;
 
 		// creating nDim
 		int *nDim = (int *)malloc(sizeof(int) * nRank);
@@ -798,7 +814,7 @@ namespace LIBCAA {
 		// creating nSrd
 		int *nSrd = (int *)malloc(sizeof(int) *nRank);
 		nSrd[nRank - 1] = 1;
-		for (int i = nRank - 1; i > 0; i++) {
+		for (int i = nRank - 1; i > 0; i--) {
 			nSrd[i - 1] = nDim[i] * nSrd[i];
 		}
 
@@ -829,6 +845,9 @@ namespace LIBCAA {
 
 		free(nDim);
 		free(nSrd);
+
+		free(axisPairs[0]);
+		free(axisPairs[1]);
 
 		return npTens;
 	}

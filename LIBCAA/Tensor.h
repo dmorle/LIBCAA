@@ -5,6 +5,7 @@
 
 namespace LIBCAA {
 
+	int **createAxisPairs(int axisNum, int *axis1, int *axis2);
 
 	class Tensor : public MDA<double>
 	{
