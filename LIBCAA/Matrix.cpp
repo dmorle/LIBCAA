@@ -12,6 +12,28 @@ namespace LIBCAA {
 		return params;
 	}
 
+	Matrix *getIdentity(int size)
+	{
+		Matrix *nMrx = new Matrix(createMatrixParams(size, size));
+
+		double *nData = (double *)malloc(sizeof(double) * size *size);
+		for (int i = 0; i < size * size; i++) {
+			if (i / size == i % size)
+				nData[i] = 1;
+			else
+				nData[i] = 0;
+		}
+
+		nMrx->forceSetData(nData);
+
+		return nMrx;
+	}
+
+	Matrix::Matrix(matrixParams params) : Tensor(2, params)
+	{
+		this->type = "Matrix";
+	}
+
 	Matrix::Matrix(matrixParams params, double val) : Tensor(2, params, val)
 	{
 		this->type = "Matrix";
@@ -21,8 +43,8 @@ namespace LIBCAA {
 	{
 		// flattening val into this->data
 		this->data = (double *)malloc(sizeof(double) * this->len);
-		for (int i = 0; i < this->dimensions[0])
-			for (int j = 0; j < this->dimensions[1])
+		for (int i = 0; i < this->dimensions[0]; i++)
+			for (int j = 0; j < this->dimensions[1]; j++)
 				this->data[i*strides[0]] = val[i][j];
 
 		this->init = true;
@@ -66,6 +88,70 @@ namespace LIBCAA {
 			this->data[row1 * strides[0] + i] = this->data[row2 * strides[0] + i];
 			this->data[row2 * strides[0] + i] = temp;
 		}
+	}
+
+	// row1 = row1 - scale *row2
+	void Matrix::rowSub(int row1, int row2, double scale)
+	{
+		for (int i = 0; i < this->dimensions[1]; i++)
+			this->data[row1 * this->strides[0] + i] -= scale * this->data[row2 * this->strides[0] + i];
+	}
+
+
+	// gauss-jordan elimination
+	Matrix *Matrix::getInverse()
+	{
+		// check conditions
+
+		int size = this->dimensions[0];
+
+		Matrix *self = (Matrix *)this->clone();
+		Matrix *inv = getIdentity(size);
+
+		for (int i = 0; i < size; i++) {
+			double leadCoeff = self->getAbsIndex(i, i);
+			if (leadCoeff == 0) {
+				// find a row with a non-zero value at pos i
+				int j;
+				for (j = i + 1; j < size; j++) {
+					if (self->getAbsIndex(j, i) != 0) {
+						self->switchRows(i, j);
+						inv->switchRows(i, j);
+						break;
+					}
+				}
+				if (j == size) {
+					// could not find an inverse
+					delete self;
+					delete inv;
+					return NULL;
+				}
+				leadCoeff = self->getAbsIndex(i, i);
+			}
+			if (leadCoeff != 1) {
+				self->scaleRow(i, 1 / leadCoeff);
+				inv->scaleRow(i, 1 / leadCoeff);
+			}
+
+			// the leading coefficient is now 1, subtract the rows
+			for (int j = 0; j < size; j++) {
+				if (j != i) {
+					self->rowSub(j, i, self->getAbsIndex(j, i));
+					inv->rowSub(j, i, self->getAbsIndex(j, i));
+				}
+			}
+		}
+
+		delete self;
+
+		return inv;
+	}
+
+	Matrix *matmul(Matrix *mat1, Matrix *mat2)
+	{
+		int axis1[] = { 0 };
+		int axis2[] = { 1 };
+		return (Matrix *)tensorDot(mat1, mat2, 1, createAxisPairs(1, axis1, axis2));
 	}
 
 }
