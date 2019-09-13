@@ -27,13 +27,16 @@
     <ClCompile Include="LIBCAAEX.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MDPolynomial.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Matrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Vector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VecPoly.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VecField.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,13 +56,19 @@
     <ClInclude Include="Tensor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MDPolynomial.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Matrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VecPoly.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VecField.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VecFunc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

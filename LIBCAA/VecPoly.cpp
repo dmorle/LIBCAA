@@ -4,7 +4,7 @@
 
 namespace LIBCAA {
 
-	VecPolyParams createMDPolyParams(int degree, int dimIn, int dimOut)
+	VecPolyParams createVecPolyParams(int degree, int dimIn, int dimOut)
 	{
 		int *params = (int *)malloc(sizeof(int) * 3);
 		params[0] = degree;
@@ -15,7 +15,7 @@ namespace LIBCAA {
 
 	VecPoly::VecPoly(VecPolyParams params) : Tensor(3, params)
 	{
-		this->type = "VecPoly";
+		//this->type = "VecPoly";
 	}
 
 	VecPoly::VecPoly(VecPolyParams params, double ***coeff) : Tensor(3, params)
@@ -27,7 +27,7 @@ namespace LIBCAA {
 					this->data[i * this->strides[0] + j * this->strides[1] + k] = coeff[i][j][k];
 
 		this->init = true;
-		this->type = "VecPoly";
+		//this->type = "VecPoly";
 	}
 
 	VecPoly::VecPoly(VecPolyParams params, double(*initFunc)()) : Tensor(3, params, initFunc)
@@ -39,8 +39,8 @@ namespace LIBCAA {
 
 	VecPoly::~VecPoly() {}
 
-	double VecPoly::eval(Vector *inputs) {
-		return 0;
+	Vector *VecPoly::eval(Vector *inputs) {
+		return NULL;
 	}
 
 

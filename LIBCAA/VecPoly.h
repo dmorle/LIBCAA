@@ -2,13 +2,14 @@
 #define VECPOLY_H
 
 #include "Vector.h"
+#include "VecFunc.h"
 
 namespace LIBCAA {
 	
 	typedef int *VecPolyParams;
-	VecPolyParams createMDPolyParams(int degree, int dimIn, int dimOut);
+	VecPolyParams createVecPolyParams(int degree, int dimIn, int dimOut);
 
-	class VecPoly : protected Tensor
+	class VecPoly : public VecFunc, protected Tensor
 	{
 	public:
 		VecPoly(VecPolyParams params);
@@ -16,7 +17,7 @@ namespace LIBCAA {
 		VecPoly(VecPolyParams params, double(*initFunc)());
 		~VecPoly();
 
-		double eval(Vector *inputs);
+		Vector *eval(Vector *inputs);
 
 	protected:
 		VecPoly(int *dimensions, double *data);

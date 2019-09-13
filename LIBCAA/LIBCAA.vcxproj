@@ -119,7 +119,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="MDA.cpp" />
-    <ClCompile Include="MDPolynomial.cpp" />
+    <ClCompile Include="VecField.cpp" />
+    <ClCompile Include="VecPoly.cpp" />
     <ClCompile Include="Tensor.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
@@ -128,7 +129,9 @@
     <ClInclude Include="LIBCAAEX.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="MDA.h" />
-    <ClInclude Include="MDPolynomial.h" />
+    <ClInclude Include="VecField.h" />
+    <ClInclude Include="VecFunc.h" />
+    <ClInclude Include="VecPoly.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Tensor.h" />
     <ClInclude Include="Vector.h" />
