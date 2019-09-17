@@ -262,6 +262,8 @@ namespace LIBCAA {
 
 			this->dspWidth = 6;
 			this->dspIndent = " ";
+
+			std::cout.precision(dspWidth - 2);
 		}
 
 		void stdInit(int rank, int *dimensions, int *strides) {
@@ -279,6 +281,8 @@ namespace LIBCAA {
 
 			this->dspWidth = 6;
 			this->dspIndent = " ";
+
+			std::cout.precision(dspWidth - 2);
 		}
 
 		// recursively prints out the array
@@ -289,7 +293,7 @@ namespace LIBCAA {
 					std::cout << std::setw(this->dspWidth) << this->data[startIndex];
 					for (int i = 1; i < cDimensions[0]; i++) {
 						std::cout << ", ";
-						std::cout << std::setw(this->dspWidth) << this->data[startIndex + i];
+						std::cout << std::setw(this->dspWidth) << std::fixed << this->data[startIndex + i];
 					}
 				}
 				std::cout << "]" << std::endl;
