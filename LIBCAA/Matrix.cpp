@@ -109,6 +109,15 @@ namespace LIBCAA {
 		Matrix *inv = getIdentity(size);
 
 		for (int i = 0; i < size; i++) {
+
+			/*
+			std::cout << "self:" << std::endl;
+			self->print();
+			std::cout << "inverse:" << std::endl;
+			inv->print();
+			std::cout << "row swapping" << std::endl;
+			*/
+
 			double leadCoeff = self->getAbsIndex(i, i);
 			if (leadCoeff == 0) {
 				// find a row with a non-zero value at pos i
@@ -128,18 +137,43 @@ namespace LIBCAA {
 				}
 				leadCoeff = self->getAbsIndex(i, i);
 			}
+
+			/*
+			std::cout << "self:" << std::endl;
+			self->print();
+			std::cout << "inverse:" << std::endl;
+			inv->print();
+			std::cout << "row scaling" << std::endl;
+			*/
+
 			if (leadCoeff != 1) {
 				self->scaleRow(i, 1 / leadCoeff);
 				inv->scaleRow(i, 1 / leadCoeff);
 			}
+			/*
+			std::cout << "self:" << std::endl;
+			self->print();
+			std::cout << "inverse:" << std::endl;
+			inv->print();
+			std::cout << "row subs" << std::endl;
+			*/
 
 			// the leading coefficient is now 1, subtract the rows
 			for (int j = 0; j < size; j++) {
 				if (j != i) {
-					self->rowSub(j, i, self->getAbsIndex(j, i));
-					inv->rowSub(j, i, self->getAbsIndex(j, i));
+					double scale = self->getAbsIndex(j, i);
+					self->rowSub(j, i, scale);
+					inv->rowSub(j, i, scale);
 				}
 			}
+
+			/*
+			std::cout << "self:" << std::endl;
+			self->print();
+			std::cout << "inverse:" << std::endl;
+			inv->print();
+			std::cout << std::endl << std::endl;
+			*/
 		}
 
 		delete self;
