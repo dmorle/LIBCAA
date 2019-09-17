@@ -8,10 +8,11 @@ namespace LIBCAA {
 	// initialization functions
 	namespace INIT {
 
+		int arangeVal;
+
 		// initializes sequential elements using the ++ operator
-		template <typename dataType, int initVal> dataType arange() {
-			static dataType val = initVal;
-			return val++;
+		template <typename dataType> dataType arange() {
+			return arangeVal++;
 		}
 
 		// returns a random "dataType" between min and max distributed uniformally
@@ -41,12 +42,14 @@ namespace LIBCAA {
 
 	// initializes sequential elements using the ++ operator
 	template <typename dataType> dataType(*createArangeInit()) () {
-		return INIT::arange<dataType, 0>;
+		INIT::arangeVal = 0;
+		return INIT::arange<dataType>;
 	}
 
 	// initializes sequential elements using the ++ operator
 	template <typename dataType> dataType(*createArangeInit(int initVal)) () {
-		return INIT::arange<dataType, initVal> ;
+		INIT::arangeVal = initVal;
+		return INIT::arange<dataType>;
 	}
 
 	// returns a random "dataType" between min and max distributed uniformally
@@ -73,13 +76,14 @@ namespace LIBCAA {
 
 	// initializes sequential elements using the ++ operator
 	double(*createArangeInit()) () {
-		return INIT::arange<double, 0>;
+		INIT::arangeVal = 0;
+		return INIT::arange<double>;
 	}
 
-	// initializes sequential elements using the ++ operator
-	//double(*createArangeInit(int initVal)) () {
-	//	return INIT::arange<double, initVal>;
-	//}
+	double(*createArangeInit(int initVal)) () {
+		INIT::arangeVal = initVal;
+		return INIT::arange<double>;
+	}
 
 	// returns a random double between min and max distributed uniformally
 	template <int min, int max> double(*createUniformDist()) () {
