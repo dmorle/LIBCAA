@@ -13,8 +13,8 @@ void tesnorTesting() {
 	int rank = 1;
 	int dimensions[] = { 3 };
 
-	Tensor *tens1 = new Tensor(rank, dimensions, INIT::arange<double>);
-	Tensor *tens2 = new Tensor(rank, dimensions, INIT::arange<double>);
+	Tensor *tens1 = new Tensor(rank, dimensions, createArangeInit());
+	Tensor *tens2 = new Tensor(rank, dimensions, createArangeInit());
 
 	tens1->print();
 	tens2->print();
@@ -40,40 +40,38 @@ void tesnorTesting() {
 }
 
 void matrixInverseTesting() {
-	Matrix *mrx = new Matrix(createMatrixParams(3, 3), INIT::uniformDist<double, int, -5, 5>);
+	Matrix *mrx = new Matrix(createMatrixParams(3, 3), createUniformDist<double, int, -5, 5>());
 	mrx->print();
 
 	Matrix *inv = mrx->getInverse();
-	if (inv)
-		inv->print();
-	else
+	if (!inv) {
 		std::cout << "Could not find inverse";
+		return;
+	}
+	inv->print();
 
 	Matrix *result = matmul(mrx, inv);
 	result->print();
 
 	delete mrx;
-	if (inv)
-		delete inv;
+	delete inv;
 	delete result;
 }
 
-void matmulTesting() {
-	Matrix *mrx1 = new Matrix(createMatrixParams(2, 2), INIT::arange<double>);
-	mrx1->print();
-	Matrix *mrx2 = new Matrix(createMatrixParams(2, 2), INIT::arange<double>);
-	mrx2->print();
+void testingInitialization() {
+	Matrix *mrx1 = new Matrix(createMatrixParams(2, 2), createArangeInit());
+	Matrix *mrx2 = new Matrix(createMatrixParams(2, 2), createArangeInit());
 
-	Matrix *result = matmul(mrx1, mrx2);
-	result->print();
+	mrx1->print();
+	mrx2->print();
 
 	delete mrx1;
 	delete mrx2;
-	delete result;
 }
 
 int main() {
-	matmulTesting();
+	//matrixInverseTesting();
+	testingInitialization();
 
 	std::cin.get();
 	return 0;
