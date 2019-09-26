@@ -1,19 +1,19 @@
 #ifndef MDA_H
 #define MDA_H
 
-#include "Object.h"
 #include <stdarg.h>
 #include <stdlib.h>
 #include <iostream>
 #include <iomanip>
+#include "Object.hpp"
 
 namespace LIBCAA {
 
 	// checks the the two shapes are the same
-	bool sameShape(int rank1, int *dimensions1, int rank2, int *dimensions2);
+	bool sameDimensions(int rank1, int *dimensions1, int rank2, int *dimensions2);
 
 	// checks if all shapes are the same
-	bool sameShape(int shapeNum, int *ranks, int **dimensions);
+	bool sameDimensions(int shapeNum, int *ranks, int **dimensions);
 
 	/*
 	 *	Multi-dimensional array class
@@ -213,7 +213,7 @@ namespace LIBCAA {
 		}
 
 		friend bool sameShape(MDA<dataType> *MDA1, MDA<dataType> *MDA2) {
-			return sameShape(MDA1->rank, MDA1->dimensions, MDA2->rank, MDA2->dimensions);
+			return sameDimensions(MDA1->rank, MDA1->dimensions, MDA2->rank, MDA2->dimensions);
 		}
 
 		friend bool sameShape(int MDANum, MDA<dataType> **MDAs) {
@@ -225,7 +225,7 @@ namespace LIBCAA {
 				allDimensions[i] = MDAs[i]->dimensions;
 			}
 
-			return sameShape(MDANum, ranks, allDimensions);
+			return sameDimensions(MDANum, ranks, allDimensions);
 		}
 
 	protected:

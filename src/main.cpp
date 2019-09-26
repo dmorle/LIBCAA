@@ -1,6 +1,6 @@
-#include "Matrix.h"
-#include "InitFunc.h"
 #include <iostream>
+#include "Matrix.hpp"
+#include "InitFunc.hpp"
 
 using namespace LIBCAA;
 

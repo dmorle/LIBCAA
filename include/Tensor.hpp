@@ -1,7 +1,7 @@
 #ifndef TENSOR_H
 #define TENSOR_H
 
-#include "MDA.h"
+#include "MDA.hpp"
 
 namespace LIBCAA {
 

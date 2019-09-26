@@ -1,4 +1,4 @@
-#include "LIBCAAEX.h"
+#include "LIBCAAEX.hpp"
 
 namespace LIBCAA {
 

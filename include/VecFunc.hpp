@@ -1,7 +1,7 @@
 #ifndef VECFUNC_H
 #define VECFUNC_H
 
-#include "Vector.h"
+#include "Vector.hpp"
 
 namespace LIBCAA {
 

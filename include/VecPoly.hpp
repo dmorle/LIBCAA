@@ -1,8 +1,8 @@
 #ifndef VECPOLY_H
 #define VECPOLY_H
 
-#include "Vector.h"
-#include "VecFunc.h"
+#include "Vector.hpp"
+#include "VecFunc.hpp"
 
 namespace LIBCAA {
 	

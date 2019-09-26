@@ -1,7 +1,7 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#include "Tensor.h"
+#include "Tensor.hpp"
 
 namespace LIBCAA {
 

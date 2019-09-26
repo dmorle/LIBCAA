@@ -1,8 +1,11 @@
-#include "MDA.h"
+#include "MDA.hpp"
+
+
 
 namespace LIBCAA {
 
-	bool sameShape(int rank1, int *dimensions1, int rank2, int *dimensions2) {
+	// checks the the two shapes are the same
+	bool sameDimensions(int rank1, int *dimensions1, int rank2, int *dimensions2) {
 		if (rank1 != rank2)
 			return false;
 
@@ -13,7 +16,8 @@ namespace LIBCAA {
 		return true;
 	}
 
-	bool sameShape(int shapeNum, int *ranks, int **dimensions) {
+	// checks if all shapes are the same
+	bool sameDimensions(int shapeNum, int *ranks, int **dimensions) {
 		for (int i = 0; i < shapeNum; i++)
 			for (int j = i + 1; j < shapeNum; j++)
 				if (ranks[i] != ranks[j])

@@ -5,7 +5,7 @@
 
 namespace LIBCAA {
 
-	// data variable of a MDA or derived class has not been created
+    // data variable of a MDA or derived class has not been created
 	class initEx : public std::exception
 	{
 		virtual const char * what() const throw();

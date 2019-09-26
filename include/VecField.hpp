@@ -1,7 +1,7 @@
 #ifndef VECFIELD_H
 #define VECFIELD_H
 
-#include "VecPoly.h"
+#include "VecPoly.hpp"
 
 namespace LIBCAA {
 
