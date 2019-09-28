@@ -1,5 +1,5 @@
 #include "Vector.hpp"
-
+#include <math.h>
 
 
 namespace LIBCAA {
@@ -25,6 +25,156 @@ namespace LIBCAA {
 	}
 
 	Vector::~Vector() {}
+
+	Vector *Vector::operator+(Vector *vec) {
+		this->opExcept(vec);
+
+		double *nData = (double *)malloc(sizeof(double) * this->len);
+		for (int i = 0; i < this->len; i++)
+			nData[i] = this->data[i] + vec->getDataIndex(i);
+
+		Vector *npVec = new Vector(this->len);
+		npVec->forceSetData(nData);
+
+		return npVec;
+	}
+
+	Vector *Vector::operator+(double val) {
+		if (!this->init)
+			throw initEx();
+
+		double *nData = (double *)malloc(sizeof(double) * this->len);
+		for (int i = 0; i < this->len; i++)
+			nData[i] = this->data[i] + val;
+
+		Vector *npVec = new Vector(this->len);
+		npVec->forceSetData(nData);
+
+		return npVec;
+	}
+
+	Vector *Vector::operator-(Vector *vec) {
+		this->opExcept(vec);
+
+		double *nData = (double *)malloc(sizeof(double) * this->len);
+		for (int i = 0; i < this->len; i++)
+			nData[i] = this->data[i] - vec->getDataIndex(i);
+
+		Vector *npVec = new Vector(this->len);
+		npVec->forceSetData(nData);
+
+		return npVec;
+	}
+
+	Vector *Vector::operator-(double val) {
+		if (!this->init)
+			throw initEx();
+
+		double *nData = (double *)malloc(sizeof(double) * this->len);
+		for (int i = 0; i < this->len; i++)
+			nData[i] = this->data[i] - val;
+
+		Vector *npVec = new Vector(this->len);
+		npVec->forceSetData(nData);
+
+		return npVec;
+	}
+
+	Vector *Vector::operator*(Vector *vec) {
+		this->opExcept(vec);
+
+		double *nData = (double *)malloc(sizeof(double) * this->len);
+		for (int i = 0; i < this->len; i++)
+			nData[i] = this->data[i] * vec->getDataIndex(i);
+
+		Vector *npVec = new Vector(this->len);
+		npVec->forceSetData(nData);
+
+		return npVec;
+	}
+
+	Vector *Vector::operator*(double val) {
+		if (!this->init)
+			throw initEx();
+
+		double *nData = (double *)malloc(sizeof(double) * this->len);
+		for (int i = 0; i < this->len; i++)
+			nData[i] = this->data[i] * val;
+
+		Vector *npVec = new Vector(this->len);
+		npVec->forceSetData(nData);
+
+		return npVec;
+	}
+
+	Vector *Vector::operator/(Vector *vec) {
+		this->opExcept(vec);
+
+		double *nData = (double *)malloc(sizeof(double) * this->len);
+		for (int i = 0; i < this->len; i++)
+			nData[i] = this->data[i] / vec->getDataIndex(i);
+
+		Vector *npVec = new Vector(this->len);
+		npVec->forceSetData(nData);
+
+		return npVec;
+	}
+
+	Vector *Vector::operator/(double val) {
+		if (!this->init)
+			throw initEx();
+
+		double *nData = (double *)malloc(sizeof(double) * this->len);
+		for (int i = 0; i < this->len; i++)
+			nData[i] = this->data[i] / val;
+
+		Vector *npVec = new Vector(this->len);
+		npVec->forceSetData(nData);
+
+		return npVec;
+	}
+
+	Vector *Vector::operator^(Vector *vec) {
+		this->opExcept(vec);
+
+		double *nData = (double *)malloc(sizeof(double) * this->len);
+		for (int i = 0; i < this->len; i++)
+			nData[i] = std::pow(this->data[i], vec->getDataIndex(i));
+
+		Vector *npVec = new Vector(this->len);
+		npVec->forceSetData(nData);
+
+
+		return npVec;
+	}
+
+	Vector *Vector::operator^(double val) {
+		if (!this->init)
+			throw initEx();
+
+		double *nData = (double *)malloc(sizeof(double) * this->len);
+		for (int i = 0; i < this->len; i++)
+			nData[i] = std::pow(this->data[i], val);
+
+		Vector *npVec = new Vector(this->len);
+		npVec->forceSetData(nData);
+
+		return npVec;
+	}
+
+	Vector *Vector::operator^(int val) {
+		if (!this->init)
+			throw initEx();
+
+		double *nData = (double *)malloc(sizeof(double) * this->len);
+		for (int i = 0; i < this->len; i++)
+			nData[i] = std::pow(this->data[i], val);
+
+		Vector *npVec = new Vector(this->len);
+		npVec->forceSetData(nData);
+
+		return npVec;
+	}
 
 	double dotProd(Vector *vec1, Vector *vec2)
 	{

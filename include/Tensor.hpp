@@ -63,7 +63,7 @@ namespace LIBCAA {
 
 		friend Tensor *tensorDot(Tensor *tens1, Tensor *tens2, int axisNum, int **axisPairs);
 
-	private:
+	protected:
 		// checks if a pointwise operation can be performed
 		// throws shapeEx() or initEx()
 		void opExcept(Tensor *pTens);

@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Matrix.hpp"
+#include "Vector.hpp"
 #include "InitFunc.hpp"
 
 using namespace LIBCAA;
@@ -58,21 +59,18 @@ void matrixInverseTesting() {
 	delete result;
 }
 
-void testingInitialization() {
-	Matrix *mrx1 = new Matrix(createMatrixParams(2, 2), createArangeInit());
-	Matrix *mrx2 = new Matrix(createMatrixParams(2, 2), createArangeInit());
+void vectorTesting() {
+	Vector *vec = new Vector(3, createArangeInit<double>());
+	Vector *nVec = *vec^vec;
 
-	mrx1->print();
-	mrx2->print();
+	vec->print();
+	nVec->print();
 
-	delete mrx1;
-	delete mrx2;
+	delete vec;
+	delete nVec;
 }
 
 int main() {
-	//matrixInverseTesting();
-	testingInitialization();
-
-	std::cin.get();
+	vectorTesting();
 	return 0;
 }

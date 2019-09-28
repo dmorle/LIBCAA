@@ -17,7 +17,20 @@ namespace LIBCAA {
 		Vector(int size, double val);
 		Vector(int size, double *vals);
 		Vector(int size, double(*initFunc)());
+
 		~Vector();
+
+		Vector *operator + (Vector *vec);
+		Vector *operator + (double val);
+		Vector *operator - (Vector *vec);
+		Vector *operator - (double val);
+		Vector *operator * (Vector *vec);
+		Vector *operator * (double val);
+		Vector *operator / (Vector *vec);
+		Vector *operator / (double val);
+		Vector *operator ^ (Vector *vec);
+		Vector *operator ^ (double val);
+		Vector *operator ^ (int val);
 
 		// throws shapeEx and initEx
 		friend double dotProd(Vector *vec1, Vector *vec2);
