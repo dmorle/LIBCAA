@@ -2,7 +2,6 @@
 #define VECPOLY_H
 
 #include "Vector.hpp"
-#include "VecFunc.hpp"
 
 namespace LIBCAA {
 	
