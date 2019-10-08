@@ -10,6 +10,19 @@ namespace LIBCAA {
 
 		int arangeVal;
 
+		// variables to keep track of indicies for an initialization
+		int rank;
+		int *dimensions;
+		int *index;
+
+		void nextIndex() {
+			index[0] = (index[0] + 1) % dimensions[0];
+			if (!index[0] && ++index[1] == dimensions[1]) {
+				free(dimensions);
+				free(index);
+			}
+		}
+
 		// initializes sequential elements using the ++ operator
 		template <typename dataType> dataType arange() {
 			return arangeVal++;
@@ -37,6 +50,17 @@ namespace LIBCAA {
 			double res1 = uniformDist<double, ((double)min) / 2, ((double)max) / 2>();
 			double res2 = uniformDist<double, ((double)min) / 2, ((double)max) / 2>();
 			return (midType)(res1 + res2);
+		}
+
+		// returns a sequence which creates a derivative matrix
+		double derivativeMatrix() {
+			if (index[0] == index[1] + 1) {
+				double ret = index[0];
+				nextIndex();
+				return ret;
+			}
+			nextIndex();
+			return 0;
 		}
 	}
 
@@ -103,6 +127,17 @@ namespace LIBCAA {
 	// returns a random double between min and max that was first cast to midType
 	template <typename midType, int min, int max> double(*createBinomialDist()) () {
 		return INIT::binomialDist<double, midType, min, max>;
+	}
+
+	template <int size> double(*createDerivativeMatrix()) () {
+		INIT::rank = 2;
+		INIT::dimensions = (int *)malloc(sizeof(int) * 2);
+		INIT::index = (int *)malloc(sizeof(int) * 2);
+
+		INIT::dimensions[0] = INIT::dimensions[1] = size;
+		INIT::index[0] = INIT::index[1] = 0;
+
+		return INIT::derivativeMatrix;
 	}
 }
 
