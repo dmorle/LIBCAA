@@ -1,4 +1,5 @@
 #include "InitFunc.hpp"
+#include <iostream>
 
 
 
@@ -18,13 +19,58 @@ namespace LIBCAA {
 		int *dimensions;
 		int *index;
 
-        void nextIndex() {
+        // currently only for matricies
+        void nextMatrixIndex() {
 			index[0] = (index[0] + 1) % dimensions[0];
 			if (!index[0] && ++index[1] == dimensions[1]) {
 				free(dimensions);
 				free(index);
 			}
 		}
+
+        // generalized for tensors
+        void nextIndex() {
+            int i = 0;
+            do {
+                index[i] = (index[i] + 1) % dimensions[i];
+            } while (!index[i++] && i < rank);
+            if (i == rank && !index[rank - 1]) {
+                free(dimensions);
+                free(index);
+            }
+        }
+
+        // determines whether the index is an even or odd parity (true => even)
+        bool findIndexParity() {
+            int cycleCount = 0;
+            for (int i = 0; i < rank; i++) {
+                if (index[i] < rank) {
+                    // start cycle
+                    cycleCount++;
+
+                    int tempI = i;
+                    do {
+                        /*for (int i = 0; i < rank; i++)
+                            std::cout<<index[i];
+                        std::cout<<"\tindex"<<std::endl;
+                        std::cin.get();
+
+                        printf("%d\ttempI", tempI);
+                        std::cin.get();*/
+
+                        int temp = index[tempI];
+                        index[tempI] += rank;
+                        tempI = temp;
+                    } while (tempI != i);
+                }
+            }
+
+            // unmarking the indicies
+            for (int i = 0; i < rank; i++)
+                index[i] -= rank;
+            
+            return (rank - cycleCount)%2;
+        }
 
 		// initializes sequential elements using the ++ operator
 		double arange() {
@@ -90,6 +136,24 @@ namespace LIBCAA {
 			nextIndex();
 			return 0;
 		}
+
+        double leviCivita() {
+            for (int i = 0; i < rank; i++)
+                for (int j = i + 1; j < rank; j++)
+                    if (index[i] == index[j]) {
+                        nextIndex();
+                        return 0;
+                    }
+            
+            // the index is a permutation
+
+            if (findIndexParity()) {
+                nextIndex();
+                return 1;
+            }
+            nextIndex();
+            return -1;
+        }
     }
     // end of INIT namespace
 
@@ -164,4 +228,18 @@ namespace LIBCAA {
 
 		return INIT::identityMatrix;
 	}
+
+    // creates a levi-civita tensor
+    double(*createLeviCivita(int rank)) () {
+        INIT::rank = rank;
+        INIT::dimensions = (int *)malloc(sizeof(int) * rank);
+        INIT::index = (int *)malloc(sizeof(int) * rank);
+
+        for (int i = 0; i < rank; i++) {
+            INIT::index[i] = 0;
+            INIT::dimensions[i] = rank;
+        }
+
+        return INIT::leviCivita;
+    }
 }

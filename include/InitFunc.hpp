@@ -22,6 +22,8 @@ namespace LIBCAA {
 
 		// returns a sequence which creates an identity matrix
 		double identityMatrix();
+
+		// returns a leviCivita tensor
 	}
 
 	// midType casts
@@ -55,6 +57,9 @@ namespace LIBCAA {
 
 	// returns the entries of an identity matrix
 	double(*createIdentityMatrix(int size)) ();
+
+	// creates a levi-civita tensor
+	double(*createLeviCivita(int rank)) ();
 }
 
 #endif

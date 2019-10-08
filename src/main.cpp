@@ -24,7 +24,14 @@ void vectorTesting() {
 	delete prime;
 }
 
+void leviCivitaTest() {
+	int rank = 3;
+	int dimensions[] = {3, 3, 3};
+	Tensor *tens = new Tensor(rank, dimensions, createLeviCivita(rank));
+	tens->print();
+}
+
 int main() {
-	vectorTesting();
+	leviCivitaTest();
 	return 0;
 }
