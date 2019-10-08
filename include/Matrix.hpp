@@ -15,7 +15,6 @@ namespace LIBCAA {
 		Matrix(matrixParams params, double val);
 		Matrix(matrixParams params, double **data);
 		Matrix(matrixParams params, double(*initFunc)());
-		~Matrix();
 
 		// overriding Tensor functions for efficiency
 		void setIndex(int i, int j, double val);
@@ -27,6 +26,8 @@ namespace LIBCAA {
 		void rowSub(int row1, int row2, double scale);
 
 		Matrix *getInverse();
+
+		Matrix *transpose();
 
 		friend Matrix *matmul(Matrix *mat1, Matrix *mat2);
 	};

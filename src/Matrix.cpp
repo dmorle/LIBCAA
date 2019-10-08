@@ -56,10 +56,6 @@ namespace LIBCAA {
 		this->type = "Matrix";
 	}
 
-	Matrix::~Matrix()
-	{
-	}
-
 	void Matrix::setIndex(int i, int j, double val)
 	{
 		this->data[i*this->strides[0] + j] = val;
@@ -179,6 +175,21 @@ namespace LIBCAA {
 		delete self;
 
 		return inv;
+	}
+
+	Matrix * Matrix::transpose() {
+		// no checks are needed
+
+		double *nData = (double *)malloc(sizeof(double) * this->len);
+
+		for (int i = 0; i < this->dimensions[0]; i++)
+			for (int j = 0; j < this->dimensions[1]; j++)
+				nData[j * this->dimensions[0] + i] = this->data[i * this->dimensions[1] + j];
+
+		Matrix *nMrx = new Matrix(createMatrixParams(this->dimensions[1], this->dimensions[1]));
+		nMrx->forceSetData(nData);
+
+		return nMrx;
 	}
 
 	Matrix *matmul(Matrix *mat1, Matrix *mat2)
