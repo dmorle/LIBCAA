@@ -12,23 +12,6 @@ namespace LIBCAA {
 		return params;
 	}
 
-	Matrix *getIdentity(int size)
-	{
-		Matrix *nMrx = new Matrix(createMatrixParams(size, size));
-
-		double *nData = (double *)malloc(sizeof(double) * size *size);
-		for (int i = 0; i < size * size; i++) {
-			if (i / size == i % size)
-				nData[i] = 1;
-			else
-				nData[i] = 0;
-		}
-
-		nMrx->forceSetData(nData);
-
-		return nMrx;
-	}
-
 	Matrix::Matrix(matrixParams params) : Tensor(2, params)
 	{
 		this->type = "Matrix";
@@ -95,13 +78,13 @@ namespace LIBCAA {
 
 
 	// gauss-jordan elimination
-	Matrix *Matrix::getInverse()
+	Matrix *getInverse(Matrix *mrx)
 	{
 		// check conditions
 
-		int size = this->dimensions[0];
+		int size = mrx->dimensions[0];
 
-		Matrix *self = (Matrix *)this->clone();
+		Matrix *self = (Matrix *)mrx->clone();
 		Matrix *inv = getIdentity(size);
 
 		for (int i = 0; i < size; i++) {
@@ -177,16 +160,16 @@ namespace LIBCAA {
 		return inv;
 	}
 
-	Matrix * Matrix::transpose() {
+	Matrix * transpose(Matrix *mrx) {
 		// no checks are needed
 
-		double *nData = (double *)malloc(sizeof(double) * this->len);
+		double *nData = (double *)malloc(sizeof(double) * mrx->len);
 
-		for (int i = 0; i < this->dimensions[0]; i++)
-			for (int j = 0; j < this->dimensions[1]; j++)
-				nData[j * this->dimensions[0] + i] = this->data[i * this->dimensions[1] + j];
+		for (int i = 0; i < mrx->dimensions[0]; i++)
+			for (int j = 0; j < mrx->dimensions[1]; j++)
+				nData[j * mrx->dimensions[0] + i] = mrx->data[i * mrx->dimensions[1] + j];
 
-		Matrix *nMrx = new Matrix(createMatrixParams(this->dimensions[1], this->dimensions[1]));
+		Matrix *nMrx = new Matrix(createMatrixParams(mrx->dimensions[1], mrx->dimensions[1]));
 		nMrx->forceSetData(nData);
 
 		return nMrx;

@@ -21,18 +21,20 @@ namespace LIBCAA {
 		double getAbsIndex(int i, int j);
 		double getIndex(int i, int j);
 
+		friend Matrix *getInverse(Matrix *mrx);
+
+		friend Matrix *transpose(Matrix *mrx);
+
+		// TODO: impliment this method
+		friend Matrix *getDiagonal(Matrix *mrx);
+
+		friend Matrix *matmul(Matrix *mat1, Matrix *mat2);
+
+	private:
 		void scaleRow(int rowNum, double scale);
 		void switchRows(int row1, int row2);
 		void rowSub(int row1, int row2, double scale);
-
-		Matrix *getInverse();
-
-		Matrix *transpose();
-
-		friend Matrix *matmul(Matrix *mat1, Matrix *mat2);
 	};
-
-	Matrix *getIdentity(int size);
 }
 
 #endif

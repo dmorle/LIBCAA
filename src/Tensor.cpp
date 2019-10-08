@@ -489,34 +489,34 @@ namespace LIBCAA {
 		return npTens;
 	}
 
-	Tensor *Tensor::transpose(int *axisOrder)
+	Tensor *transpose(Tensor *tens, int *axisOrder)
 	{
 		// checking possiblity
-		for (int i = 0; i < this->rank; i++)
-			if (axisOrder[i] >= this->rank)
+		for (int i = 0; i < tens->rank; i++)
+			if (axisOrder[i] >= tens->rank)
 				throw shapeEx();
 
 		// generating the dimensions of the transpose
-		int *nDimensions = (int *)malloc(sizeof(int) * this->rank);
-		for (int i = 0; i < this->rank; i++) {
-			nDimensions[i] = this->dimensions[axisOrder[i]];
+		int *nDimensions = (int *)malloc(sizeof(int) * tens->rank);
+		for (int i = 0; i < tens->rank; i++) {
+			nDimensions[i] = tens->dimensions[axisOrder[i]];
 		}
 
 		// generating the strides of the transpose
-		int *nStrides = (int *)malloc(sizeof(int) * this->rank);
-		nStrides[this->rank - 1] = 1;
+		int *nStrides = (int *)malloc(sizeof(int) * tens->rank);
+		nStrides[tens->rank - 1] = 1;
 
-		for (int i = this->rank - 2; i >= 0; i--)
+		for (int i = tens->rank - 2; i >= 0; i--)
 			nStrides[i] = nDimensions[i + 1] * nStrides[i + 1];
 
 		// allocating memory for the new data
-		double *newData = (double *)malloc(sizeof(double) * this->len);
+		double *newData = (double *)malloc(sizeof(double) * tens->len);
 
 		// getting the transposed axes
-		transposeAxis<double>(this->data, this->strides, axisOrder, newData, nDimensions, nStrides, this->rank);
+		transposeAxis<double>(tens->data, tens->strides, axisOrder, newData, nDimensions, nStrides, tens->rank);
 
 		// creating the tensor
-		Tensor *npTens = new Tensor(this->rank, nDimensions, nStrides);
+		Tensor *npTens = new Tensor(tens->rank, nDimensions, nStrides);
 		npTens->forceSetData(newData);
 
 		return npTens;
@@ -524,14 +524,14 @@ namespace LIBCAA {
 
 	// collapses axes of the tensor via summation
 	// after the last entry in axes, the following integer MUST be -1
-	Tensor *Tensor::collapseAxis(int axisNum, int *axes)
+	Tensor *collapseAxis(Tensor *tens, int axisNum, int *axes)
 	{
 		// check if the collapse is valid
-		if (axisNum > this->rank)
+		if (axisNum > tens->rank)
 			throw shapeEx();
 
 		for (int i = 0; i < axisNum; i++)
-			if (axes[i] >= this->rank)
+			if (axes[i] >= tens->rank)
 				throw shapeEx();
 
 		for (int i = 0; i < axisNum - 1; i++)
@@ -646,14 +646,14 @@ namespace LIBCAA {
 			throw initEx();
 	}
 
-	Tensor *Tensor::applyFunc(double(*func)(double))
+	Tensor *applyFunc(Tensor *tens, double(*func)(double))
 	{
-		double *nData = (double *)malloc(sizeof(double) * this->len);
-		for (int i = 0; i < this->len; i++) {
-			nData[i] = func(this->data[i]);
+		double *nData = (double *)malloc(sizeof(double) * tens->len);
+		for (int i = 0; i < tens->len; i++) {
+			nData[i] = func(tens->data[i]);
 		}
 
-		Tensor *npTens = new Tensor(this->rank, this->dimensions, this->rank);
+		Tensor *npTens = new Tensor(tens->rank, tens->dimensions, tens->rank);
 		npTens->forceSetData(nData);
 
 		return npTens;

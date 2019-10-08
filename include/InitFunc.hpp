@@ -62,6 +62,16 @@ namespace LIBCAA {
 			nextIndex();
 			return 0;
 		}
+
+		// returns a sequence which creates an identity matrix
+		double identityMatrix() {
+			if (index[0] == index[1]) {
+				nextIndex();
+				return 1;
+			}
+			nextIndex();
+			return 0;
+		}
 	}
 
 	// initializes sequential elements using the ++ operator
@@ -138,6 +148,16 @@ namespace LIBCAA {
 		INIT::index[0] = INIT::index[1] = 0;
 
 		return INIT::derivativeMatrix;
+	}
+
+	template <int size> double(*createIdentityMatrix()) () {
+		INIT::dimensions = (int *)malloc(sizeof(int) * 2);
+		INIT::index = (int *)malloc(sizeof(int) * 2);
+
+		INIT::dimensions[0] = INIT::dimensions[1] = size;
+		INIT::index[0] = INIT::index[1] = 0;
+
+		return INIT::identityMatrix;
 	}
 }
 
