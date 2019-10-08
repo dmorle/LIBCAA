@@ -546,11 +546,11 @@ namespace LIBCAA {
 			// generating the transpose of the original for axis collapse
 
 		// getting the axis order for the transpose
-		double *transData = (double *)malloc(sizeof(double) * this->len);
+		double *transData = (double *)malloc(sizeof(double) * tens->len);
 
 		int count = 0;
-		int *transOrder = (int *)malloc(sizeof(int) * this->rank);
-		for (int i = 0; i < this->rank; i++) {
+		int *transOrder = (int *)malloc(sizeof(int) * tens->rank);
+		for (int i = 0; i < tens->rank; i++) {
 			if (i == axes[count]) {
 				count++;
 				continue;
@@ -560,29 +560,29 @@ namespace LIBCAA {
 		}
 
 		for (int i = 0; i < axisNum; i++) {
-			transOrder[this->rank - i - 1] = axes[i];
+			transOrder[tens->rank - i - 1] = axes[i];
 		}
 
 		// generating the dimensions of the transpose
-		int *transDimensions = (int *)malloc(sizeof(int) * this->rank);
-		for (int i = 0; i < this->rank; i++) {
-			transDimensions[i] = this->dimensions[transOrder[i]];
+		int *transDimensions = (int *)malloc(sizeof(int) * tens->rank);
+		for (int i = 0; i < tens->rank; i++) {
+			transDimensions[i] = tens->dimensions[transOrder[i]];
 		}
 
 
 		// generating the strides of the transpose
-		int *transStrides = (int *)malloc(sizeof(int) * this->rank);
-		transStrides[this->rank - 1] = 1;
+		int *transStrides = (int *)malloc(sizeof(int) * tens->rank);
+		transStrides[tens->rank - 1] = 1;
 
-		for (int i = this->rank - 2; i >= 0; i--)
+		for (int i = tens->rank - 2; i >= 0; i--)
 			transStrides[i] = transDimensions[i + 1] * transStrides[i + 1];
 
 		// generating the transpose
-		transposeAxis<double>(this->data, this->strides, transOrder, transData, transDimensions, transStrides, this->rank);
+		transposeAxis<double>(tens->data, tens->strides, transOrder, transData, transDimensions, transStrides, tens->rank);
 
 			// set up for axis collapse
 
-		int newRank = this->rank - axisNum;
+		int newRank = tens->rank - axisNum;
 
 		int *newDimensions = (int *)malloc(sizeof(int) * newRank);
 		int *newStrides = (int *)malloc(sizeof(int) * newRank);
@@ -599,7 +599,7 @@ namespace LIBCAA {
 		// len = dim[0] * srd[0]
 		double *newData = (double *)malloc(sizeof(double) * newDimensions[0] * newStrides[0]);
 		
-		for (int i = 0; i < this->len / sumLen; i++) {
+		for (int i = 0; i < tens->len / sumLen; i++) {
 			newData[i] = transData[i * sumLen];
 			for (int j = 1; j < sumLen; j++) {
 				newData[i] += transData[i * sumLen + j];

@@ -6,11 +6,12 @@
 using namespace LIBCAA;
 
 void vectorTesting() {
-	Matrix *poly = new Matrix(createMatrixParams(6, 2), createArangeInit<double>());
+	int size = 6;
+	Matrix *poly = new Matrix(createMatrixParams(6, 2), createArangeInit());
 
 	poly->print();
 
-	Matrix *derivative = new Matrix(createMatrixParams(6, 6), createDerivativeMatrix<6>());
+	Matrix *derivative = new Matrix(createMatrixParams(size, size), createDerivativeMatrix(size));
 
 	derivative->print();
 

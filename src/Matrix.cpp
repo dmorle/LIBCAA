@@ -1,5 +1,9 @@
 #include "Matrix.hpp"
 
+#ifndef INITFUNC_H
+#include "InitFunc.hpp"
+#endif
+
 
 
 namespace LIBCAA {
@@ -85,7 +89,7 @@ namespace LIBCAA {
 		int size = mrx->dimensions[0];
 
 		Matrix *self = (Matrix *)mrx->clone();
-		Matrix *inv = getIdentity(size);
+		Matrix *inv = new Matrix(createMatrixParams(size, size), createIdentityMatrix(size));
 
 		for (int i = 0; i < size; i++) {
 
