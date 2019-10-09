@@ -1,6 +1,29 @@
 #include "Tensor.hpp"
 #include <math.h>
 
+// applyFunc helpers
+
+double sigmoid(double x) {
+	// TODO: do sigmoid
+	return 0;
+}
+
+double sigmoid1(double x) {
+	// TODO: do sigmoid prime
+	return 0;
+}
+
+double ReLU(double x) {
+	if (x > 0)
+		return x;
+	return 0;
+}
+
+double ReLU1(double x) {
+	if (x > 0)
+		return 1;
+	return 0;
+}
 
 namespace LIBCAA {
 
@@ -651,6 +674,61 @@ namespace LIBCAA {
 		double *nData = (double *)malloc(sizeof(double) * tens->len);
 		for (int i = 0; i < tens->len; i++) {
 			nData[i] = func(tens->data[i]);
+		}
+
+		Tensor *npTens = new Tensor(tens->rank, tens->dimensions, tens->rank);
+		npTens->forceSetData(nData);
+
+		return npTens;
+	}
+
+	Tensor *applyFunc(Tensor *tens, STDFUNC func)
+	{
+		double *nData = (double *)malloc(sizeof(double) * tens->len);
+
+		switch(func) {
+			case SIGMOID:
+				for (int i = 0; i < tens->len; i++)
+					nData[i] = sigmoid(tens->data[i]);
+			case SIGMOID1:
+				for (int i = 0; i < tens->len; i++)
+					nData[i] = sigmoid1(tens->data[i]);
+			case RELU:
+				for (int i = 0; i < tens->len; i++)
+					nData[i] = ReLU(tens->data[i]);
+			case RELU1:
+				for (int i = 0; i < tens->len; i++)
+					nData[i] = ReLU1(tens->data[i]);
+			case SQUARE:
+				for (int i = 0; i < tens->len; i++)
+					nData[i] = tens->data[i] * tens->data[i];
+			case SQRT:
+				for (int i = 0; i < tens->len; i++)
+					nData[i] = sqrt(tens->data[i]);
+			case EXP:
+				for (int i = 0; i < tens->len; i++)
+					nData[i] = exp(tens->data[i]);
+			case LN:
+				for (int i = 0; i < tens->len; i++)
+					nData[i] = log(tens->data[i]);
+			case SIN:
+				for (int i = 0; i < tens->len; i++)
+					nData[i] = sin(tens->data[i]);
+			case COS:
+				for (int i = 0; i < tens->len; i++)
+					nData[i] = cos(tens->data[i]);
+			case TAN:
+				for (int i = 0; i < tens->len; i++)
+					nData[i] = tan(tens->data[i]);
+			case SINH:
+				for (int i = 0; i < tens->len; i++)
+					nData[i] = sinh(tens->data[i]);
+			case COSH:
+				for (int i = 0; i < tens->len; i++)
+					nData[i] = cosh(tens->data[i]);
+			case TANH:
+				for (int i = 0; i < tens->len; i++)
+					nData[i] = tanh(tens->data[i]);
 		}
 
 		Tensor *npTens = new Tensor(tens->rank, tens->dimensions, tens->rank);
