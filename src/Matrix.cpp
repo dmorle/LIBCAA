@@ -121,7 +121,7 @@ namespace LIBCAA {
 					// could not find an inverse
 					delete self;
 					delete inv;
-					return NULL;
+					throw invEx();
 				}
 				leadCoeff = self->getAbsIndex(i, i);
 			}
@@ -178,7 +178,45 @@ namespace LIBCAA {
 
 		Matrix *self = mrx->clone();
 
+		double det = 1;
 
+		for (int i = 0; i < size; i++) {
+			double leadCoeff = self->getAbsIndex(i, i);
+
+			// swapping rows if a 0 was found in the leading coefficient
+			if (leadCoeff == 0) {
+				// find a row with a non-zero value at pos i
+				int j;
+				for (j = i + 1; j < size; j++) {
+					if (self->getAbsIndex(j, i) != 0) {
+						self->switchRows(i, j);
+						det *= -1;
+						break;
+					}
+				}
+				if (j == size) {
+					delete self;
+					return 0;
+				}
+				leadCoeff = self->getAbsIndex(i, i);
+			}
+
+			// scaling row for easier computation
+			if (leadCoeff != 1) {
+				self->scaleRow(i, 1 / leadCoeff);
+				det *= leadCoeff;
+			}
+
+			// row elimination
+			for (int j = i + 1; j < size; j++) {
+				double scale = self->getAbsIndex(j, i);
+				self->rowSub(j, i, scale);
+			}
+		}
+
+		delete self;
+
+		return det;
 	}
 
 	Matrix * transpose(Matrix *mrx) {
