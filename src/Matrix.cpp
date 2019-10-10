@@ -43,6 +43,10 @@ namespace LIBCAA {
 		this->type = "Matrix";
 	}
 
+	Matrix *Matrix::clone() {
+		return (Matrix *) MDA::clone();
+	}
+
 	void Matrix::setIndex(int i, int j, double val)
 	{
 		this->data[i*this->strides[0] + j] = val;
@@ -85,10 +89,11 @@ namespace LIBCAA {
 	Matrix *getInverse(Matrix *mrx)
 	{
 		// check conditions
+		// TODO: check for square and init
 
 		int size = mrx->dimensions[0];
 
-		Matrix *self = (Matrix *)mrx->clone();
+		Matrix *self = mrx->clone();
 		Matrix *inv = new Matrix(createMatrixParams(size, size), createIdentityMatrix(size));
 
 		for (int i = 0; i < size; i++) {
@@ -162,6 +167,18 @@ namespace LIBCAA {
 		delete self;
 
 		return inv;
+	}
+
+	double determinant(Matrix *mrx) {
+
+		// check conditions
+		// TODO: check for square and init
+		
+		int size = mrx->dimensions[0];
+
+		Matrix *self = mrx->clone();
+
+
 	}
 
 	Matrix * transpose(Matrix *mrx) {
