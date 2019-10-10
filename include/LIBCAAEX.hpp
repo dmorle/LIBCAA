@@ -32,7 +32,7 @@ namespace LIBCAA {
 	class invEx : public std::exception
 	{
 		virtual const char * what() const throw();
-	}
+	};
 
 }
 
