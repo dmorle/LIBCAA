@@ -28,6 +28,12 @@ namespace LIBCAA {
 		virtual const char * what() const throw();
 	};
 
+	// operation is called on a Tensor or derived class which requires an inverse; the inverse does not exist
+	class invEx : public std::exception
+	{
+		virtual const char * what() const throw();
+	}
+
 }
 
 #endif

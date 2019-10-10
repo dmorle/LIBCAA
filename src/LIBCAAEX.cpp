@@ -22,4 +22,9 @@ namespace LIBCAA {
 		return "unmatching types";
 	}
 
+	const char * invEx::what() const throw()
+	{
+		return "inverse could not be found";
+	}
+
 }
