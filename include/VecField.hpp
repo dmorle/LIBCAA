@@ -14,6 +14,7 @@ namespace LIBCAA {
 
 	VecFieldParams createVecFieldParams(int degree, int spatialDimension, double *(*func)(double *));
 
+
 	class VecField : public VecPoly
 	{
 	public:

@@ -12,6 +12,7 @@ namespace LIBCAA {
 		params[2] = dimOut;
 		return params;
 	}
+	
 
 	VecPoly::VecPoly(VecPolyParams params) : Tensor(3, params)
 	{

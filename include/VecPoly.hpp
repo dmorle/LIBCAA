@@ -8,6 +8,7 @@ namespace LIBCAA {
 	typedef int *VecPolyParams;
 	VecPolyParams createVecPolyParams(int degree, int dimIn, int dimOut);
 
+
 	class VecPoly : protected Tensor
 	{
 	public:

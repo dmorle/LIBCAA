@@ -17,6 +17,7 @@ namespace LIBCAA {
 		params->coeff = TaylorSeries(degree, spatialDimension, func);
 		return params;
 	}
+	
 
 	VecField::VecField(VecFieldParams params) : VecPoly(createVecPolyParams(params->degree, params->spatialDimension, params->spatialDimension))
 	{
