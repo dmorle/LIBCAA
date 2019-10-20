@@ -6,7 +6,7 @@
 *.user
 *.userosscache
 *.sln.docstates
-src/main.cpp
+*.cpp
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
