@@ -84,6 +84,366 @@ namespace LIBCAA {
 			this->data[row1 * this->strides[0] + i] -= scale * this->data[row2 * this->strides[0] + i];
 	}
 
+	void Matrix::opExcept(Matrix *mrx)
+	{
+		// checking if operation can be performed
+		if (
+			mrx->dimensions[0] != this->dimensions[0] ||
+			mrx->dimensions[1] != this->dimensions[1]
+			)
+			throw shapeEx();
+
+		// checking if both matricies are initialized
+		if (!this->init || !mrx->getInit())
+			throw initEx();
+	}
+
+	Matrix *add(Matrix *mrx1, Matrix *mrx2)
+	{
+		mrx1->opExcept(mrx2);
+
+		double *nData = (double *)malloc(sizeof(double) * mrx1->len);
+		for (int i = 0; i < mrx1->len; i++)
+			nData[i] = mrx1->data[i] + mrx2->data[i];
+
+		Matrix *npMrx = new Matrix(createMatrixParams(mrx1->dimensions[0], mrx1->dimensions[1]));
+		npMrx->forceSetData(nData);
+
+		return npMrx;
+	}
+
+	Matrix *add(Matrix *mrx, double val)
+	{
+		double *nData = (double *)malloc(sizeof(double) * mrx->len);
+		for (int i = 0; i < mrx->len; i++)
+			nData[i] = mrx->data[i] + val;
+
+		Matrix *npMrx = new Matrix(createMatrixParams(mrx->dimensions[0], mrx->dimensions[1]));
+		npMrx->forceSetData(nData);
+
+		return npMrx;
+	}
+
+	Matrix *add(double val, Matrix *mrx)
+	{
+		double *nData = (double *)malloc(sizeof(double) * mrx->len);
+		for (int i = 0; i < mrx->len; i++)
+			nData[i] = val + mrx->data[i];
+
+		Matrix *npMrx = new Matrix(createMatrixParams(mrx->dimensions[0], mrx->dimensions[1]));
+		npMrx->forceSetData(nData);
+
+		return npMrx;
+	}
+	
+	Matrix *sub(Matrix *mrx1, Matrix *mrx2)
+	{
+		mrx1->opExcept(mrx2);
+
+		double *nData = (double *)malloc(sizeof(double) * mrx1->len);
+		for (int i = 0; i < mrx1->len; i++)
+			nData[i] = mrx1->data[i] - mrx2->data[i];
+
+		Matrix *npMrx = new Matrix(createMatrixParams(mrx1->dimensions[0], mrx1->dimensions[1]));
+		npMrx->forceSetData(nData);
+
+		return npMrx;
+	}
+
+	Matrix *sub(Matrix *mrx, double val)
+	{
+		double *nData = (double *)malloc(sizeof(double) * mrx->len);
+		for (int i = 0; i < mrx->len; i++)
+			nData[i] = mrx->data[i] - val;
+
+		Matrix *npMrx = new Matrix(createMatrixParams(mrx->dimensions[0], mrx->dimensions[1]));
+		npMrx->forceSetData(nData);
+
+		return npMrx;
+	}
+
+	Matrix *sub(double val, Matrix *mrx)
+	{
+		double *nData = (double *)malloc(sizeof(double) * mrx->len);
+		for (int i = 0; i < mrx->len; i++)
+			nData[i] = val - mrx->data[i];
+
+		Matrix *npMrx = new Matrix(createMatrixParams(mrx->dimensions[0], mrx->dimensions[1]));
+		npMrx->forceSetData(nData);
+
+		return npMrx;
+	}
+
+	Matrix *mul(Matrix *mrx1, Matrix *mrx2)
+	{
+		mrx1->opExcept(mrx2);
+
+		double *nData = (double *)malloc(sizeof(double) * mrx1->len);
+		for (int i = 0; i < mrx1->len; i++)
+			nData[i] = mrx1->data[i] * mrx2->data[i];
+
+		Matrix *npMrx = new Matrix(createMatrixParams(mrx1->dimensions[0], mrx1->dimensions[1]));
+		npMrx->forceSetData(nData);
+
+		return npMrx;
+	}
+
+	Matrix *mul(Matrix *mrx, double val)
+	{
+		double *nData = (double *)malloc(sizeof(double) * mrx->len);
+		for (int i = 0; i < mrx->len; i++)
+			nData[i] = mrx->data[i] * val;
+
+		Matrix *npMrx = new Matrix(createMatrixParams(mrx->dimensions[0], mrx->dimensions[1]));
+		npMrx->forceSetData(nData);
+
+		return npMrx;
+	}
+
+	Matrix *mul(double val, Matrix *mrx)
+	{
+		double *nData = (double *)malloc(sizeof(double) * mrx->len);
+		for (int i = 0; i < mrx->len; i++)
+			nData[i] = val * mrx->data[i];
+
+		Matrix *npMrx = new Matrix(createMatrixParams(mrx->dimensions[0], mrx->dimensions[1]));
+		npMrx->forceSetData(nData);
+
+		return npMrx;
+	}
+
+	Matrix *div(Matrix *mrx1, Matrix *mrx2)
+	{
+		mrx1->opExcept(mrx2);
+
+		double *nData = (double *)malloc(sizeof(double) * mrx1->len);
+		for (int i = 0; i < mrx1->len; i++)
+			nData[i] = mrx1->data[i] / mrx2->data[i];
+
+		Matrix *npMrx = new Matrix(createMatrixParams(mrx1->dimensions[0], mrx1->dimensions[1]));
+		npMrx->forceSetData(nData);
+
+		return npMrx;
+	}
+
+	Matrix *div(Matrix *mrx, double val)
+	{
+		double *nData = (double *)malloc(sizeof(double) * mrx->len);
+		for (int i = 0; i < mrx->len; i++)
+			nData[i] = mrx->data[i] / val;
+
+		Matrix *npMrx = new Matrix(createMatrixParams(mrx->dimensions[0], mrx->dimensions[1]));
+		npMrx->forceSetData(nData);
+
+		return npMrx;
+	}
+
+	Matrix *div(double val, Matrix *mrx)
+	{
+		double *nData = (double *)malloc(sizeof(double) * mrx->len);
+		for (int i = 0; i < mrx->len; i++)
+			nData[i] = val / mrx->data[i];
+
+		Matrix *npMrx = new Matrix(createMatrixParams(mrx->dimensions[0], mrx->dimensions[1]));
+		npMrx->forceSetData(nData);
+
+		return npMrx;
+	}
+
+	Matrix *pow(Matrix *mrx1, Matrix *mrx2)
+	{
+		mrx1->opExcept(mrx2);
+
+		double *nData = (double *)malloc(sizeof(double) * mrx1->len);
+		for (int i = 0; i < mrx1->len; i++)
+			nData[i] = std::pow(mrx1->data[i], mrx2->data[i]);
+
+		Matrix *npMrx = new Matrix(createMatrixParams(mrx1->dimensions[0], mrx1->dimensions[1]));
+		npMrx->forceSetData(nData);
+
+		return npMrx;
+	}
+
+	Matrix *pow(Matrix *mrx, double val)
+	{
+		double *nData = (double *)malloc(sizeof(double) * mrx->len);
+		for (int i = 0; i < mrx->len; i++)
+			nData[i] = std::pow(mrx->data[i], val);
+
+		Matrix *npMrx = new Matrix(createMatrixParams(mrx->dimensions[0], mrx->dimensions[1]));
+		npMrx->forceSetData(nData);
+
+		return npMrx;
+	}
+
+	Matrix *pow(double val, Matrix *mrx)
+	{
+		double *nData = (double *)malloc(sizeof(double) * mrx->len);
+		for (int i = 0; i < mrx->len; i++)
+			nData[i] = std::pow(val, mrx->data[i]);
+
+		Matrix *npMrx = new Matrix(createMatrixParams(mrx->dimensions[0], mrx->dimensions[1]));
+		npMrx->forceSetData(nData);
+
+		return npMrx;
+	}
+
+	Matrix *pow(Matrix *mrx, int val)
+	{
+		double *nData = (double *)malloc(sizeof(double) * mrx->len);
+		for (int i = 0; i < mrx->len; i++)
+			nData[i] = std::pow(mrx->data[i], val);
+
+		Matrix *npMrx = new Matrix(createMatrixParams(mrx->dimensions[0], mrx->dimensions[1]));
+		npMrx->forceSetData(nData);
+
+		return npMrx;
+	}
+
+
+	Matrix *addAcc(int len, Matrix **mrxArr)
+	{
+		for (int i = 1; i < len; i++)
+			mrxArr[0]->opExcept(mrxArr[i]);
+
+		double *nData = (double *)calloc(mrxArr[0]->len, sizeof(double));
+
+		for (int i = 0; i < mrxArr[0]->len; i++)
+			for (int j = 0; j < len; j++)
+				nData[j] += mrxArr[j]->data[i];
+		
+		Matrix *npMrx = new Matrix(createMatrixParams(mrxArr[0]->dimensions[0], mrxArr[0]->dimensions[1]));
+		npMrx->forceSetData(nData);
+
+		return npMrx;
+	}
+
+	Matrix *mulAcc(int len, Matrix **mrxArr)
+	{
+		for (int i = 1; i < len; i++)
+			mrxArr[0]->opExcept(mrxArr[i]);
+
+		double *nData = (double *)malloc(sizeof(double) * mrxArr[0]->len);
+		for (int j = 0; j < mrxArr[0]->len; j++)
+			nData[j] = mrxArr[0]->data[j];
+
+		for (int i = 1; i < mrxArr[0]->len; i++)
+			for (int j = 0; j < len; j++)
+				nData[j] *= mrxArr[j]->data[i];
+		
+		Matrix *npMrx = new Matrix(createMatrixParams(mrxArr[0]->dimensions[0], mrxArr[0]->dimensions[1]));
+		npMrx->forceSetData(nData);
+
+		return npMrx;
+	}
+	
+
+	void iadd(Matrix *mrx1, Matrix *mrx2)
+	{
+		mrx1->opExcept(mrx2);
+
+		for (int i = 0; i < mrx1->len; i++)
+			mrx1->data[i] += mrx2->data[i];
+	}
+
+	void iadd(Matrix *mrx, double val)
+	{
+		for (int i = 0; i < mrx->len; i++)
+			mrx->data[i] += val;
+	}
+
+	void iadd(double val, Matrix *mrx)
+	{
+		for (int i = 0; i < mrx->len; i++)
+			mrx->data[i] += val;
+	}
+
+	void isub(Matrix *mrx1, Matrix *mrx2)
+	{
+		mrx1->opExcept(mrx2);
+
+		for (int i = 0; i < mrx1->len; i++)
+			mrx1->data[i] -= mrx2->data[i];
+	}
+
+	void isub(Matrix *mrx, double val)
+	{
+		for (int i = 0; i < mrx->len; i++)
+			mrx->data[i] -= val;
+	}
+
+	void isub(double val, Matrix *mrx)
+	{
+		for (int i = 0; i < mrx->len; i++)
+			mrx->data[i] = val - mrx->data[i];
+	}
+
+	void imul(Matrix *mrx1, Matrix *mrx2)
+	{
+		mrx1->opExcept(mrx2);
+
+		for (int i = 0; i < mrx1->len; i++)
+			mrx1->data[i] *= mrx2->data[i];
+	}
+
+	void imul(Matrix *mrx, double val)
+	{
+		for (int i = 0; i < mrx->len; i++)
+			mrx->data[i] *= val;
+	}
+
+	void imul(double val, Matrix *mrx)
+	{
+		for (int i = 0; i < mrx->len; i++)
+			mrx->data[i] *= val;
+	}
+
+	void idiv(Matrix *mrx1, Matrix *mrx2)
+	{
+		mrx1->opExcept(mrx2);
+
+		for (int i = 0; i < mrx1->len; i++)
+			mrx1->data[i] /= mrx2->data[i];
+	}
+
+	void idiv(Matrix *mrx, double val)
+	{
+		for (int i = 0; i < mrx->len; i++)
+			mrx->data[i] /= mrx->data[i];
+	}
+
+	void idiv(double val, Matrix *mrx)
+	{
+		for (int i = 0; i < mrx->len; i++)
+			mrx->data[i] = val/mrx->data[i];
+	}
+
+	void ipow(Matrix *mrx1, Matrix *mrx2)
+	{
+		mrx1->opExcept(mrx2);
+
+		for (int i = 0; i < mrx1->len; i++)
+			mrx1->data[i] = std::pow(mrx1->data[i], mrx2->data[i]);
+	}
+
+	void ipow(Matrix *mrx, double val)
+	{
+		for (int i = 0; i < mrx->len; i++)
+			mrx->data[i] = std::pow(mrx->data[i], val);
+	}
+
+	void ipow(double val, Matrix *mrx)
+	{
+		for (int i = 0; i , mrx->len; i++)
+			mrx->data[i] = std::pow(val, mrx->data[i]);
+	}
+
+	void ipow(Matrix *mrx, int val)
+	{
+		for (int i = 0; i < mrx->len; i++)
+			mrx->data[i] = std::pow(mrx->data[i], val);
+	}
+
 
 	// gauss-jordan elimination
 	Matrix *getInverse(Matrix *mrx)
