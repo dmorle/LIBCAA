@@ -1,7 +1,7 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#include "Vector.hpp"
+#include "Matrix.hpp"
 
 namespace LIBCAA {
 
