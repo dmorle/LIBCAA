@@ -124,16 +124,16 @@ namespace LIBCAA {
 				nextIndex();
 				return ret;
 			}
-			nextIndex();
+			nextMatrixIndex();
 			return 0;
 		}
 
         double identityMatrix() {
 			if (index[0] == index[1]) {
-				nextIndex();
+				nextMatrixIndex();
 				return 1;
 			}
-			nextIndex();
+			nextMatrixIndex();
 			return 0;
 		}
 
