@@ -147,370 +147,387 @@ namespace LIBCAA {
 
 	Tensor::~Tensor() {}
 
-	Tensor *Tensor::operator+(Tensor *tens)
+	void Tensor::opExcept(Tensor *pTens)
 	{
-		this->opExcept(tens);
+		// checking if operation can be performed
+		if (!sameShape(this, pTens))
+			throw shapeEx();
+
+		// checking if both tensors are initialized
+		if (!this->init || !pTens->getInit())
+			throw initEx();
+	}
+
+	void Tensor::opExcept(Tensor *pTens, bool checkType)
+	{
+		// checking if tensors have the same type
+		if (this->getType() != pTens->getType())
+			throw typeEx();
+
+		// checking if operation can be performed
+		if (!sameShape(this, pTens))
+			throw shapeEx();
+
+		// checking if both tensors are initialized
+		if (!this->init || !pTens->getInit())
+			throw initEx();
+	}
+
+	Tensor *add(Tensor *tens1, Tensor *tens2)
+	{
+		tens1->opExcept(tens2);
+
+		double *nData = (double *)malloc(sizeof(double) * tens1->len);
+		for (int i = 0; i < tens1->len; i++)
+			nData[i] = tens1->data[i] + tens2->data[i];
+
+		Tensor *npTens = new Tensor(tens1->rank, tens1->dimensions);
+		npTens->forceSetData(nData);
+
+		return npTens;
+	}
+
+	Tensor *add(Tensor *tens, double val)
+	{
+		double *nData = (double *)malloc(sizeof(double) * tens->len);
+		for (int i = 0; i < tens->len; i++)
+			nData[i] = tens->data[i] + val;
+
+		Tensor *npTens = new Tensor(tens->rank, tens->dimensions);
+		npTens->forceSetData(nData);
+
+		return npTens;
+	}
+
+	Tensor *add(double val, Tensor *tens)
+	{
+		double *nData = (double *)malloc(sizeof(double) * tens->len);
+		for (int i = 0; i < tens->len; i++)
+			nData[i] = val + tens->data[i];
+
+		Tensor *npTens = new Tensor(tens->rank, tens->dimensions);
+		npTens->forceSetData(nData);
+
+		return npTens;
+	}
+	
+	Tensor *sub(Tensor *tens1, Tensor *tens2)
+	{
+		tens1->opExcept(tens2);
+
+		double *nData = (double *)malloc(sizeof(double) * tens1->len);
+		for (int i = 0; i < tens1->len; i++)
+			nData[i] = tens1->data[i] - tens2->data[i];
+
+		Tensor *npTens = new Tensor(tens1->rank, tens1->dimensions);
+		npTens->forceSetData(nData);
+
+		return npTens;
+	}
+
+	Tensor *sub(Tensor *tens, double val)
+	{
+		double *nData = (double *)malloc(sizeof(double) * tens->len);
+		for (int i = 0; i < tens->len; i++)
+			nData[i] = tens->data[i] - val;
+
+		Tensor *npTens = new Tensor(tens->rank, tens->dimensions);
+		npTens->forceSetData(nData);
+
+		return npTens;
+	}
+
+	Tensor *sub(double val, Tensor *tens)
+	{
+		double *nData = (double *)malloc(sizeof(double) * tens->len);
+		for (int i = 0; i < tens->len; i++)
+			nData[i] = val - tens->data[i];
+
+		Tensor *npTens = new Tensor(tens->rank, tens->dimensions);
+		npTens->forceSetData(nData);
+
+		return npTens;
+	}
+
+	Tensor *mul(Tensor *tens1, Tensor *tens2)
+	{
+		tens1->opExcept(tens2);
+
+		double *nData = (double *)malloc(sizeof(double) * tens1->len);
+		for (int i = 0; i < tens1->len; i++)
+			nData[i] = tens1->data[i] * tens2->data[i];
+
+		Tensor *npTens = new Tensor(tens1->rank, tens1->dimensions);
+		npTens->forceSetData(nData);
+
+		return npTens;
+	}
+
+	Tensor *mul(Tensor *tens, double val)
+	{
+		double *nData = (double *)malloc(sizeof(double) * tens->len);
+		for (int i = 0; i < tens->len; i++)
+			nData[i] = tens->data[i] * val;
+
+		Tensor *npTens = new Tensor(tens->rank, tens->dimensions);
+		npTens->forceSetData(nData);
+
+		return npTens;
+	}
+
+	Tensor *mul(double val, Tensor *tens)
+	{
+		double *nData = (double *)malloc(sizeof(double) * tens->len);
+		for (int i = 0; i < tens->len; i++)
+			nData[i] = val * tens->data[i];
+
+		Tensor *npTens = new Tensor(tens->rank, tens->dimensions);
+		npTens->forceSetData(nData);
+
+		return npTens;
+	}
+
+	Tensor *div(Tensor *tens1, Tensor *tens2)
+	{
+		tens1->opExcept(tens2);
+
+		double *nData = (double *)malloc(sizeof(double) * tens1->len);
+		for (int i = 0; i < tens1->len; i++)
+			nData[i] = tens1->data[i] / tens2->data[i];
+
+		Tensor *npTens = new Tensor(tens1->rank, tens1->dimensions);
+		npTens->forceSetData(nData);
+
+		return npTens;
+	}
+
+	Tensor *div(Tensor *tens, double val)
+	{
+		double *nData = (double *)malloc(sizeof(double) * tens->len);
+		for (int i = 0; i < tens->len; i++)
+			nData[i] = tens->data[i] / val;
+
+		Tensor *npTens = new Tensor(tens->rank, tens->dimensions);
+		npTens->forceSetData(nData);
+
+		return npTens;
+	}
+
+	Tensor *div(double val, Tensor *tens)
+	{
+		double *nData = (double *)malloc(sizeof(double) * tens->len);
+		for (int i = 0; i < tens->len; i++)
+			nData[i] = val / tens->data[i];
+
+		Tensor *npTens = new Tensor(tens->rank, tens->dimensions);
+		npTens->forceSetData(nData);
+
+		return npTens;
+	}
+
+	Tensor *pow(Tensor *tens1, Tensor *tens2)
+	{
+		tens1->opExcept(tens2);
+
+		double *nData = (double *)malloc(sizeof(double) * tens1->len);
+		for (int i = 0; i < tens1->len; i++)
+			nData[i] = std::pow(tens1->data[i], tens2->data[i]);
+
+		Tensor *npTens = new Tensor(tens1->rank, tens1->dimensions);
+		npTens->forceSetData(nData);
+
+		return npTens;
+	}
+
+	Tensor *pow(Tensor *tens, double val)
+	{
+		double *nData = (double *)malloc(sizeof(double) * tens->len);
+		for (int i = 0; i < tens->len; i++)
+			nData[i] = std::pow(tens->data[i], val);
+
+		Tensor *npTens = new Tensor(tens->rank, tens->dimensions);
+		npTens->forceSetData(nData);
+
+		return npTens;
+	}
+
+	Tensor *pow(double val, Tensor *tens)
+	{
+		double *nData = (double *)malloc(sizeof(double) * tens->len);
+		for (int i = 0; i < tens->len; i++)
+			nData[i] = std::pow(val, tens->data[i]);
+
+		Tensor *npTens = new Tensor(tens->rank, tens->dimensions);
+		npTens->forceSetData(nData);
+
+		return npTens;
+	}
+
+	Tensor *pow(Tensor *tens, int val)
+	{
+		double *nData = (double *)malloc(sizeof(double) * tens->len);
+		for (int i = 0; i < tens->len; i++)
+			nData[i] = std::pow(tens->data[i], val);
+
+		Tensor *npTens = new Tensor(tens->rank, tens->dimensions);
+		npTens->forceSetData(nData);
+
+		return npTens;
+	}
+
+
+	Tensor *addAcc(int len, Tensor **tensArr)
+	{
+		for (int i = 1; i < len; i++)
+			tensArr[0]->opExcept(tensArr[i]);
+
+		double *nData = (double *)calloc(tensArr[0]->len, sizeof(double));
+
+		for (int i = 0; i < tensArr[0]->len; i++)
+			for (int j = 0; j < len; j++)
+				nData[j] += tensArr[j]->data[i];
 		
-		double *nData = (double *)malloc(sizeof(double) * this->len);
-		for (int i = 0; i < this->len; i++) {
-			nData[i] = this->data[i] + tens->getDataIndex(i);
-		}
-
-		Tensor *npTens = new Tensor(this->rank, this->dimensions);
+		Tensor *npTens = new Tensor(tensArr[0]->rank, tensArr[0]->dimensions);
 		npTens->forceSetData(nData);
 
 		return npTens;
 	}
 
-	Tensor *Tensor::operator+(double val)
+	Tensor *mulAcc(int len, Tensor **tensArr)
 	{
-		if (!this->init)
-			throw initEx();
+		for (int i = 1; i < len; i++)
+			tensArr[0]->opExcept(tensArr[i]);
 
-		double *nData = (double *)malloc(sizeof(double) * this->len);
-		for (int i = 0; i < this->len; i++) {
-			nData[i] = this->data[i] - val;
-		}
+		double *nData = (double *)malloc(sizeof(double) * tensArr[0]->len);
+		for (int j = 0; j < tensArr[0]->len; j++)
+			nData[j] = tensArr[0]->data[j];
 
-		Tensor *npTens = new Tensor(this->rank, this->dimensions);
+		for (int i = 1; i < tensArr[0]->len; i++)
+			for (int j = 0; j < len; j++)
+				nData[j] *= tensArr[j]->data[i];
+		
+		Tensor *npTens = new Tensor(tensArr[0]->rank, tensArr[0]->dimensions);
 		npTens->forceSetData(nData);
 
 		return npTens;
 	}
+	
 
-	Tensor *Tensor::operator-(Tensor *tens)
+	void iadd(Tensor *tens1, Tensor *tens2)
 	{
-		this->opExcept(tens);
+		tens1->opExcept(tens2);
 
-		double *nData = (double *)malloc(sizeof(double) * this->len);
-		for (int i = 0; i < this->len; i++) {
-			nData[i] = this->data[i] - tens->getDataIndex(i);
-		}
-
-		Tensor *npTens = new Tensor(this->rank, this->dimensions);
-		npTens->forceSetData(nData);
-
-		return npTens;
+		for (int i = 0; i < tens1->len; i++)
+			tens1->data[i] += tens2->data[i];
 	}
 
-	Tensor *Tensor::operator-(double val)
+	void iadd(Tensor *tens, double val)
 	{
-		if (!this->init)
-			throw initEx();
-
-		double *nData = (double *)malloc(sizeof(double) * this->len);
-		for (int i = 0; i < this->len; i++) {
-			nData[i] = this->data[i] - val;
-		}
-
-		Tensor *npTens = new Tensor(this->rank, this->dimensions);
-		npTens->forceSetData(nData);
-
-		return npTens;
+		for (int i = 0; i < tens->len; i++)
+			tens->data[i] += val;
 	}
 
-	Tensor *Tensor::operator*(Tensor *tens)
+	void iadd(double val, Tensor *tens)
 	{
-		this->opExcept(tens);
-
-		double *nData = (double *)malloc(sizeof(double) * this->len);
-		for (int i = 0; i < this->len; i++) {
-			nData[i] = this->data[i] * tens->getDataIndex(i);
-		}
-
-		Tensor *npTens = new Tensor(this->rank, this->dimensions);
-		npTens->forceSetData(nData);
-
-		return npTens;
+		for (int i = 0; i < tens->len; i++)
+			tens->data[i] += val;
 	}
 
-	Tensor *Tensor::operator*(double val)
+	void isub(Tensor *tens1, Tensor *tens2)
 	{
-		if (!this->init)
-			throw initEx();
+		tens1->opExcept(tens2);
 
-		double *nData = (double *)malloc(sizeof(double) * this->len);
-		for (int i = 0; i < this->len; i++) {
-			nData[i] = this->data[i] * val;
-		}
-
-		Tensor *npTens = new Tensor(this->rank, this->dimensions);
-		npTens->forceSetData(nData);
-
-		return npTens;
+		for (int i = 0; i < tens1->len; i++)
+			tens1->data[i] -= tens2->data[i];
 	}
 
-	Tensor *Tensor::operator/(Tensor *tens)
+	void isub(Tensor *tens, double val)
 	{
-		this->opExcept(tens);
-
-		double *nData = (double *)malloc(sizeof(double) * this->len);
-		for (int i = 0; i < this->len; i++) {
-			nData[i] = this->data[i] / tens->getDataIndex(i);
-		}
-
-		Tensor *npTens = new Tensor(this->rank, this->dimensions);
-		npTens->forceSetData(nData);
-
-		return npTens;
+		for (int i = 0; i < tens->len; i++)
+			tens->data[i] -= val;
 	}
 
-	Tensor *Tensor::operator/(double val)
+	void isub(double val, Tensor *tens)
 	{
-		if (!this->init)
-			throw initEx();
-
-		double *nData = (double *)malloc(sizeof(double) * this->len);
-		for (int i = 0; i < this->len; i++) {
-			nData[i] = this->data[i] / val;
-		}
-
-		Tensor *npTens = new Tensor(this->rank, this->dimensions);
-		npTens->forceSetData(nData);
-
-		return npTens;
+		for (int i = 0; i < tens->len; i++)
+			tens->data[i] = val - tens->data[i];
 	}
 
-	Tensor *Tensor::operator^(Tensor *tens)
+	void imul(Tensor *tens1, Tensor *tens2)
 	{
-		this->opExcept(tens);
+		tens1->opExcept(tens2);
 
-		double *nData = (double *)malloc(sizeof(double) * this->len);
-		for (int i = 0; i < this->len; i++) {
-			nData[i] = std::pow(this->data[i], tens->getDataIndex(i));
-		}
-
-		Tensor *npTens = new Tensor(this->rank, this->dimensions);
-		npTens->forceSetData(nData);
-
-		return npTens;
+		for (int i = 0; i < tens1->len; i++)
+			tens1->data[i] *= tens2->data[i];
 	}
 
-	Tensor *Tensor::operator^(double val)
+	void imul(Tensor *tens, double val)
 	{
-		if (!this->init)
-			throw initEx();
-
-		double *nData = (double *)malloc(sizeof(double) * this->len);
-		for (int i = 0; i < this->len; i++) {
-			nData[i] = std::pow(this->data[i], val);
-		}
-
-		Tensor *npTens = new Tensor(this->rank, this->dimensions);
-		npTens->forceSetData(nData);
-
-		return npTens;
+		for (int i = 0; i < tens->len; i++)
+			tens->data[i] *= val;
 	}
 
-	Tensor *Tensor::operator^(int val)
+	void imul(double val, Tensor *tens)
 	{
-		if (!this->init)
-			throw initEx();
-
-		double *nData = (double *)malloc(sizeof(double) * this->len);
-		for (int i = 0; i < this->len; i++) {
-			nData[i] = std::pow(this->data[i], val);
-		}
-
-		Tensor *npTens = new Tensor(this->rank, this->dimensions);
-		npTens->forceSetData(nData);
-
-		return npTens;
+		for (int i = 0; i < tens->len; i++)
+			tens->data[i] *= val;
 	}
 
-	void Tensor::operator+=(Tensor *tens)
+	void idiv(Tensor *tens1, Tensor *tens2)
 	{
-		this->opExcept(tens);
+		tens1->opExcept(tens2);
 
-		// operation
-		for (int i = 0; i < this->len; i++)
-			this->data[i] += tens->getDataIndex(i);
+		for (int i = 0; i < tens1->len; i++)
+			tens1->data[i] /= tens2->data[i];
 	}
 
-	void Tensor::operator+=(double val)
+	void idiv(Tensor *tens, double val)
 	{
-		if (!this->init)
-			throw initEx();
-
-		// operation
-		for (int i = 0; i < this->len; i++)
-			this->data[i] += val;
+		for (int i = 0; i < tens->len; i++)
+			tens->data[i] /= tens->data[i];
 	}
 
-	void Tensor::operator-=(Tensor *tens)
+	void idiv(double val, Tensor *tens)
 	{
-		this->opExcept(tens);
-
-		// operation
-		for (int i = 0; i < this->len; i++)
-			this->data[i] -= tens->getDataIndex(i);
+		for (int i = 0; i < tens->len; i++)
+			tens->data[i] = val/tens->data[i];
 	}
 
-	void Tensor::operator-=(double val)
+	void ipow(Tensor *tens1, Tensor *tens2)
 	{
-		if (!this->init)
-			throw initEx();
+		tens1->opExcept(tens2);
 
-		for (int i = 0; i < this->len; i++)
-			this->data[i] -= val;
+		for (int i = 0; i < tens1->len; i++)
+			tens1->data[i] = std::pow(tens1->data[i], tens2->data[i]);
 	}
 
-	void Tensor::operator*=(Tensor *tens)
+	void ipow(Tensor *tens, double val)
 	{
-		this->opExcept(tens);
-
-		// operation
-		for (int i = 0; i < this->len; i++)
-			this->data[i] *= tens->getDataIndex(i);
+		for (int i = 0; i < tens->len; i++)
+			tens->data[i] = std::pow(tens->data[i], val);
 	}
 
-	void Tensor::operator*=(double val)
+	void ipow(double val, Tensor *tens)
 	{
-		if (!this->init)
-			throw initEx();
-
-		// operation
-		for (int i = 0; i < this->len; i++)
-			this->data[i] *= val;
+		for (int i = 0; i , tens->len; i++)
+			tens->data[i] = std::pow(val, tens->data[i]);
 	}
 
-	void Tensor::operator/=(Tensor *tens)
+	void ipow(Tensor *tens, int val)
 	{
-		this->opExcept(tens);
-
-		// operation
-		for (int i = 0; i < this->len; i++)
-			this->data[i] /= tens->getDataIndex(i);
+		for (int i = 0; i < tens->len; i++)
+			tens->data[i] = std::pow(tens->data[i], val);
 	}
 
-	void Tensor::operator/=(double val)
-	{
-		if (!this->init)
-			throw initEx();
-
-		// operation
-		for (int i = 0; i < this->len; i++)
-			this->data[i] /= val;
-	}
-
-	void Tensor::operator^=(Tensor *tens)
-	{
-		this->opExcept(tens);
-
-		// operation
-		for (int i = 0; i < this->len; i++)
-			this->data[i] = pow(this->data[i], tens->getDataIndex(i));
-	}
-
-	void Tensor::operator^=(double val)
-	{
-		if (!this->init)
-			throw initEx();
-
-		// operation
-		for (int i = 0; i < this->len; i++)
-			this->data[i] = pow(this->data[i], val);
-	}
-
-	void Tensor::operator^=(int val)
-	{
-		if (!this->init)
-			throw initEx();
-
-		// operation
-		for (int i = 0; i < this->len; i++)
-			this->data[i] = pow(this->data[i], val);
-	}
-
-	Tensor *Tensor::operator==(Tensor *tens)
-	{
-		this->opExcept(tens);
-
-		double *nData = (double *)malloc(sizeof(double) * this->len);
-		for (int i = 0; i < this->len; i++) {
-			nData[i] = this->data[i] == tens->getDataIndex(i);
-		}
-
-		Tensor *npTens = new Tensor(this->rank, this->dimensions);
-		npTens->forceSetData(nData);
-
-		return npTens;
-	}
-
-	Tensor *Tensor::operator!=(Tensor *tens)
-	{
-		this->opExcept(tens);
-
-		double *nData = (double *)malloc(sizeof(double) * this->len);
-		for (int i = 0; i < this->len; i++) {
-			nData[i] = this->data[i] != tens->getDataIndex(i);
-		}
-
-		Tensor *npTens = new Tensor(this->rank, this->dimensions);
-		npTens->forceSetData(nData);
-
-		return npTens;
-	}
-
-	Tensor *Tensor::operator>(Tensor *tens)
-	{
-		this->opExcept(tens);
-
-		double *nData = (double *)malloc(sizeof(double) * this->len);
-		for (int i = 0; i < this->len; i++) {
-			nData[i] = this->data[i] > tens->getDataIndex(i);
-		}
-
-		Tensor *npTens = new Tensor(this->rank, this->dimensions);
-		npTens->forceSetData(nData);
-
-		return npTens;
-	}
-
-	Tensor *Tensor::operator<(Tensor *tens)
-	{
-		this->opExcept(tens);
-
-		double *nData = (double *)malloc(sizeof(double) * this->len);
-		for (int i = 0; i < this->len; i++) {
-			nData[i] = this->data[i] < tens->getDataIndex(i);
-		}
-
-		Tensor *npTens = new Tensor(this->rank, this->dimensions);
-		npTens->forceSetData(nData);
-
-		return npTens;
-	}
-
-	Tensor *Tensor::operator>=(Tensor *tens)
-	{
-		this->opExcept(tens);
-
-		double *nData = (double *)malloc(sizeof(double) * this->len);
-		for (int i = 0; i < this->len; i++) {
-			nData[i] = this->data[i] >= tens->getDataIndex(i);
-		}
-
-		Tensor *npTens = new Tensor(this->rank, this->dimensions);
-		npTens->forceSetData(nData);
-
-		return npTens;
-	}
-
-	Tensor *Tensor::operator<=(Tensor *tens)
-	{
-		this->opExcept(tens);
-
-		double *nData = (double *)malloc(sizeof(double) * this->len);
-		for (int i = 0; i < this->len; i++) {
-			nData[i] = this->data[i] <= tens->getDataIndex(i);
-		}
-
-		Tensor *npTens = new Tensor(this->rank, this->dimensions);
-		npTens->forceSetData(nData);
-
-		return npTens;
-	}
+	// TODO: impliment boolean comparisons
+	/*
+	Tensor *eq(Tensor *tens);
+	Tensor *ne(Tensor *tens);
+	Tensor *gt(Tensor *tens);
+	Tensor *lt(Tensor *tens);
+	Tensor *le(Tensor *tens);
+	Tensor *ge(Tensor *tens);
+	*/
 
 	Tensor *transpose(Tensor *tens, int *axisOrder)
 	{
@@ -641,32 +658,6 @@ namespace LIBCAA {
 		free(newStrides);
 		
 		return npTens;
-	}
-
-	void Tensor::opExcept(Tensor *pTens)
-	{
-		// checking if operation can be performed
-		if (!sameShape(this, pTens))
-			throw shapeEx();
-
-		// checking if both tensors are initialized
-		if (!this->init || !pTens->getInit())
-			throw initEx();
-	}
-
-	void Tensor::opExcept(Tensor *pTens, bool checkType)
-	{
-		// checking if tensors have the same type
-		if (this->getType() != pTens->getType())
-			throw typeEx();
-
-		// checking if operation can be performed
-		if (!sameShape(this, pTens))
-			throw shapeEx();
-
-		// checking if both tensors are initialized
-		if (!this->init || !pTens->getInit())
-			throw initEx();
 	}
 
 	Tensor *applyFunc(Tensor *tens, double(*func)(double))
