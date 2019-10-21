@@ -38,36 +38,49 @@ namespace LIBCAA {
 		// MDA deconstructor is transferable to Tensor
 		~Tensor();
 
-		Tensor *operator + (Tensor *tens);
-		Tensor *operator + (double val);
-		Tensor *operator - (Tensor *tens);
-		Tensor *operator - (double val);
-		Tensor *operator * (Tensor *tens);
-		Tensor *operator * (double val);
-		Tensor *operator / (Tensor *tens);
-		Tensor *operator / (double val);
-		Tensor *operator ^ (Tensor *tens);
-		Tensor *operator ^ (double val);
-		Tensor *operator ^ (int val);
+		friend Tensor *add(Tensor *tens1, Tensor *tens2);
+		friend Tensor *add(Tensor *tens, double val);
+		friend Tensor *add(double val, Tensor *tens);
+		friend Tensor *sub(Tensor *tens1, Tensor *tens2);
+		friend Tensor *sub(Tensor *tens, double val);
+		friend Tensor *sub(double val, Tensor *tens);
+		friend Tensor *mul(Tensor *tens1, Tensor *tens2);
+		friend Tensor *mul(Tensor *tens, double val);
+		friend Tensor *mul(double val, Tensor *tens);
+		friend Tensor *div(Tensor *tens1, Tensor *tens2);
+		friend Tensor *div(Tensor *tens, double val);
+		friend Tensor *div(double val, Tensor *tens);
+		friend Tensor *pow(Tensor *tens1, Tensor *tens2);
+		friend Tensor *pow(Tensor *tens, double val);
+		friend Tensor *pow(double val, Tensor *tens);
+		friend Tensor *pow(Tensor *tens, int val);
 
-		void operator += (Tensor *tens);
-		void operator += (double val);
-		void operator -= (Tensor *tens);
-		void operator -= (double val);
-		void operator *= (Tensor *tens);
-		void operator *= (double val);
-		void operator /= (Tensor *tens);
-		void operator /= (double val);
-		void operator ^= (Tensor *tens);
-		void operator ^= (double val);
-		void operator ^= (int val);
+		friend Tensor *addAcc(int len, Tensor **tensArr);
+		friend Tensor *mulAcc(int len, Tensor **tensArr);
 
-		Tensor *operator == (Tensor *tens);
-		Tensor *operator != (Tensor *tens);
-		Tensor *operator >  (Tensor *tens);
-		Tensor *operator <  (Tensor *tens);
-		Tensor *operator >= (Tensor *tens);
-		Tensor *operator <= (Tensor *tens);
+		friend Tensor *iadd(Tensor *tens1, Tensor *tens2);
+		friend Tensor *iadd(Tensor *tens, double val);
+		friend Tensor *iadd(double val, Tensor *tens);
+		friend Tensor *isub(Tensor *tens1, Tensor *tens2);
+		friend Tensor *isub(Tensor *tens, double val);
+		friend Tensor *isub(double val, Tensor *tens);
+		friend Tensor *imul(Tensor *tens1, Tensor *tens2);
+		friend Tensor *imul(Tensor *tens, double val);
+		friend Tensor *imul(double val, Tensor *tens);
+		friend Tensor *idiv(Tensor *tens1, Tensor *tens2);
+		friend Tensor *idiv(Tensor *tens, double val);
+		friend Tensor *idiv(double val, Tensor *tens);
+		friend Tensor *ipow(Tensor *tens1, Tensor *tens2);
+		friend Tensor *ipow(Tensor *tens, double val);
+		friend Tensor *ipow(double val, Tensor *tens);
+		friend Tensor *ipow(Tensor *tens, int val);
+
+		friend Tensor *eq(Tensor *tens);
+		friend Tensor *ne(Tensor *tens);
+		friend Tensor *gt(Tensor *tens);
+		friend Tensor *lt(Tensor *tens);
+		friend Tensor *le(Tensor *tens);
+		friend Tensor *ge(Tensor *tens);
 
 		friend Tensor *transpose(Tensor *tens, int *axisOrder);
 		friend Tensor *collapseAxis(Tensor *tens, int axisNum, int *axes);
