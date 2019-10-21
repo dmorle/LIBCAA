@@ -58,22 +58,22 @@ namespace LIBCAA {
 		friend Tensor *addAcc(int len, Tensor **tensArr);
 		friend Tensor *mulAcc(int len, Tensor **tensArr);
 
-		friend Tensor *iadd(Tensor *tens1, Tensor *tens2);
-		friend Tensor *iadd(Tensor *tens, double val);
-		friend Tensor *iadd(double val, Tensor *tens);
-		friend Tensor *isub(Tensor *tens1, Tensor *tens2);
-		friend Tensor *isub(Tensor *tens, double val);
-		friend Tensor *isub(double val, Tensor *tens);
-		friend Tensor *imul(Tensor *tens1, Tensor *tens2);
-		friend Tensor *imul(Tensor *tens, double val);
-		friend Tensor *imul(double val, Tensor *tens);
-		friend Tensor *idiv(Tensor *tens1, Tensor *tens2);
-		friend Tensor *idiv(Tensor *tens, double val);
-		friend Tensor *idiv(double val, Tensor *tens);
-		friend Tensor *ipow(Tensor *tens1, Tensor *tens2);
-		friend Tensor *ipow(Tensor *tens, double val);
-		friend Tensor *ipow(double val, Tensor *tens);
-		friend Tensor *ipow(Tensor *tens, int val);
+		friend void iadd(Tensor *tens1, Tensor *tens2);
+		friend void iadd(Tensor *tens, double val);
+		friend void iadd(double val, Tensor *tens);
+		friend void isub(Tensor *tens1, Tensor *tens2);
+		friend void isub(Tensor *tens, double val);
+		friend void isub(double val, Tensor *tens);
+		friend void imul(Tensor *tens1, Tensor *tens2);
+		friend void imul(Tensor *tens, double val);
+		friend void imul(double val, Tensor *tens);
+		friend void idiv(Tensor *tens1, Tensor *tens2);
+		friend void idiv(Tensor *tens, double val);
+		friend void idiv(double val, Tensor *tens);
+		friend void ipow(Tensor *tens1, Tensor *tens2);
+		friend void ipow(Tensor *tens, double val);
+		friend void ipow(double val, Tensor *tens);
+		friend void ipow(Tensor *tens, int val);
 
 		friend Tensor *eq(Tensor *tens);
 		friend Tensor *ne(Tensor *tens);
