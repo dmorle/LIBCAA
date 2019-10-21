@@ -19,6 +19,7 @@ namespace LIBCAA {
 		Matrix *clone();
 
 		// overriding Tensor functions for efficiency
+		void setAbsIndex(int i, int j, double val);
 		void setIndex(int i, int j, double val);
 		double getAbsIndex(int i, int j);
 		double getIndex(int i, int j);

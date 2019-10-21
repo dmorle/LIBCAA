@@ -1,7 +1,7 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#include "Tensor.hpp"
+#include "Matrix.hpp"
 
 namespace LIBCAA {
 
@@ -31,6 +31,12 @@ namespace LIBCAA {
 		Vector *operator ^ (Vector *vec);
 		Vector *operator ^ (double val);
 		Vector *operator ^ (int val);
+
+		// overriding Tensor functions for efficiency
+		void setAbsIndex(int i, double val);
+		void setIndex(int i, double val);
+		double getAbsIndex(int i);
+		double getIndex(int i);
 
 		// throws shapeEx and initEx
 		friend double dotProd(Vector *vec1, Vector *vec2);

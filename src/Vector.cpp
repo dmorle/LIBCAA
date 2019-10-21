@@ -26,6 +26,26 @@ namespace LIBCAA {
 
 	Vector::~Vector() {}
 
+	void Vector::setAbsIndex(int i, double val)
+	{
+		this->data[i] = val;
+	}
+
+	void Vector::setIndex(int i, double val)
+	{
+		setAbsIndex(i % this->len, val);
+	}
+
+	double Vector::getAbsIndex(int i)
+	{
+		return this->data[i];
+	}
+
+	double Vector::getIndex(int i)
+	{
+		return getAbsIndex(i % this->len);
+	}
+
 	Vector *Vector::operator+(Vector *vec) {
 		this->opExcept(vec);
 
