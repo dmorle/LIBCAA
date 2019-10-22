@@ -5,6 +5,20 @@
 
 namespace LIBCAA {
 
+	class Vector;
+	class Matrix;
+
+	// Matrix-Vector friend functions go here
+
+	// solves Mx=b
+	Vector *linearSystem(Matrix *M, Vector *b);
+
+	// solves mrx * vec
+	Vector *matmul(Matrix *mrx, Vector *vec);
+
+	// end of Matrix-Vector friend functions
+
+
 	typedef int *matrixParams;
 	matrixParams createMatrixParams(int m, int n);
 
@@ -86,5 +100,7 @@ namespace LIBCAA {
 		void rowSub(int row1, int row2, double scale);
 	};
 }
+
+#include "Vector.hpp"
 
 #endif
