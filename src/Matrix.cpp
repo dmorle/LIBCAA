@@ -47,9 +47,14 @@ namespace LIBCAA {
 		return (Matrix *) MDA::clone();
 	}
 
-	void Matrix::setIndex(int i, int j, double val)
+	void Matrix::setAbsIndex(int i, int j, double val)
 	{
 		this->data[i*this->strides[0] + j] = val;
+	}
+
+	void Matrix::setIndex(int i, int j, double val)
+	{
+		setAbsIndex(i % this->dimensions[0], j % this->dimensions[1], val);
 	}
 
 	double Matrix::getAbsIndex(int i, int j)
