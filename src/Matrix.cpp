@@ -1,4 +1,6 @@
 #include "Matrix.hpp"
+#include <cmath>
+
 
 
 namespace LIBCAA {
@@ -76,7 +78,8 @@ namespace LIBCAA {
 		for (int i = 0; i < mrx1->len; i++)
 			nData[i] = mrx1->data[i] + mrx2->data[i];
 
-		Matrix *npMrx = new Matrix(createMatrixParams(mrx1->dimensions[0], mrx1->dimensions[1]));
+		int tempDim[2] = {mrx1->dimensions[0], mrx1->dimensions[1]};
+		Matrix *npMrx = new Matrix(tempDim);
 		npMrx->forceSetData(nData);
 
 		return npMrx;
@@ -87,8 +90,9 @@ namespace LIBCAA {
 		double *nData = (double *)malloc(sizeof(double) * mrx->len);
 		for (int i = 0; i < mrx->len; i++)
 			nData[i] = mrx->data[i] + val;
-
-		Matrix *npMrx = new Matrix(createMatrixParams(mrx->dimensions[0], mrx->dimensions[1]));
+		
+		int tempDim[2] = {mrx->dimensions[0], mrx->dimensions[1]};
+		Matrix *npMrx = new Matrix(tempDim);
 		npMrx->forceSetData(nData);
 
 		return npMrx;
@@ -100,7 +104,8 @@ namespace LIBCAA {
 		for (int i = 0; i < mrx->len; i++)
 			nData[i] = val + mrx->data[i];
 
-		Matrix *npMrx = new Matrix(createMatrixParams(mrx->dimensions[0], mrx->dimensions[1]));
+		int tempDim[2] = {mrx->dimensions[0], mrx->dimensions[1]};
+		Matrix *npMrx = new Matrix(tempDim);
 		npMrx->forceSetData(nData);
 
 		return npMrx;
@@ -114,7 +119,8 @@ namespace LIBCAA {
 		for (int i = 0; i < mrx1->len; i++)
 			nData[i] = mrx1->data[i] - mrx2->data[i];
 
-		Matrix *npMrx = new Matrix(createMatrixParams(mrx1->dimensions[0], mrx1->dimensions[1]));
+		int tempDim[2] = {mrx1->dimensions[0], mrx1->dimensions[1]};
+		Matrix *npMrx = new Matrix(tempDim);
 		npMrx->forceSetData(nData);
 
 		return npMrx;
@@ -126,7 +132,8 @@ namespace LIBCAA {
 		for (int i = 0; i < mrx->len; i++)
 			nData[i] = mrx->data[i] - val;
 
-		Matrix *npMrx = new Matrix(createMatrixParams(mrx->dimensions[0], mrx->dimensions[1]));
+		int tempDim[2] = {mrx->dimensions[0], mrx->dimensions[1]};
+		Matrix *npMrx = new Matrix(tempDim);
 		npMrx->forceSetData(nData);
 
 		return npMrx;
@@ -138,7 +145,8 @@ namespace LIBCAA {
 		for (int i = 0; i < mrx->len; i++)
 			nData[i] = val - mrx->data[i];
 
-		Matrix *npMrx = new Matrix(createMatrixParams(mrx->dimensions[0], mrx->dimensions[1]));
+		int tempDim[2] = {mrx->dimensions[0], mrx->dimensions[1]};
+		Matrix *npMrx = new Matrix(tempDim);
 		npMrx->forceSetData(nData);
 
 		return npMrx;
@@ -152,7 +160,8 @@ namespace LIBCAA {
 		for (int i = 0; i < mrx1->len; i++)
 			nData[i] = mrx1->data[i] * mrx2->data[i];
 
-		Matrix *npMrx = new Matrix(createMatrixParams(mrx1->dimensions[0], mrx1->dimensions[1]));
+		int tempDim[2] = {mrx1->dimensions[0], mrx1->dimensions[1]};
+		Matrix *npMrx = new Matrix(tempDim);
 		npMrx->forceSetData(nData);
 
 		return npMrx;
@@ -164,7 +173,8 @@ namespace LIBCAA {
 		for (int i = 0; i < mrx->len; i++)
 			nData[i] = mrx->data[i] * val;
 
-		Matrix *npMrx = new Matrix(createMatrixParams(mrx->dimensions[0], mrx->dimensions[1]));
+		int tempDim[2] = {mrx->dimensions[0], mrx->dimensions[1]};
+		Matrix *npMrx = new Matrix(tempDim);
 		npMrx->forceSetData(nData);
 
 		return npMrx;
@@ -176,7 +186,8 @@ namespace LIBCAA {
 		for (int i = 0; i < mrx->len; i++)
 			nData[i] = val * mrx->data[i];
 
-		Matrix *npMrx = new Matrix(createMatrixParams(mrx->dimensions[0], mrx->dimensions[1]));
+		int tempDim[2] = {mrx->dimensions[0], mrx->dimensions[1]};
+		Matrix *npMrx = new Matrix(tempDim);
 		npMrx->forceSetData(nData);
 
 		return npMrx;
@@ -190,7 +201,8 @@ namespace LIBCAA {
 		for (int i = 0; i < mrx1->len; i++)
 			nData[i] = mrx1->data[i] / mrx2->data[i];
 
-		Matrix *npMrx = new Matrix(createMatrixParams(mrx1->dimensions[0], mrx1->dimensions[1]));
+		int tempDim[2] = {mrx1->dimensions[0], mrx1->dimensions[1]};
+		Matrix *npMrx = new Matrix(tempDim);
 		npMrx->forceSetData(nData);
 
 		return npMrx;
@@ -202,7 +214,8 @@ namespace LIBCAA {
 		for (int i = 0; i < mrx->len; i++)
 			nData[i] = mrx->data[i] / val;
 
-		Matrix *npMrx = new Matrix(createMatrixParams(mrx->dimensions[0], mrx->dimensions[1]));
+		int tempDim[2] = {mrx->dimensions[0], mrx->dimensions[1]};
+		Matrix *npMrx = new Matrix(tempDim);
 		npMrx->forceSetData(nData);
 
 		return npMrx;
@@ -214,7 +227,8 @@ namespace LIBCAA {
 		for (int i = 0; i < mrx->len; i++)
 			nData[i] = val / mrx->data[i];
 
-		Matrix *npMrx = new Matrix(createMatrixParams(mrx->dimensions[0], mrx->dimensions[1]));
+		int tempDim[2] = {mrx->dimensions[0], mrx->dimensions[1]};
+		Matrix *npMrx = new Matrix(tempDim);
 		npMrx->forceSetData(nData);
 
 		return npMrx;
@@ -228,7 +242,8 @@ namespace LIBCAA {
 		for (int i = 0; i < mrx1->len; i++)
 			nData[i] = std::pow(mrx1->data[i], mrx2->data[i]);
 
-		Matrix *npMrx = new Matrix(createMatrixParams(mrx1->dimensions[0], mrx1->dimensions[1]));
+		int tempDim[2] = {mrx1->dimensions[0], mrx1->dimensions[1]};
+		Matrix *npMrx = new Matrix(tempDim);
 		npMrx->forceSetData(nData);
 
 		return npMrx;
@@ -240,7 +255,8 @@ namespace LIBCAA {
 		for (int i = 0; i < mrx->len; i++)
 			nData[i] = std::pow(mrx->data[i], val);
 
-		Matrix *npMrx = new Matrix(createMatrixParams(mrx->dimensions[0], mrx->dimensions[1]));
+		int tempDim[2] = {mrx->dimensions[0], mrx->dimensions[1]};
+		Matrix *npMrx = new Matrix(tempDim);
 		npMrx->forceSetData(nData);
 
 		return npMrx;
@@ -252,7 +268,8 @@ namespace LIBCAA {
 		for (int i = 0; i < mrx->len; i++)
 			nData[i] = std::pow(val, mrx->data[i]);
 
-		Matrix *npMrx = new Matrix(createMatrixParams(mrx->dimensions[0], mrx->dimensions[1]));
+		int tempDim[2] = {mrx->dimensions[0], mrx->dimensions[1]};
+		Matrix *npMrx = new Matrix(tempDim);
 		npMrx->forceSetData(nData);
 
 		return npMrx;
@@ -264,7 +281,8 @@ namespace LIBCAA {
 		for (int i = 0; i < mrx->len; i++)
 			nData[i] = std::pow(mrx->data[i], val);
 
-		Matrix *npMrx = new Matrix(createMatrixParams(mrx->dimensions[0], mrx->dimensions[1]));
+		int tempDim[2] = {mrx->dimensions[0], mrx->dimensions[1]};
+		Matrix *npMrx = new Matrix(tempDim);
 		npMrx->forceSetData(nData);
 
 		return npMrx;
@@ -282,7 +300,8 @@ namespace LIBCAA {
 			for (int j = 0; j < len; j++)
 				nData[j] += mrxArr[j]->data[i];
 		
-		Matrix *npMrx = new Matrix(createMatrixParams(mrxArr[0]->dimensions[0], mrxArr[0]->dimensions[1]));
+		int tempDim[2] = {mrxArr[0]->dimensions[0], mrxArr[0]->dimensions[1]};
+		Matrix *npMrx = new Matrix(tempDim);
 		npMrx->forceSetData(nData);
 
 		return npMrx;
@@ -301,7 +320,8 @@ namespace LIBCAA {
 			for (int j = 0; j < len; j++)
 				nData[j] *= mrxArr[j]->data[i];
 		
-		Matrix *npMrx = new Matrix(createMatrixParams(mrxArr[0]->dimensions[0], mrxArr[0]->dimensions[1]));
+		int tempDim[2] = {mrxArr[0]->dimensions[0], mrxArr[0]->dimensions[1]};
+		Matrix *npMrx = new Matrix(tempDim);
 		npMrx->forceSetData(nData);
 
 		return npMrx;
@@ -424,7 +444,12 @@ namespace LIBCAA {
 		int size = mrx->dimensions[0];
 
 		Matrix *self = mrx->clone();
-		Matrix *inv = new Matrix(createMatrixParams(size, size), createIdentityMatrix(size));
+
+		int tempDim[2] = {size, size};
+		Matrix *inv = new Matrix(tempDim, 0.0);
+
+		for (int i = 0; i < size; i++)
+			inv->setAbsIndex(i, i, 0);
 
 		for (int i = 0; i < size; i++) {
 
@@ -558,10 +583,11 @@ namespace LIBCAA {
 			for (int j = 0; j < mrx->dimensions[1]; j++)
 				nData[j * mrx->dimensions[0] + i] = mrx->data[i * mrx->dimensions[1] + j];
 
-		Matrix *nMrx = new Matrix(createMatrixParams(mrx->dimensions[1], mrx->dimensions[1]));
-		nMrx->forceSetData(nData);
+		int tempDim[2] = {mrx->dimensions[1], mrx->dimensions[0]};
+		Matrix *npMrx = new Matrix(tempDim);
+		npMrx->forceSetData(nData);
 
-		return nMrx;
+		return npMrx;
 	}
 
 	Matrix *matmul(Matrix *mat1, Matrix *mat2)
@@ -579,10 +605,11 @@ namespace LIBCAA {
 			}
 		}
 
-		Matrix *nMrx = new Matrix(createMatrixParams(mat1->dimensions[0], mat2->dimensions[1]));
-		nMrx->forceSetData(nData);
+		int tempDim[2] = {mat1->dimensions[0], mat2->dimensions[1]};
+		Matrix *npMrx = new Matrix(tempDim);
+		npMrx->forceSetData(nData);
 
-		return nMrx;
+		return npMrx;
 	}
 
 }

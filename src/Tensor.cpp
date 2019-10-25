@@ -135,21 +135,11 @@ namespace LIBCAA {
 		this->type = "Tensor";
 	}
 
-	Tensor::Tensor(int rank, int * dimensions, double(*initFunc)()) : MDA(rank, dimensions, initFunc)
-	{
-		this->type = "Tensor";
-	}
-
-	Tensor::Tensor(int rank, int * dimensions, double * data) : MDA(rank, dimensions, data)
-	{
-		this->type = "Tensor";
-	}
-
 	Tensor::~Tensor() {}
 
-	Tensor *clone()
+	Tensor *Tensor::clone()
 	{
-		return (Tensor *) MDA::clone();
+		return (Tensor *)MDA::clone();
 	}
 
 	void Tensor::opExcept(Tensor *pTens)
