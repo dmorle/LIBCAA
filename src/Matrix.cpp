@@ -10,6 +10,11 @@ namespace LIBCAA {
 		this->type = "Matrix";
 	}
 
+	Matrix::Matrix(int *dimensions, double val) : Tensor(2, dimensions, val)
+	{
+		this->type = "Matrix";
+	}
+
 	Matrix *Matrix::clone() {
 		return (Matrix *) MDA::clone();
 	}

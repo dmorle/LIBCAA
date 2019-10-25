@@ -33,7 +33,7 @@ namespace LIBCAA {
         return npVec;
     }
 
-    Tensor *Factory::constant(int rank, int *dimensions, double val = 0)
+    Tensor *Factory::constant(int rank, int *dimensions, double val)
     {
         Tensor *npTens = new Tensor(rank, dimensions);
 
@@ -46,7 +46,7 @@ namespace LIBCAA {
         return npTens;
     }
 
-    Matrix *Factory::constant(int m, int n, double val = 0)
+    Matrix *Factory::constant(int m, int n, double val)
     {
         int dimensions[] = {m, n};
         Matrix *npMat = new Matrix(dimensions);
@@ -59,7 +59,7 @@ namespace LIBCAA {
         return npMat;
     }
 
-    Vector *Factory::constant(int len, double val = 0)
+    Vector *Factory::constant(int len, double val)
     {
         Vector *npVec = new Vector(len);
 
@@ -71,7 +71,7 @@ namespace LIBCAA {
         return npVec;
     }
 
-    Tensor *Factory::arange(int rank, int *dimensions, double start = 0)
+    Tensor *Factory::arange(int rank, int *dimensions, double start)
     {
         Tensor *npTens = new Tensor(rank, dimensions);
 
@@ -84,7 +84,7 @@ namespace LIBCAA {
         return npTens;
     }
 
-    Matrix *Factory::arange(int m, int n, double start = 0)
+    Matrix *Factory::arange(int m, int n, double start)
     {
         int dimensions[] = {m, n};
         Matrix *npMat = new Matrix(dimensions);
@@ -98,7 +98,7 @@ namespace LIBCAA {
         return npMat;
     }
 
-    Vector *Factory::arange(int len, double start = 0)
+    Vector *Factory::arange(int len, double start)
     {
         Vector *npVec = new Vector(len);
 
@@ -111,7 +111,7 @@ namespace LIBCAA {
         return npVec;
     }
 
-    Tensor *Factory::uniDist(int rank, int *dimensions, double min = 0, double max = 1)
+    Tensor *Factory::uniDist(int rank, int *dimensions, double min, double max)
     {
         Tensor *npTens = new Tensor(rank, dimensions);
 
@@ -123,7 +123,7 @@ namespace LIBCAA {
         return npTens;
     }
 
-    Matrix *Factory::uniDist(int m, int n, double min = 0, double max = 1)
+    Matrix *Factory::uniDist(int m, int n, double min, double max)
     {
         int dimensions[] = {m, n};
         Matrix *npMat = new Matrix(dimensions);
@@ -136,7 +136,7 @@ namespace LIBCAA {
         return npMat;
     }
 
-    Vector *Factory::uniDist(int len, double min = 0, double max = 1)
+    Vector *Factory::uniDist(int len, double min, double max)
     {
         Vector *npVec = new Vector(len);
 
@@ -148,7 +148,7 @@ namespace LIBCAA {
         return npVec;
     }
 
-    Tensor *Factory::normDist(int rank, int *dimensions, double mean = 0, double stdDev = 1)
+    Tensor *Factory::normDist(int rank, int *dimensions, double mean, double stdDev)
     {
         Tensor *npTens = new Tensor(rank, dimensions);
 
@@ -160,7 +160,7 @@ namespace LIBCAA {
         return npTens;
     }
 
-    Matrix *Factory::normDist(int m, int n, double mean = 0, double stdDev = 1)
+    Matrix *Factory::normDist(int m, int n, double mean, double stdDev)
     {
         int dimensions[] = {m, n};
         Matrix *npMat = new Matrix(dimensions);
@@ -173,7 +173,7 @@ namespace LIBCAA {
         return npMat;
     }
 
-    Vector *Factory::normDist(int len, double mean = 0, double stdDev = 1)
+    Vector *Factory::normDist(int len, double mean, double stdDev)
     {
         Vector *npVec = new Vector(len);
 
