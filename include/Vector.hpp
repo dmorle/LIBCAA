@@ -10,15 +10,10 @@ namespace LIBCAA {
 	//	vector value functions
 	//	linear Ordinary Differential Equations
 	class Vector : public Tensor
-	{
-	private:
-		Vector(int size);
+	{	
 	public:
-		Vector(int size, double val);
-		Vector(int size, double *vals);
-		Vector(int size, double(*initFunc)());
 
-		~Vector();
+		friend class Factory;
 
 		friend Vector *add(Vector *vec1, Vector *vec2);
 		friend Vector *add(Vector *vec, double val);
@@ -74,6 +69,18 @@ namespace LIBCAA {
 		friend double dotProd(Vector *vec1, Vector *vec2);
 		// throws shapeEx and initEx
 		friend Vector *crossProd(Vector *vec1, Vector *vec2);
+	
+	protected:
+
+		Vector(int size, double val);
+		Vector(int size, double *vals);
+		Vector(int size, double(*initFunc)());
+
+		~Vector();
+	
+	private:
+	
+		Vector(int size);
 	};
 
 }

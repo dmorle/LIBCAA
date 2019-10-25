@@ -19,16 +19,11 @@ namespace LIBCAA {
 	// end of Matrix-Vector friend functions
 
 
-	typedef int *matrixParams;
-	matrixParams createMatrixParams(int m, int n);
-
 	class Matrix : public Tensor
 	{
 	public:
-		Matrix(matrixParams params);
-		Matrix(matrixParams params, double val);
-		Matrix(matrixParams params, double **data);
-		Matrix(matrixParams params, double(*initFunc)());
+
+		friend class Factory;
 
 		Matrix *clone();
 
@@ -92,8 +87,12 @@ namespace LIBCAA {
 
 		friend Matrix *matmul(Matrix *mat1, Matrix *mat2);
 
+	protected:
+	
+		Matrix(int *dimensions);
+		Matrix(int *dimensions, double val);
+		Matrix(int *dimensions, double(*initFunc)());
 
-	private:
 		void opExcept(Matrix *mrx);
 		void scaleRow(int rowNum, double scale);
 		void switchRows(int row1, int row2);

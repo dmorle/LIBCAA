@@ -1,44 +1,9 @@
 #include "Matrix.hpp"
 
-#ifndef INITFUNC_H
-#include "InitFunc.hpp"
-#endif
-
-
 
 namespace LIBCAA {
 
-	matrixParams createMatrixParams(int m, int n)
-	{
-		int *params = (int *)malloc(sizeof(int) * 2);
-		params[0] = m;
-		params[1] = n;
-		return params;
-	}
-
-	Matrix::Matrix(matrixParams params) : Tensor(2, params)
-	{
-		this->type = "Matrix";
-	}
-
-	Matrix::Matrix(matrixParams params, double val) : Tensor(2, params, val)
-	{
-		this->type = "Matrix";
-	}
-
-	Matrix::Matrix(matrixParams params, double **val) : Tensor(2, params)
-	{
-		// flattening val into this->data
-		this->data = (double *)malloc(sizeof(double) * this->len);
-		for (int i = 0; i < this->dimensions[0]; i++)
-			for (int j = 0; j < this->dimensions[1]; j++)
-				this->data[i*strides[0]] = val[i][j];
-
-		this->init = true;
-		this->type = "Matrix";
-	}
-
-	Matrix::Matrix(matrixParams params, double(*initFunc)()) : Tensor(2, params, initFunc)
+	Matrix::Matrix(int *dimensions) : Tensor(2, dimensions)
 	{
 		this->type = "Matrix";
 	}
