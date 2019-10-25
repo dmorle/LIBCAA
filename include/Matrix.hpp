@@ -91,7 +91,6 @@ namespace LIBCAA {
 	
 		Matrix(int *dimensions);
 		Matrix(int *dimensions, double val);
-		Matrix(int *dimensions, double(*initFunc)());
 
 		void opExcept(Matrix *mrx);
 		void scaleRow(int rowNum, double scale);

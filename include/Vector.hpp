@@ -74,7 +74,6 @@ namespace LIBCAA {
 
 		Vector(int size, double val);
 		Vector(int size, double *vals);
-		Vector(int size, double(*initFunc)());
 
 		~Vector();
 	
