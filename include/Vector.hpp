@@ -69,6 +69,8 @@ namespace LIBCAA {
 		friend double dotProd(Vector *vec1, Vector *vec2);
 		// throws shapeEx and initEx
 		friend Vector *crossProd(Vector *vec1, Vector *vec2);
+
+		friend Vector *matmul(Matrix *mrx, Vector *vec);
 	
 	protected:
 

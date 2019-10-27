@@ -595,26 +595,44 @@ namespace LIBCAA {
 		return npMrx;
 	}
 
-	Matrix *matmul(Matrix *mat1, Matrix *mat2)
+	Matrix *matmul(Matrix *mrx1, Matrix *mrx2)
 	{
 		// checking if multiplcation is possible
-		if (mat1->dimensions[1] != mat2->dimensions[0])
+		if (mrx1->dimensions[1] != mrx2->dimensions[0])
 			throw shapeEx();
 
-		double *nData = (double *)malloc(sizeof(double) * mat1->dimensions[0] * mat2->dimensions[1]);
-		for (int i = 0; i < mat1->dimensions[0]; i++) {
-			for (int j = 0; j < mat2->dimensions[1]; j++) {
-				nData[i * mat1->dimensions[1] + j] = 0;
-				for (int k = 0; k < mat1->dimensions[1]; k++)
-					nData[i * mat1->dimensions[1] + j] += mat1->getAbsIndex(i, k) * mat2->getAbsIndex(k, j);
+		double *nData = (double *)malloc(sizeof(double) * mrx1->dimensions[0] * mrx2->dimensions[1]);
+		for (int i = 0; i < mrx1->dimensions[0]; i++) {
+			for (int j = 0; j < mrx2->dimensions[1]; j++) {
+				nData[i * mrx1->dimensions[1] + j] = 0;
+				for (int k = 0; k < mrx1->dimensions[1]; k++)
+					nData[i * mrx1->dimensions[1] + j] += mrx1->getAbsIndex(i, k) * mrx2->getAbsIndex(k, j);
 			}
 		}
 
-		int tempDim[2] = {mat1->dimensions[0], mat2->dimensions[1]};
+		int tempDim[2] = {mrx1->dimensions[0], mrx2->dimensions[1]};
 		Matrix *npMrx = new Matrix(tempDim);
 		npMrx->forceSetData(nData);
 
 		return npMrx;
+	}
+
+	Vector *matmul(Matrix *mrx, Vector *vec) {
+		// checking if multiplication is possible
+		if (mrx->dimensions[1] != vec->dimensions[0])
+			throw shapeEx();
+		
+		double *nData = (double *)malloc(sizeof(double) * mrx->dimensions[0]);
+		for (int i = 0; i < mrx->dimensions[0]; i++) {
+			nData[i] = 0;
+			for (int j = 0; j < mrx->dimensions[1]; j++)
+				nData[i] += mrx->getAbsIndex(i, j) * vec->data[j];
+		}
+
+		Vector *npVec = new Vector(mrx->dimensions[0]);
+		npVec->forceSetData(nData);
+
+		return npVec;
 	}
 
 }

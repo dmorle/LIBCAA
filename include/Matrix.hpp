@@ -85,7 +85,8 @@ namespace LIBCAA {
 		// TODO: impliment this method
 		friend Matrix *getDiagonal(Matrix *mrx);
 
-		friend Matrix *matmul(Matrix *mat1, Matrix *mat2);
+		friend Matrix *matmul(Matrix *mrx1, Matrix *mrx2);
+		friend Vector *matmul(Matrix *mrx, Vector *vec);
 
 	protected:
 	
