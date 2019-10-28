@@ -306,7 +306,59 @@ private:
     }
 
     void getRoots1() {
+        cl::polynomial *func = polys[currentPoly];
+
+        double oldGuess;
+        double newGuess;
         
+        double ea;
+
+        auto calcError = [&] () {
+            ea = fabs((oldGuess-newGuess)/newGuess);
+        };
+
+        double es;
+        printf("Please enter a value for the error tolerance: ");
+        scanf("%lf", &es);
+        
+        double guess1;
+        printf("Please enter the first value for bisection method: ");
+        scanf("%lf", guess1);
+
+        double guess2;
+        printf("Please enter the first value for bisection method: ");
+        scanf("%lf", guess2);
+
+        // check for if the root is findable
+        if (func->eval(guess1) * func->eval(guess2) > 0) {
+            printf("Unable to find a root from the given initial values\n\n");
+            return;
+        }
+
+        int maxIter;
+        printf("Please enter the number of maximum iterations: ");
+        scanf("%d", maxIter);
+        getchar();  // clearing the leftover \n from stdin
+
+        bool foundVal = false;
+        for (int i = 0; i < maxIter; i++) {
+            newGuess = (guess1 + guess2)/2;
+            if (func->eval(guess1) * newGuess > 0) {
+                oldGuess = guess1;
+                guess1 = newGuess;
+            }
+            else {
+                oldGuess = guess2;
+                guess2 = newGuess;
+            }
+            calcError();
+            if (es < ea) {
+                foundVal = true;
+                break;
+            }
+        }
+
+        printf("\nAn %s root of this polynomial is: %f\n\n", foundVal ? "accurate" : "inaccurate", newGuess);
     }
 
     void getRoots2() {
@@ -326,17 +378,17 @@ private:
         printf("Please enter an initial value for the newton-raphson method: ");
         scanf("%lf", guess);
 
-        int maxIter;
-        printf("Please enter the number of maximum iterations: ");
-        scanf("%d", maxIter);
-        getchar();  // clearing the leftover \n from stdin
-
         double ea;
 
         auto calcError = [&] () {
             ea = fabs((oldGuess-guess)/guess);
         };
 
+        int maxIter;
+        printf("Please enter the number of maximum iterations: ");
+        scanf("%d", maxIter);
+        getchar();  // clearing the leftover \n from stdin
+        
         bool foundVal = false;
         for (int i = 0; i < maxIter; i++) {
             oldGuess = guess;
