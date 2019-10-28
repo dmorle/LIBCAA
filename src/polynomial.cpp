@@ -50,7 +50,6 @@ namespace LIBCAA
         Factory fact = Factory();
         Vector *vec = fact.arange(len);
         ipow(x, vec);
-        vec->print();
 
         double result = dotProd(this, vec);
 

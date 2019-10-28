@@ -330,11 +330,11 @@ private:
         
         double guess1;
         printf("Please enter the first value for bisection method: ");
-        scanf("%lf", guess1);
+        scanf("%lf", &guess1);
 
         double guess2;
-        printf("Please enter the first value for bisection method: ");
-        scanf("%lf", guess2);
+        printf("Please enter the second value for bisection method: ");
+        scanf("%lf", &guess2);
 
         // check for if the root is findable
         if (func->eval(guess1) * func->eval(guess2) > 0) {
@@ -344,13 +344,13 @@ private:
 
         int maxIter;
         printf("Please enter the number of maximum iterations: ");
-        scanf("%d", maxIter);
+        scanf("%d", &maxIter);
         getchar();  // clearing the leftover \n from stdin
 
         bool foundVal = false;
         for (int i = 0; i < maxIter; i++) {
             newGuess = (guess1 + guess2)/2;
-            if (func->eval(guess1) * newGuess > 0) {
+            if (func->eval(guess1) * func->eval(newGuess) > 0) {
                 oldGuess = guess1;
                 guess1 = newGuess;
             }
@@ -359,7 +359,7 @@ private:
                 guess2 = newGuess;
             }
             calcError();
-            if (es < ea) {
+            if (ea < es) {
                 foundVal = true;
                 break;
             }
@@ -386,11 +386,11 @@ private:
         
         double guess1;
         printf("Please enter the first value for false position method: ");
-        scanf("%lf", guess1);
+        scanf("%lf", &guess1);
 
         double guess2;
-        printf("Please enter the first value for false position method: ");
-        scanf("%lf", guess2);
+        printf("Please enter the second value for false position method: ");
+        scanf("%lf", &guess2);
 
         // check for if the root is findable
         if (func->eval(guess1) * func->eval(guess2) > 0) {
@@ -400,7 +400,7 @@ private:
 
         int maxIter;
         printf("Please enter the number of maximum iterations: ");
-        scanf("%d", maxIter);
+        scanf("%d", &maxIter);
         getchar();  // clearing the leftover \n from stdin
 
         bool foundVal = false;
@@ -435,7 +435,7 @@ private:
         double oldGuess;
         double guess;
         printf("Please enter an initial value for the newton-raphson method: ");
-        scanf("%lf", guess);
+        scanf("%lf", &guess);
 
         double ea;
 
@@ -445,7 +445,7 @@ private:
 
         int maxIter;
         printf("Please enter the number of maximum iterations: ");
-        scanf("%d", maxIter);
+        scanf("%d", &maxIter);
         getchar();  // clearing the leftover \n from stdin
         
         bool foundVal = false;
@@ -453,7 +453,7 @@ private:
             oldGuess = guess;
             guess -= func->eval(guess)/derivative->eval(guess);
             calcError();
-            if (es < ea) {
+            if (ea < es) {
                 foundVal = true;
                 break;
             }
