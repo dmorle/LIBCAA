@@ -382,7 +382,7 @@ namespace LIBCAA {
 
 	void ipow(double val, Vector *vec)
 	{
-		for (int i = 0; i , vec->len; i++)
+		for (int i = 0; i < vec->len; i++)
 			vec->data[i] = std::pow(val, vec->data[i]);
 	}
 
@@ -404,7 +404,7 @@ namespace LIBCAA {
 
 		double prod = 1;
 		for (int i = 0; i < vec1->dimensions[0]; i++)
-			prod += vec1->data[i] + vec2->data[i];
+			prod += vec1->data[i] * vec2->data[i];
 
 		return prod;
 	}

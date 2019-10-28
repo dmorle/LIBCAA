@@ -53,7 +53,9 @@ public:
             "print d/dx\n",
             "save d/dx\n",
             "eval\n",
-            "roots\n",
+            "roots1\n",
+            "roots2\n",
+            "roots3\n",
             "exit\n"
         };
 
@@ -115,7 +117,7 @@ private:
         // lambda for printing user options
         auto printOptions = [&] () {
             for (int i = 0; i < options.size(); i++)
-                printf("%41s <=> %s", descriptions[i].c_str(), options[i].c_str());
+                printf("%48s <=> %s", descriptions[i].c_str(), options[i].c_str());
             
             printf("\nPlease enter your action: ");
         };
@@ -153,17 +155,22 @@ private:
 
         // getting a name for the polynomial
         char tempName[MAX_SIZE];
+        auto formatTempName = [&] () {
+            for (int i = 0; i < MAX_SIZE; i++)
+                if (!tempName[i] || tempName[i] == '\n') {
+                    tempName[i] = '\0';
+                    break;
+                }
+        };
+
         sprintf(tempName, "%s%d", "poly", polys.size());     // default name
         std::string name(tempName);
         
         printf("Enter a name for the polynomial (nothing creates a default name): ");
         if (fgets(tempName, MAX_SIZE, stdin)) {
             if (tempName[0] != '\n') {
-                for (int i = 0; i < MAX_SIZE; i++) {
-                    if (!tempName[i] || tempName[i] == '\n')
-                        break;
-                    name[i] = tempName[i];
-                }
+                formatTempName();
+                name = std::string(tempName);
             }
         }
 
@@ -267,7 +274,7 @@ private:
     void printDeriv() {
         cl::polynomial *pPoly = polys[currentPoly]->getDerivative();
 
-        printf("\n%s's derivative:\n", pPoly->name.c_str());
+        printf("\n%s:\n", pPoly->name.c_str());
         for (int i = pPoly->getLen() - 1; i >= 0; i--) {
             if (pPoly->getIndex(i) == 0) {
                 if (i == 0 && pPoly->getLen() == 1) {
