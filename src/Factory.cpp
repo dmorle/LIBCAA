@@ -212,12 +212,19 @@ namespace LIBCAA {
 
     Matrix *Factory::derivativeMatrix(int size)
     {
-        int dimensions[] = {size, size};
+        int dimensions[] = {size - 1, size};
         Matrix *npMat = new Matrix(dimensions);
 
         double *data = (double *)malloc(sizeof(double) * npMat->len);
 
-        // TODO: initialize data
+        for (int i = 0; i < size - 1; i++) {
+            for (int j = 0; j < size; j++) {
+                if (j == i + 1)
+                    data[i * size + j] = j;
+                else
+                    data[i * size + j] = 0;
+            }
+        }
 
         npMat->forceSetData(data);
         return npMat;

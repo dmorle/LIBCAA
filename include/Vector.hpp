@@ -13,6 +13,8 @@ namespace LIBCAA {
 	{	
 	public:
 
+		~Vector();
+
 		friend class Factory;
 
 		friend Vector *add(Vector *vec1, Vector *vec2);
@@ -74,14 +76,9 @@ namespace LIBCAA {
 	
 	protected:
 
+		Vector(int size);
 		Vector(int size, double val);
 		Vector(int size, double *vals);
-
-		~Vector();
-	
-	private:
-	
-		Vector(int size);
 	};
 
 }

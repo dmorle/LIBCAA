@@ -14,6 +14,16 @@ namespace LIBCAA {
 		this->type = "Vector";
 	}
 
+	Vector::Vector(int size, double *vals) : Tensor(1, &size)
+	{
+		this->type = "Vector";
+		double *nData = (double *)malloc(sizeof(double) * size);
+		for (int i = 0; i < size; i++)
+			nData[i] = vals[i];
+		
+		forceSetData(nData);
+	}
+
 	Vector::~Vector() {}
 
 	void Vector::setAbsIndex(int i, double val)
