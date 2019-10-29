@@ -22,78 +22,12 @@ namespace LIBCAA {
 	 *		Tensor
 	 *		Matrix
 	 *		Vector
-	 *		MDPolynomial
 	 */
 	template <typename dataType> class MDA : public Object
 	{
 	public:
 
-		// creates an empty MDA obj
-		MDA(int rank, int *dimensions) {
-			this->type = "MDA";
-			this->stdInit(rank, dimensions);
-			
-			this->init = false;
-		}
-
-		// creates an empty MDA obj
-		MDA(int rank, int *dimensions, int *strides) {
-			this->type = "MDA";
-			this->stdInit(rank, dimensions, strides);
-
-			this->init = false;
-		}
-
-		// creates MDA obj with initialization from a rank and dimension array
-		MDA(int rank, int *dimensions, dataType val) {
-			this->type = "MDA";
-			this->stdInit(rank, dimensions);
-
-			this->data = (dataType *)malloc(sizeof(dataType) * this->len);
-			for (int i = 0; i < this->len; i++) {
-				this->data[i] = val;
-			}
-
-			this->init = true;
-		}
-
-		// creates MDA obj with each element initialized by initFunc
-		MDA(int rank, int *dimensions, dataType(*initFunc)()) {
-			this->type = "MDA";
-			this->stdInit(rank, dimensions);
-			
-			this->data = (dataType *)malloc(sizeof(dataType) * this->len);
-			for (int i = 0; i < this->len; i++) {
-				this->data[i] = initFunc();
-			}
-
-			this->init = true;
-		}
-
-		MDA(int rank, int *dimensions, dataType *data) {
-			this->type = "MDA";
-			this->stdInit(rank, dimensions);
-
-			this->data = (dataType *)malloc(sizeof(dataType) * this->len);
-			for (int i = 0; i < this->len; i++) {
-				this->data[i] = data[i];
-			}
-
-			this->init = true;
-		}
-
-		// deallocates memory used by MDA obj
-		~MDA() {
-			// freeing the dimensions memory
-			free(this->dimensions);
-
-			// freeing the strides memory
-			free(this->strides);
-
-			// freeing the data memory
-			if (this->init)
-				free(this->data);
-		}
+		friend class Factory;
 
 		// copies all data into a new MDA
 		void *clone() {
@@ -235,10 +169,79 @@ namespace LIBCAA {
 		int len;
 		dataType *data;
 		bool init;
-
+	
 	private:
 		int dspWidth;
 		std::string dspIndent;
+
+	protected:
+
+		// creates an empty MDA obj
+		MDA(int rank, int *dimensions) {
+			this->type = "MDA";
+			this->stdInit(rank, dimensions);
+			
+			this->init = false;
+		}
+
+		// creates an empty MDA obj
+		MDA(int rank, int *dimensions, int *strides) {
+			this->type = "MDA";
+			this->stdInit(rank, dimensions, strides);
+
+			this->init = false;
+		}
+
+		// creates MDA obj with initialization from a rank and dimension array
+		MDA(int rank, int *dimensions, dataType val) {
+			this->type = "MDA";
+			this->stdInit(rank, dimensions);
+
+			this->data = (dataType *)malloc(sizeof(dataType) * this->len);
+			for (int i = 0; i < this->len; i++) {
+				this->data[i] = val;
+			}
+
+			this->init = true;
+		}
+
+		// creates MDA obj with each element initialized by initFunc
+		MDA(int rank, int *dimensions, dataType(*initFunc)()) {
+			this->type = "MDA";
+			this->stdInit(rank, dimensions);
+			
+			this->data = (dataType *)malloc(sizeof(dataType) * this->len);
+			for (int i = 0; i < this->len; i++) {
+				this->data[i] = initFunc();
+			}
+
+			this->init = true;
+		}
+
+		MDA(int rank, int *dimensions, dataType *data) {
+			this->type = "MDA";
+			this->stdInit(rank, dimensions);
+
+			this->data = (dataType *)malloc(sizeof(dataType) * this->len);
+			for (int i = 0; i < this->len; i++) {
+				this->data[i] = data[i];
+			}
+
+			this->init = true;
+		}
+
+		// deallocates memory used by MDA obj
+		~MDA() {
+			// freeing the dimensions memory
+			free(this->dimensions);
+
+			// freeing the strides memory
+			free(this->strides);
+
+			// freeing the data memory
+			if (this->init)
+				free(this->data);
+		}
 
 	private:
 		// initializes the shape defining attributes

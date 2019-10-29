@@ -4,10 +4,6 @@
 
 namespace LIBCAA {
 
-    Factory::Factory() {}
-
-    Factory::~Factory() {}
-
     Tensor *Factory::noInit(int rank, int *dimensions)
     {
         Tensor *npTens = new Tensor(rank, dimensions);
@@ -228,6 +224,17 @@ namespace LIBCAA {
 
         npMat->forceSetData(data);
         return npMat;
+    }
+
+    void Factory::release(void *_obj) {
+        Object *obj = (Object *)_obj;
+        for (std::string _ : objList)
+            if (_ == obj->getType()) {
+                delete _obj;
+                return;
+            }
+        
+        throw typeEx();
     }
 
 }

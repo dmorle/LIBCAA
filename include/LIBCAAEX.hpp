@@ -23,6 +23,7 @@ namespace LIBCAA {
 		virtual const char * what() const throw();
 	};
 
+	// type given to a function is invalid
 	class typeEx : public std::exception
 	{
 		virtual const char * what() const throw();
