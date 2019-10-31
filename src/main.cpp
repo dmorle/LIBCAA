@@ -78,24 +78,52 @@ public:
                     lsPoly();
                     break;
                 case PRINT:
+                    if (!checkInit()) {
+                        printf("There are no polynomials created yet\nCreate one with the 'new' command\n\n");
+                        break;
+                    }
                     printPoly();
                     break;
                 case PRINTD:
+                    if (!checkInit()) {
+                        printf("There are no polynomials created yet\nCreate one with the 'new' command\n\n");
+                        break;
+                    }
                     printDeriv();
                     break;
                 case SAVED:
+                    if (!checkInit()) {
+                        printf("There are no polynomials created yet\nCreate one with the 'new' command\n\n");
+                        break;
+                    }
                     saveDeriv();
                     break;
                 case EVAL:
+                    if (!checkInit()) {
+                        printf("There are no polynomials created yet\nCreate one with the 'new' command\n\n");
+                        break;
+                    }
                     eval();
                     break;
                 case ROOTS1:
+                    if (!checkInit()) {
+                        printf("There are no polynomials created yet\nCreate one with the 'new' command\n\n");
+                        break;
+                    }
                     getRoots1();
                     break;
                 case ROOTS2:
+                    if (!checkInit()) {
+                        printf("There are no polynomials created yet\nCreate one with the 'new' command\n\n");
+                        break;
+                    }
                     getRoots2();
                     break;
                 case ROOTS3:
+                    if (!checkInit()) {
+                        printf("There are no polynomials created yet\nCreate one with the 'new' command\n\n");
+                        break;
+                    }
                     getRoots3();
                     break;
                 case EXIT:
@@ -466,7 +494,7 @@ private:
     // returns -1 if user cancelled
     // returns the index otherwise
     int getPolyIndex() {
-        if (!this->polys.size())
+        if (!checkInit())
             return -2;
         
         char searchName[MAX_SIZE];
@@ -511,6 +539,12 @@ private:
         }
 
         return index;
+    }
+
+    bool checkInit() {
+        if (polys.size())
+            return true;
+        return false;
     }
 
 } ConsoleUI;
