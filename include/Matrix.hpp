@@ -98,6 +98,61 @@ namespace LIBCAA {
 		void switchRows(int row1, int row2);
 		void rowSub(int row1, int row2, double scale);
 	};
+
+	Matrix *add(Matrix *mrx1, Matrix *mrx2);
+	Matrix *add(Matrix *mrx, double val);
+	Matrix *add(double val, Matrix *mrx);
+	Matrix *sub(Matrix *mrx1, Matrix *mrx2);
+	Matrix *sub(Matrix *mrx, double val);
+	Matrix *sub(double val, Matrix *mrx);
+	Matrix *mul(Matrix *mrx1, Matrix *mrx2);
+	Matrix *mul(Matrix *mrx, double val);
+	Matrix *mul(double val, Matrix *mrx);
+	Matrix *div(Matrix *mrx1, Matrix *mrx2);
+	Matrix *div(Matrix *mrx, double val);
+	Matrix *div(double val, Matrix *mrx);
+	Matrix *pow(Matrix *mrx1, Matrix *mrx2);
+	Matrix *pow(Matrix *mrx, double val);
+	Matrix *pow(double val, Matrix *mrx);
+	Matrix *pow(Matrix *mrx, int val);
+
+	Matrix *addAcc(int len, Matrix **mrxArr);
+	Matrix *mulAcc(int len, Matrix **mrxArr);
+
+	void iadd(Matrix *mrx1, Matrix *mrx2);
+	void iadd(Matrix *mrx, double val);
+	void iadd(double val, Matrix *mrx);
+	void isub(Matrix *mrx1, Matrix *mrx2);
+	void isub(Matrix *mrx, double val);
+	void isub(double val, Matrix *mrx);
+	void imul(Matrix *mrx1, Matrix *mrx2);
+	void imul(Matrix *mrx, double val);
+	void imul(double val, Matrix *mrx);
+	void idiv(Matrix *mrx1, Matrix *mrx2);
+	void idiv(Matrix *mrx, double val);
+	void idiv(double val, Matrix *mrx);
+	void ipow(Matrix *mrx1, Matrix *mrx2);
+	void ipow(Matrix *mrx, double val);
+	void ipow(double val, Matrix *mrx);
+	void ipow(Matrix *mrx, int val);
+
+	Matrix *eq(Matrix *mrx);
+	Matrix *ne(Matrix *mrx);
+	Matrix *gt(Matrix *mrx);
+	Matrix *lt(Matrix *mrx);
+	Matrix *le(Matrix *mrx);
+	Matrix *ge(Matrix *mrx);
+
+	Matrix *getInverse(Matrix *mrx);
+	double determinant(Matrix *mrx);
+
+	Matrix *transpose(Matrix *mrx);
+
+	Matrix *getDiagonal(Matrix *mrx);
+
+	Matrix *matmul(Matrix *mrx1, Matrix *mrx2);
+	Vector *matmul(Matrix *mrx, Vector *vec);
+	
 }
 
 #include "Vector.hpp"

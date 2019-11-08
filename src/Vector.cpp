@@ -26,6 +26,11 @@ namespace LIBCAA {
 
 	Vector::~Vector() {}
 
+	Vector *Vector::clone()
+	{
+		return (Vector *)Tensor::clone();
+	}
+
 	void Vector::setAbsIndex(int i, double val)
 	{
 		this->data[i] = val;

@@ -4,15 +4,12 @@
 #include <random>
 #include "Vector.hpp"
 #include "Matrix.hpp"
-#include "Tensor.hpp"
 
 namespace LIBCAA {
 
 	class Factory
 	{
 	public:
-		Factory();
-		~Factory();
 
 		Tensor *noInit(int rank, int *dimensions);
 		Matrix *noInit(int m, int n);
@@ -38,8 +35,15 @@ namespace LIBCAA {
 
 		Matrix *identity(int size);
 		Matrix *derivativeMatrix(int size);
-	};
 
+		// used for deleting LIBCAA objects
+		void release(void *_obj);
+	
+		// List of all non-virtual objects
+		char objList[4][64]{ "MDA", "Tensor", "Matrix", "Vector" };
+
+	};
+	
 }
 
 #endif
