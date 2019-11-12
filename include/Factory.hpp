@@ -15,6 +15,10 @@ namespace LIBCAA {
 		Matrix *noInit(int m, int n);
 		Vector *noInit(int len);
 
+		Tensor *usrInit(int rank, int *dimensions);
+		Matrix *usrInit(int m, int n);
+		Vector *usrInit(int len);
+
 		Tensor *constant(int rank, int *dimensions, double val=0);
 		Matrix *constant(int m, int n, double val=0);
 		Vector *constant(int len, double val=0);
