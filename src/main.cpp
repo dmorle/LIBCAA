@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <stdio.h>
+#include <stdio_ext.h>
 #include <string.h>
 #include <math.h>
 
@@ -15,17 +16,22 @@
 
 enum MainMenuAction {
     INVALID,
+    LINSYS,
+    SIMPLEX,
     EXIT
 };
 
 class {
 
 public:
-    void start() {
+    void start()
+    {
         this->descriptions = {
+            "Solve a linear system",
             "Exit the program"
         };
         this->options = {
+            "linsys\n",
             "exit\n"
         };
 
@@ -35,6 +41,9 @@ public:
 
             // doing the action
             switch (action) {
+                case LINSYS:
+                    solveLinearSystem();
+                    break;
                 case EXIT:
                     return;
             }
@@ -42,10 +51,8 @@ public:
     }
 
 private:
-    MainMenuAction getMainAction() {
-        // flushing the input stream
-        fflush(stdin);
-
+    MainMenuAction getMainAction()
+    {
         // lambda for printing user options
         auto printOptions = [&] () {
             for (int i = 0; i < options.size(); i++)
@@ -67,7 +74,7 @@ private:
 
         // gets action from user
         printOptions();
-        fflush(stdin);
+        __fpurge(stdin);
         if (fgets(input, MAX_SIZE, stdin))
             decodeInput();
 
@@ -75,12 +82,56 @@ private:
         while (act == INVALID) {
             printf("\nInvalid Action\n\n");
             printOptions();
-            fflush(stdin);
+            __fpurge(stdin);
             if (fgets(input, MAX_SIZE, stdin))
                 decodeInput();
         }
         
         return act;
+    }
+
+    void solveLinearSystem()
+    {
+        LIBCAA::Factory fact;
+
+        // getting the m value for the matrix
+        int size;
+        printf("Please enter the number of equations/variables in your system: ");
+        scanf("%d", &size);
+        while (size < 1) {
+            printf("Invalid Input\n\nPlease enter the number of equations/variables in your system: ");
+            scanf("%d", &size);
+        }
+
+        // getting the value for the matrix
+        printf("Please enter your matrix of coefficients: \n");
+        matrix x = fact.usrInit(size, size);
+
+        // getting the constant values of the system
+        printf("Please enter the constant values of your equations: \n");
+        vector y = fact.usrInit(size);
+
+        // solving the system
+        try {
+            matrix xInv = inv(x);
+            vector solution = matmul(xInv, y);
+
+            // displaying the solution
+            printf("the solution is: \n");
+            solution->print();
+            printf("\n");
+
+            // freeing local memory
+            fact.release(xInv);
+            fact.release(solution);
+        }
+        catch (LIBCAA::invEx) {
+            printf("The system of equations provided has no solution\n\n");
+        }
+
+        // freeing memory
+        fact.release(x);
+        fact.release(y);
     }
 
     std::vector<std::string> descriptions;
