@@ -4,7 +4,7 @@
     typedef LIBCAA::Matrix *matrix;
     typedef LIBCAA::Vector *vector;
 
-#elif
+#else
 
     #define USE_OBJ_MACROS
 
@@ -61,7 +61,7 @@
         #define matmul LIBCAA::matmul
     #endif
 
-#elif
+#else
 
     #define USE_OP_MACROS
 

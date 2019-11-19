@@ -1,4 +1,5 @@
 #include "Factory.hpp"
+#include <stdio.h>
 
 
 
@@ -29,6 +30,65 @@ namespace LIBCAA {
         return npVec;
     }
 
+    Tensor *Factory::usrInit(int rank, int *dimensions)
+    {
+        Tensor *npTens = new Tensor(rank, dimensions);
+
+        double *data = (double *)malloc(sizeof(double) * npTens->len);
+        int *index = (int *)alloca(sizeof(int) * rank);
+        for (int i = 0; i < npTens->len; i++) {
+            index[0]++;
+            for (int j = 0; j < rank; j++) {
+                if (index[j] == dimensions[j]) {
+                    index[j] = 0;
+                    index[j+1]++;
+                }
+            }
+
+            // printing the current index
+            printf("Enter the value for entry ( ");
+            printf("%3d", index[0]);
+            for (int j = 1; j < rank; j++)
+                printf(", %3d", index[j]);
+            printf(" ): ");
+
+            scanf("%lf", data + i);
+        }
+
+        npTens->forceSetData(data);
+        return npTens;
+    }
+
+    Matrix *Factory::usrInit(int m, int n)
+    {
+        int dimensions[] = {m, n};
+        Matrix *npMat = new Matrix(dimensions);
+
+        double *data = (double *)malloc(sizeof(double) * npMat->len);
+        for (int i = 0; i < npMat->len; i++) {
+            printf("Enter the value for entry ( %3d, %3d ): ", i/n, i%n);
+
+            scanf("%lf", data + i);
+        }
+
+        npMat->forceSetData(data);
+        return npMat;
+    }
+
+    Vector *Factory::usrInit(int len) {
+        Vector *npVec = new Vector(len);
+
+        double *data = (double *)malloc(sizeof(double) * npVec->len);
+        for (int i = 0; i < npVec->len; i++) {
+            printf("Enter the value for entry %3d: ", i);
+
+            scanf("%lf", data + i);
+        }
+
+        npVec->forceSetData(data);
+        return npVec;
+    }
+
     Tensor *Factory::constant(int rank, int *dimensions, double val)
     {
         Tensor *npTens = new Tensor(rank, dimensions);
@@ -38,7 +98,6 @@ namespace LIBCAA {
             data[i] = val;
 
         npTens->forceSetData(data);
-        npTens->init = true;
         return npTens;
     }
 

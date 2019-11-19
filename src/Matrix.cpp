@@ -451,10 +451,10 @@ namespace LIBCAA {
 		Matrix *self = mrx->clone();
 
 		int tempDim[2] = {size, size};
-		Matrix *inv = new Matrix(tempDim, 0.0);
+		Matrix *inv = new Matrix(tempDim, 0);
 
 		for (int i = 0; i < size; i++)
-			inv->setAbsIndex(i, i, 0);
+			inv->setAbsIndex(i, i, 1);
 
 		for (int i = 0; i < size; i++) {
 
