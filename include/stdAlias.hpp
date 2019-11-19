@@ -52,6 +52,7 @@
         #define det LIBCAA::determinant
         #define getDiagonal LIBCAA::getDiagonal
         #define matmul LIBCAA::matmul
+        #define concat LIBCAA::concat
     #endif
 
     #ifndef NO_VECTOR_OPS

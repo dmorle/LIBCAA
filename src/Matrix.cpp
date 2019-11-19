@@ -529,10 +529,16 @@ namespace LIBCAA {
 		return inv;
 	}
 
-	double determinant(Matrix *mrx) {
+	double determinant(Matrix *mrx)
+	{
 
-		// check conditions
-		// TODO: check for square and init
+		// check shape
+		if (mrx->dimensions[0] != mrx->dimensions[1])
+			throw shapeEx();
+
+		// check for init
+		if (!mrx->init)
+			throw initEx();
 		
 		int size = mrx->dimensions[0];
 
@@ -579,7 +585,8 @@ namespace LIBCAA {
 		return det;
 	}
 
-	Matrix * transpose(Matrix *mrx) {
+	Matrix * transpose(Matrix *mrx)
+	{
 		// no checks are needed
 
 		double *nData = (double *)malloc(sizeof(double) * mrx->len);
@@ -600,6 +607,10 @@ namespace LIBCAA {
 		// checking if multiplcation is possible
 		if (mrx1->dimensions[1] != mrx2->dimensions[0])
 			throw shapeEx();
+		
+		// check for init
+		if (!mrx1->init || !mrx2->init)
+			throw initEx();
 
 		double *nData = (double *)malloc(sizeof(double) * mrx1->dimensions[0] * mrx2->dimensions[1]);
 		for (int i = 0; i < mrx1->dimensions[0]; i++) {
@@ -617,10 +628,15 @@ namespace LIBCAA {
 		return npMrx;
 	}
 
-	Vector *matmul(Matrix *mrx, Vector *vec) {
+	Vector *matmul(Matrix *mrx, Vector *vec)
+	{
 		// checking if multiplication is possible
 		if (mrx->dimensions[1] != vec->dimensions[0])
 			throw shapeEx();
+		
+		// check for init
+		if (!mrx->init || !vec->init)
+			throw initEx();
 		
 		double *nData = (double *)malloc(sizeof(double) * mrx->dimensions[0]);
 		for (int i = 0; i < mrx->dimensions[0]; i++) {
@@ -633,6 +649,45 @@ namespace LIBCAA {
 		npVec->forceSetData(nData);
 
 		return npVec;
+	}
+
+	Matrix *concat(Matrix *mrx1, Matrix *mrx2, int axis)
+	{
+		// check for valid shape
+		if (mrx1->dimensions[1-axis] != mrx2->dimensions[1-axis])
+			throw shapeEx();
+
+		// check for init
+		if (!mrx1->init || !mrx2->init)
+			throw initEx();
+
+		
+		double *nData = (double *)malloc(sizeof(double) * mrx1->len * mrx2->len);
+		int nDim[2] = {
+			mrx1->dimensions[0] + (axis == 0) * mrx2->dimensions[0], 
+			mrx1->dimensions[1] + (axis == 1) * mrx2->dimensions[1]
+		};
+		if (axis == 0) {
+			for (int i = 0; i < mrx1->len * mrx2->len; i++) {
+				if (i < mrx1->len)
+					nData[i] = mrx1->data[i];
+				else
+					nData[i] = mrx2->data[i - mrx1->len];
+			}
+		}
+		else {
+			for (int i = 0; i < mrx1->len * mrx2->len; i++) {
+				if (i % nDim[1] < mrx1->dimensions[1])
+					nData[i] = mrx1->getAbsIndex(i / nDim[1], i % nDim[1]);
+				else
+					nData[i] = mrx2->getAbsIndex(i / nDim[1], i % nDim[1] - mrx1->dimensions[1]);
+			}
+		}
+
+		Matrix *npMat = new Matrix(nDim);
+		npMat->forceSetData(nData);
+
+		return npMat;
 	}
 
 }

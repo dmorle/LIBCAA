@@ -88,6 +88,8 @@ namespace LIBCAA {
 		friend Matrix *matmul(Matrix *mrx1, Matrix *mrx2);
 		friend Vector *matmul(Matrix *mrx, Vector *vec);
 
+		friend Matrix *concat(Matrix *mrx1, Matrix *mrx2, int axis);
+
 	protected:
 	
 		Matrix(int *dimensions);
@@ -152,7 +154,8 @@ namespace LIBCAA {
 
 	Matrix *matmul(Matrix *mrx1, Matrix *mrx2);
 	Vector *matmul(Matrix *mrx, Vector *vec);
-	
+
+	Matrix *concat(Matrix *mrx1, Matrix *mrx2, int axis=0);
 }
 
 #include "Vector.hpp"
