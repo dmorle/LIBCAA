@@ -140,6 +140,7 @@ private:
     }
 
     void solveConstraintOpt() {
+
         LIBCAA::Factory f;
 
         int m;
@@ -168,10 +169,21 @@ private:
         matrix idn = f.identity(m);
         matrix zeros = f.constant(1, m + 1);
 
-        
+        auto checkC = [&] () {
+            for (int j = 0; j < n; j++)
+                if (c->getIndex(0, j) > 0)
+                    return false;
 
-        while ()
-            int j0 = getMaxIndex(c);
+            return true;
+        };
+
+        while (!checkC()) {
+
+            A->print();
+
+            int *temp = getMaxIndex(c);
+            int j0 = temp[1];
+            free(temp);
             int i0 = 0;
             for (int i = 1; i < n; i++) {
                 if (!A->getIndex(i0, j0)) {
@@ -182,7 +194,7 @@ private:
                 if (!A->getIndex(i, j0))
                     continue;
 
-                if (b->getIndex(i)/A->getIndex(i, j0) < b->getIndex(i0)/A->getIndex(i0, j0))
+                if (b->getIndex(i, 0)/A->getIndex(i, j0) < b->getIndex(i0, 0)/A->getIndex(i0, j0))
                     i0 = i;
             }
 
@@ -201,30 +213,31 @@ private:
             for (int j = 0; j < m; j++) {
                 c->setIndex(0, j, c->getIndex(0, j) - c->getIndex(0, j0) * A->getIndex(i0, j));
             }
+        }
+
+        A->print();
 
         // concatonating the matricies
-        // matrix left = concat(constrainFunc, objFunc, 0);
-        // matrix upperRight = concat(idn, constrainVals, 1);
-        // matrix right = concat(upperRight, zeros, 0);
+        matrix left = concat(A, c, 0);
+        matrix upperRight = concat(idn, b, 1);
+        matrix right = concat(upperRight, zeros, 0);
 
-        // matrix mrx = concat(left, right, 1);
+        matrix mrx = concat(left, right, 1);
         
-        // // releasing unnessisary matricies
-        // f.release(constrainFunc);
-        // f.release(objFunc);
-        // f.release(constrainVals);
-        // f.release(idn);
-        // f.release(zeros);
-        // f.release(left);
-        // f.release(upperRight);
-        // f.release(right);
+        // releasing unnessisary matricies
+        f.release(A);
+        f.release(c);
+        f.release(b);
+        f.release(idn);
+        f.release(zeros);
+        f.release(left);
+        f.release(upperRight);
+        f.release(right);
 
 
-        // mrx->print();
+        mrx->print();
 
-        // f.release(mrx);
-
-
+        f.release(mrx);
     }
 
     std::vector<std::string> descriptions;

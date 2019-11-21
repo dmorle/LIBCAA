@@ -89,6 +89,7 @@ namespace LIBCAA {
 		friend Vector *matmul(Matrix *mrx, Vector *vec);
 
 		friend Matrix *concat(Matrix *mrx1, Matrix *mrx2, int axis);
+		friend int *getMaxIndex(Matrix *mrx);
 
 	protected:
 	
@@ -158,6 +159,7 @@ namespace LIBCAA {
 	Vector *matmul(Matrix *mrx, Vector *vec);
 
 	Matrix *concat(Matrix *mrx1, Matrix *mrx2, int axis=0);
+	int *getMaxIndex(Matrix *mrx);
 }
 
 #include "Vector.hpp"

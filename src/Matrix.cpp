@@ -690,4 +690,20 @@ namespace LIBCAA {
 		return npMat;
 	}
 
+	int *getMaxIndex(Matrix *mrx) {
+		if (!mrx->len)
+			return 0;
+		
+		int max = 0;
+		for (int i = 1; i < mrx->len; i++)
+			if (mrx->data[i] > mrx->data[max])
+				max = i;
+		
+		int *index = (int *)malloc(sizeof(int) * 2);
+		index[0] = max/mrx->strides[0];
+		index[1] = max%mrx->strides[0];
+
+		return index;
+	}
+
 }
