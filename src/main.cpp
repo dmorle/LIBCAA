@@ -28,10 +28,12 @@ public:
     {
         this->descriptions = {
             "Solve a linear system",
+            "Solve simplex "
             "Exit the program"
         };
         this->options = {
             "linsys\n",
+            "simplex\n",
             "exit\n"
         };
 
@@ -43,6 +45,9 @@ public:
             switch (action) {
                 case LINSYS:
                     solveLinearSystem();
+                    break;
+                case SIMPLEX:
+                    solveConstraintOpt();
                     break;
                 case EXIT:
                     return;
@@ -132,6 +137,54 @@ private:
         // freeing memory
         fact.release(x);
         fact.release(y);
+    }
+
+    void solveConstraintOpt() {
+        LIBCAA::Factory f;
+
+        int m;
+        printf("Please enter the number of constraints: ");
+        scanf("%d", &m);
+
+        int n;
+        printf("Please enter the number of variables: ");
+        scanf("%d", &n);
+
+
+        printf("Please enter the coefficients of the constraints (a_ij): \n");
+        matrix constrainFunc = f.usrInit(m, n);
+
+        printf("Please enter the coefficients of the objective function (c_i): \n");
+        matrix objFunc = f.usrInit(1, n);
+
+        printf("Please enter the constraining values (b_i): \n");
+        matrix constrainVals = f.usrInit(m, 1);
+
+
+        matrix idn = f.identity(m);
+        matrix zeros = f.constant(1, m + 1);
+
+        // concatonating the matricies
+        matrix left = concat(constrainFunc, objFunc, 0);
+        matrix upperRight = concat(idn, constrainVals, 1);
+        matrix right = concat(upperRight, zeros, 0);
+
+        matrix mrx = concat(left, right, 1);
+        
+        // releasing unnessisary matricies
+        f.release(constrainFunc);
+        f.release(objFunc);
+        f.release(constrainVals);
+        f.release(idn);
+        f.release(zeros);
+        f.release(left);
+        f.release(upperRight);
+        f.release(right);
+
+
+        mrx->print();
+
+        f.release(mrx);
     }
 
     std::vector<std::string> descriptions;
