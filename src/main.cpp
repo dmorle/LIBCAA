@@ -150,41 +150,81 @@ private:
         printf("Please enter the number of variables: ");
         scanf("%d", &n);
 
+        if (m <= 0 || n <= 0) {
+            printf("\n\nInvalid Input(s)\n\n");
+            return;
+        }
 
         printf("Please enter the coefficients of the constraints (a_ij): \n");
-        matrix constrainFunc = f.usrInit(m, n);
+        matrix A = f.usrInit(m, n);
 
         printf("Please enter the coefficients of the objective function (c_i): \n");
-        matrix objFunc = f.usrInit(1, n);
+        matrix c = f.usrInit(1, n);
 
         printf("Please enter the constraining values (b_i): \n");
-        matrix constrainVals = f.usrInit(m, 1);
+        matrix b = f.usrInit(m, 1);
 
 
         matrix idn = f.identity(m);
         matrix zeros = f.constant(1, m + 1);
 
-        // concatonating the matricies
-        matrix left = concat(constrainFunc, objFunc, 0);
-        matrix upperRight = concat(idn, constrainVals, 1);
-        matrix right = concat(upperRight, zeros, 0);
-
-        matrix mrx = concat(left, right, 1);
         
-        // releasing unnessisary matricies
-        f.release(constrainFunc);
-        f.release(objFunc);
-        f.release(constrainVals);
-        f.release(idn);
-        f.release(zeros);
-        f.release(left);
-        f.release(upperRight);
-        f.release(right);
+
+        while ()
+            int j0 = getMaxIndex(c);
+            int i0 = 0;
+            for (int i = 1; i < n; i++) {
+                if (!A->getIndex(i0, j0)) {
+                    i0 = i;
+                    continue;
+                }
+                
+                if (!A->getIndex(i, j0))
+                    continue;
+
+                if (b->getIndex(i)/A->getIndex(i, j0) < b->getIndex(i0)/A->getIndex(i0, j0))
+                    i0 = i;
+            }
+
+            double pivotVal = 1/A->getIndex(i0, j0);
+            A->scaleRow(i0, pivotVal);
+            idn->scaleRow(i0, pivotVal);
+            b->scaleRow(i0, pivotVal);
+
+            for (int i = 0; i < n; i++)
+                if (i != i0) {
+                    A->rowSub(i, i0, A->getIndex(i, j0));
+                    idn->rowSub(i, i0, A->getIndex(i, j0));
+                    b->rowSub(i, i0, A->getIndex(i, j0));
+                }
+            
+            for (int j = 0; j < m; j++) {
+                c->setIndex(0, j, c->getIndex(0, j) - c->getIndex(0, j0) * A->getIndex(i0, j));
+            }
+
+        // concatonating the matricies
+        // matrix left = concat(constrainFunc, objFunc, 0);
+        // matrix upperRight = concat(idn, constrainVals, 1);
+        // matrix right = concat(upperRight, zeros, 0);
+
+        // matrix mrx = concat(left, right, 1);
+        
+        // // releasing unnessisary matricies
+        // f.release(constrainFunc);
+        // f.release(objFunc);
+        // f.release(constrainVals);
+        // f.release(idn);
+        // f.release(zeros);
+        // f.release(left);
+        // f.release(upperRight);
+        // f.release(right);
 
 
-        mrx->print();
+        // mrx->print();
 
-        f.release(mrx);
+        // f.release(mrx);
+
+
     }
 
     std::vector<std::string> descriptions;

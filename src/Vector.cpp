@@ -437,4 +437,16 @@ namespace LIBCAA {
 		return nVec;
 	}
 
+	int getMaxIndex(Vector *vec) {
+		if (!vec->len)
+			return 0;
+		
+		int max = 0;
+		for (int i = 1; i < vec->len; i++)
+			if (vec->data[i] > vec->data[max])
+				max = i;
+		
+		return max;
+	}
+
 }

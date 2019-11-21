@@ -95,6 +95,8 @@ namespace LIBCAA {
 		Matrix(int *dimensions);
 		Matrix(int *dimensions, double val);
 
+	public:
+	
 		void opExcept(Matrix *mrx);
 		void scaleRow(int rowNum, double scale);
 		void switchRows(int row1, int row2);

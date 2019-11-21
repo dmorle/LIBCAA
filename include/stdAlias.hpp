@@ -59,6 +59,7 @@
         #define dot LIBCAA::dotProd
         #define cross LIBCAA::crossProd
         #define matmul LIBCAA::matmul
+        #define getMaxIndex LIBCAA::getMaxIndex
     #endif
 
 #else

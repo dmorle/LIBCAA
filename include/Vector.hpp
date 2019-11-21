@@ -73,6 +73,7 @@ namespace LIBCAA {
 		friend Vector *crossProd(Vector *vec1, Vector *vec2);
 
 		friend Vector *matmul(Matrix *mrx, Vector *vec);
+		friend int getMaxIndex(Vector *vec);
 	
 	protected:
 
@@ -134,6 +135,7 @@ namespace LIBCAA {
 	Vector *crossProd(Vector *vec1, Vector *vec2);
 
 	Vector *matmul(Matrix *mrx, Vector *vec);
+	int getMaxIndex(Vector *vec);
 }
 
 #endif
