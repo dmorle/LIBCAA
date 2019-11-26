@@ -615,9 +615,9 @@ namespace LIBCAA {
 		double *nData = (double *)malloc(sizeof(double) * mrx1->dimensions[0] * mrx2->dimensions[1]);
 		for (int i = 0; i < mrx1->dimensions[0]; i++) {
 			for (int j = 0; j < mrx2->dimensions[1]; j++) {
-				nData[i * mrx1->dimensions[1] + j] = 0;
+				nData[i * mrx2->dimensions[1] + j] = 0;
 				for (int k = 0; k < mrx1->dimensions[1]; k++)
-					nData[i * mrx1->dimensions[1] + j] += mrx1->getAbsIndex(i, k) * mrx2->getAbsIndex(k, j);
+					nData[i * mrx2->dimensions[1] + j] += mrx1->getAbsIndex(i, k) * mrx2->getAbsIndex(k, j);
 			}
 		}
 
