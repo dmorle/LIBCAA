@@ -34,20 +34,27 @@ int main() {
     f.release(ones);
     matrix Atrans = trans(A);
 
-    A->print();
-    Atrans->print();
-
     matrix M = matmul(Atrans, A);
     matrix Y = matmul(Atrans, y);
     f.release(A);
     f.release(Atrans);
 
-    M->print();
-
     matrix M1 = inv(M);
     matrix sol = matmul(M1, Y);
     f.release(M1);
 
+    //r^2 = (n∑(xiyi)−(∑xi)(∑yi))^2 / ( (n∑xi^2−(∑xi)^2)*(n∑yi^2−(∑yi)^2) )
+    double sum_x = M->getAbsIndex(0, 1);
+    double sum_y = Y->getAbsIndex(0, 1);
+    double sum_xy = Y->getAbsIndex(0, 0);
+    double sum_xx = M->getAbsIndex(0, 0);
+    double sum_yy = innerProd(y, y);
+
+    double r2 = pow(m * sum_xy - sum_x * sum_y, 2) / ((m * sum_xx - pow(sum_x, 2)) * (m * sum_yy - pow(sum_y, 2)));
+
+    printf("The solution is: \n");
     sol->print();
+
+    printf("R^2 is: %lf", r2);
     return 0;
 }
