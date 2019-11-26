@@ -370,6 +370,11 @@ namespace LIBCAA {
 		return npTens;
 	}
 
+	double pow(double val1, double val2)
+	{
+		return std::pow(val1, val2);
+	}
+
 
 	Tensor *addAcc(int len, Tensor **tensArr)
 	{

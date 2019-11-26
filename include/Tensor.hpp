@@ -100,6 +100,7 @@ namespace LIBCAA {
 	Tensor *pow(Tensor *tens, double val);
 	Tensor *pow(double val, Tensor *tens);
 	Tensor *pow(Tensor *tens, int val);
+	double pow(double val1, double val2);
 
 	Tensor *addAcc(int len, Tensor **tensArr);
 	Tensor *mulAcc(int len, Tensor **tensArr);
